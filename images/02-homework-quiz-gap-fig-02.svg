@@ -1,0 +1,67 @@
+<svg viewBox="0 0 700 420" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">Fluency vs. Mastery</title>
+  <desc id="desc">Two-panel illustration. Left panel: a stylized brain reading smooth output with a checkmark — labeled FLUENCY. Right panel: the same brain mid-struggle with crossed-out predictions — labeled MASTERY. The experience is identical; the neural events are not.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#2a1a0e"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="700" height="420" fill="#FFFFFF"/>
+
+  <text x="32" y="48" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="10" letter-spacing="0.08em" fill="#545454">FIGURE 2.2 — FLUENCY VS. MASTERY</text>
+  <text x="32" y="76" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="13" font-weight="bold" fill="#2a1a0e">The experience is identical. The neural events are not.</text>
+
+  <!-- LEFT PANEL: FLUENCY -->
+  <rect x="32" y="108" width="304" height="240" fill="#F5EFE8" stroke="#D4D4D4" stroke-width="1"/>
+  <text x="184" y="132" text-anchor="middle" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="10" letter-spacing="0.08em" fill="#545454">PANEL A — FLUENCY</text>
+
+  <!-- Stylized brain (simple lobed shape) on left -->
+  <g>
+    <!-- brain outline -->
+    <path d="M 80 220 C 80 192, 100 174, 124 174 C 132 162, 150 158, 164 168 C 178 158, 196 162, 204 174 C 228 174, 248 192, 248 220 C 248 248, 228 266, 204 266 C 196 278, 178 282, 164 272 C 150 282, 132 278, 124 266 C 100 266, 80 248, 80 220 Z" fill="#FFFFFF" stroke="#2a1a0e" stroke-width="1.5"/>
+    <!-- folds -->
+    <path d="M 100 200 Q 120 210, 100 226" stroke="#2a1a0e" stroke-width="0.75" fill="none"/>
+    <path d="M 130 192 Q 150 210, 130 230" stroke="#2a1a0e" stroke-width="0.75" fill="none"/>
+    <path d="M 164 188 Q 164 230, 164 252" stroke="#2a1a0e" stroke-width="0.75" fill="none"/>
+    <path d="M 198 192 Q 218 210, 198 230" stroke="#2a1a0e" stroke-width="0.75" fill="none"/>
+    <path d="M 228 200 Q 248 210, 228 226" stroke="#2a1a0e" stroke-width="0.75" fill="none"/>
+  </g>
+
+  <!-- code block read smoothly -->
+  <rect x="84" y="296" width="200" height="40" fill="#FFFFFF" stroke="#D4D4D4" stroke-width="1"/>
+  <text x="92" y="312" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="9" fill="#545454">def trace_signals(g):</text>
+  <text x="92" y="324" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="9" fill="#545454">    return resolve(g)  # ✓</text>
+
+  <text x="184" y="356" text-anchor="middle" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="11" fill="#545454">smooth read → checkmark → done</text>
+
+  <!-- RIGHT PANEL: MASTERY -->
+  <rect x="364" y="108" width="304" height="240" fill="#F5EFE8" stroke="#D4D4D4" stroke-width="1"/>
+  <text x="516" y="132" text-anchor="middle" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="10" letter-spacing="0.08em" fill="#545454">PANEL B — MASTERY</text>
+
+  <g>
+    <path d="M 412 220 C 412 192, 432 174, 456 174 C 464 162, 482 158, 496 168 C 510 158, 528 162, 536 174 C 560 174, 580 192, 580 220 C 580 248, 560 266, 536 266 C 528 278, 510 282, 496 272 C 482 282, 464 278, 456 266 C 432 266, 412 248, 412 220 Z" fill="#FFFFFF" stroke="#2a1a0e" stroke-width="1.5"/>
+    <path d="M 432 200 Q 452 210, 432 226" stroke="#2a1a0e" stroke-width="0.75" fill="none"/>
+    <path d="M 462 192 Q 482 210, 462 230" stroke="#2a1a0e" stroke-width="0.75" fill="none"/>
+    <path d="M 496 188 Q 496 230, 496 252" stroke="#2a1a0e" stroke-width="0.75" fill="none"/>
+    <path d="M 530 192 Q 550 210, 530 230" stroke="#2a1a0e" stroke-width="0.75" fill="none"/>
+    <path d="M 560 200 Q 580 210, 560 226" stroke="#2a1a0e" stroke-width="0.75" fill="none"/>
+    <!-- spark / mid-struggle marks -->
+    <circle cx="446" cy="200" r="2" fill="#C8102E"/>
+    <circle cx="490" cy="184" r="2" fill="#C8102E"/>
+    <circle cx="540" cy="208" r="2" fill="#C8102E"/>
+    <circle cx="478" cy="244" r="2" fill="#C8102E"/>
+  </g>
+
+  <!-- predictions struck out -->
+  <rect x="416" y="296" width="200" height="40" fill="#FFFFFF" stroke="#D4D4D4" stroke-width="1"/>
+  <text x="424" y="312" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="9" fill="#545454">predict: emit B first</text>
+  <line x1="424" y1="309" x2="540" y2="309" stroke="#C8102E" stroke-width="1"/>
+  <text x="424" y="324" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="9" fill="#2a1a0e">→ actually: emit A first</text>
+
+  <text x="516" y="356" text-anchor="middle" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="11" fill="#545454">predict → mismatch → adjust → learn</text>
+
+  <!-- Bottom rule + caption -->
+  <line x1="32" y1="376" x2="668" y2="376" stroke="#D4D4D4" stroke-width="0.75" stroke-dasharray="4 3"/>
+  <text x="32" y="398" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="10" fill="#545454">From inside, both brains feel like they're learning. Only one is. The signal you read — clarity, progress, no confusion — measures fluency, not mastery.</text>
+</svg>

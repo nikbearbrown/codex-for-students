@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Figure 8.2 — Path A vs. Path B</title>
+<style>
+:root {
+  --color-white: #FFFFFF;
+  --color-fill: #F5EFE8;
+  --color-ink: #2a1a0e;
+  --color-mark: #6B3520;
+  --color-red: #C8102E;
+  --color-slate: #1A3A5C;
+  --color-ochre: #C8860E;
+  --color-secondary: #545454;
+  --color-border: #D4D4D4;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-white: #111111;
+    --color-fill: #1a1612;
+    --color-ink: #F0EBE3;
+    --color-mark: #C8865E;
+    --color-red: #E8243A;
+    --color-slate: #6B8FB8;
+    --color-ochre: #D49A30;
+    --color-secondary: #A0978C;
+    --color-border: #2E2E2E;
+  }
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: var(--color-white); color: var(--color-ink); font-family: 'EB Garamond', Georgia, serif; padding: 24px; }
+#chart { width: 100%; min-height: 500px; }
+.tooltip { position: absolute; pointer-events: none; opacity: 0; background: var(--color-slate); color: var(--color-white); padding: 8px 12px; font-size: 12px; font-family: 'EB Garamond', Georgia, serif; max-width: 280px; line-height: 1.4; }
+text { font-family: 'EB Garamond', Georgia, serif; fill: var(--color-ink); }
+.caps { font-family: 'IBM Plex Mono', 'JetBrains Mono', monospace; letter-spacing: 0.08em; fill: var(--color-secondary); font-size: 9px; }
+.secondary { fill: var(--color-secondary); }
+.step { cursor: pointer; transition: fill 120ms; }
+.step:hover { fill: var(--color-fill); }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+</style>
+</head>
+<body>
+<div id="chart" role="main"></div>
+<div class="tooltip" id="tt"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
+<script>
+function draw() {
+  d3.select('#chart').selectAll('*').remove();
+  const totalWidth = document.getElementById('chart').clientWidth || 700;
+  const totalHeight = 480;
+
+  const svg = d3.select('#chart').append('svg').attr('viewBox',`0 0 ${totalWidth} ${totalHeight}`)
+    .attr('role','img').attr('aria-labelledby','chart-title chart-desc');
+  const defs = svg.append('defs');
+  defs.append('marker').attr('id','arrow').attr('markerWidth',8).attr('markerHeight',6).attr('refX',7).attr('refY',3).attr('orient','auto')
+    .append('polygon').attr('points','0 0, 8 3, 0 6').attr('fill','var(--color-ink)');
+  defs.append('marker').attr('id','arrow-red').attr('markerWidth',8).attr('markerHeight',6).attr('refX',7).attr('refY',3).attr('orient','auto')
+    .append('polygon').attr('points','0 0, 8 3, 0 6').attr('fill','var(--color-red)');
+  svg.append('title').attr('id','chart-title').text('Path A vs. Path B');
+  svg.append('desc').attr('id','chart-desc').text('Two horizontal flow diagrams comparing specify-first against code-first approaches to the same build.');
+
+  svg.append('text').attr('class','caps').attr('font-size',10).attr('x',32).attr('y',56).text('FIGURE 8.2 — PATH A VS. PATH B');
+  svg.append('text').attr('x',32).attr('y',88).attr('font-weight','bold').attr('font-size',13).text('Same Codex, same task. The framing decides the hour.');
+
+  const tt = d3.select('#tt');
+  function showTip(html){ tt.html(html).style('opacity',1); }
+  function moveTip(e){ tt.style('left',(e.pageX+12)+'px').style('top',(e.pageY-8)+'px'); }
+  function hideTip(){ tt.style('opacity',0); }
+
+  function renderFlow(opts){
+    const { label, sub, y, color, steps } = opts;
+    svg.append('text').attr('class','caps').attr('font-size',10).attr('x',32).attr('y',y).attr('fill',color).attr('font-weight','bold').text(label);
+    svg.append('text').attr('x',32).attr('y',y+14).attr('font-size',10).attr('font-style','italic').attr('class','secondary').text(sub);
+
+    let cx = 32;
+    const stepY = y+32;
+    steps.forEach((s, i) => {
+      const w = s.width;
+      const g = svg.append('g')
+        .on('mouseenter',()=>showTip(`<strong>${s.cap}</strong><br/>${s.tip}`))
+        .on('mousemove',moveTip).on('mouseleave',hideTip);
+
+      g.append('rect').attr('class','step').attr('x',cx).attr('y',stepY).attr('width',w).attr('height',44)
+        .attr('fill','var(--color-fill)').attr('stroke', s.highlight ? 'var(--color-red)' : 'var(--color-border)').attr('stroke-width',1);
+      g.append('text').attr('class','caps').attr('x',cx+10).attr('y',stepY+16).attr('fill', s.highlight ? 'var(--color-red)' : 'var(--color-secondary)').attr('font-weight', s.highlight ? 'bold' : 'normal').text(s.cap).attr('pointer-events','none');
+      g.append('text').attr('x',cx+10).attr('y',stepY+30).attr('font-size',10).attr('fill', s.highlight ? 'var(--color-red)' : 'var(--color-ink)').attr('font-weight', s.highlight ? 'bold' : 'normal').text(s.title).attr('pointer-events','none');
+      g.append('text').attr('x',cx+10).attr('y',stepY+42).attr('font-size',9).attr('font-style','italic').attr('class','secondary').text(s.time).attr('pointer-events','none');
+
+      if (i < steps.length-1){
+        svg.append('line').attr('x1',cx+w).attr('y1',stepY+22).attr('x2',cx+w+26).attr('y2',stepY+22).attr('stroke','var(--color-ink)').attr('stroke-width',1).attr('marker-end','url(#arrow)');
+      }
+      cx += w + 28;
+    });
+    return stepY;
+  }
+
+  const pathATop = renderFlow({
+    label:'PATH A — SPECIFY FIRST', sub:'10 min upstream → 45 min build → working tool', y:138, color:'var(--color-red)',
+    steps:[
+      { cap:'ASK MODE', title:'interrogate', time:'10 min', width:100, tip:'Five questions surface what you have not thought of. Grouping, deduplication, per-build framing — surfaced before Code Mode starts.' },
+      { cap:'SPEC', title:'write', time:'5 min', width:100, tip:'Minimum viable spec. Problem, architecture, user flows, testable user needs, out of scope. Five sections, half a page.' },
+      { cap:'CODE MODE', title:'implement to spec', time:'45 min', width:120, tip:'Each prompt references the spec. Handoff conditions test against the User needs section. The implementation tracks the spec, not the sketch.' },
+      { cap:'WORKING', title:'used daily', time:'total: 60 min', width:100, highlight:true, tip:'The tool serves the need. The 15 minutes upstream were the difference; the build time itself is identical to Path B.' }
+    ]
+  });
+
+  renderFlow({
+    label:'PATH B — CODE FIRST, FIX LATER', sub:'60 min build → unused script → wasted hour', y:278, color:'var(--color-secondary)',
+    steps:[
+      { cap:'CODE MODE', title:'vague prompt', time:'25 min', width:120, tip:'Sketch posted directly to Code Mode. Codex builds the most-probable interpretation. Output is fluent and points the wrong way.' },
+      { cap:'REWORK 1', title:'discard, retry', time:'15 min', width:100, tip:'First rework — discard the misdirected response, re-prompt against the same vague frame. The frame, not Codex, is the problem.' },
+      { cap:'REWORK 2', title:'patch forward', time:'20 min', width:100, tip:'Second rework — patch instead of rewind. Context pollution accumulates. Each correction makes the next response less reliable.' },
+      { cap:'UNUSED', title:'wrong framing', time:'total: 60 min', width:100, tip:'The script ships, runs, and is abandoned within a week. The framing was never what Seth actually needed.' }
+    ]
+  });
+
+  // Rework loops
+  svg.append('path').attr('d','M 200 310 C 200 260, 70 260, 62 308').attr('fill','none').attr('stroke','var(--color-red)').attr('stroke-width',1).attr('marker-end','url(#arrow-red)').attr('stroke-dasharray','3 2');
+  svg.append('text').attr('x',135).attr('y',270).attr('text-anchor','middle').attr('font-size',9).attr('font-style','italic').attr('fill','var(--color-red)').text('re-prompt; same vague frame');
+
+  svg.append('path').attr('d','M 326 310 C 326 254, 188 254, 184 308').attr('fill','none').attr('stroke','var(--color-red)').attr('stroke-width',1).attr('marker-end','url(#arrow-red)').attr('stroke-dasharray','3 2');
+  svg.append('text').attr('x',256).attr('y',248).attr('text-anchor','middle').attr('font-size',9).attr('font-style','italic').attr('fill','var(--color-red)').text('accumulate context pollution');
+
+  svg.append('line').attr('x1',32).attr('y1',408).attr('x2',totalWidth-32).attr('y2',408).attr('stroke','var(--color-border)').attr('stroke-width',0.75).attr('stroke-dasharray','4 3');
+  svg.append('text').attr('x',32).attr('y',432).attr('class','secondary').attr('font-size',10).text('Both flows cost 60 minutes. The 15 minutes Path A spent upstream are the difference between a tool');
+  svg.append('text').attr('x',32).attr('y',448).attr('class','secondary').attr('font-size',10).text('Seth used daily and a script he stopped opening after a week.');
+}
+draw();
+const ro = new ResizeObserver(() => draw());
+ro.observe(document.getElementById('chart'));
+</script>
+</body>
+</html>

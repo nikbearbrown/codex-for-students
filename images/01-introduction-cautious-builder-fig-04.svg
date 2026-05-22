@@ -1,0 +1,49 @@
+<svg viewBox="0 0 700 360" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">The three-act arc of the book</title>
+  <desc id="desc">Horizontal timeline with three acts — Act One (the problem, chapters 1-3), Act Two (the discipline, chapters 4-10), Act Three (the build, chapters 11-14).</desc>
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#2a1a0e"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="700" height="360" fill="#FFFFFF"/>
+
+  <text x="32" y="48" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="10" letter-spacing="0.08em" fill="#545454">FIGURE 1.4 — THE BOOK'S ARC</text>
+  <text x="32" y="76" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="13" font-weight="bold" fill="#2a1a0e">Three acts. Fourteen chapters.</text>
+
+  <!-- Timeline rule -->
+  <line x1="60" y1="200" x2="640" y2="200" stroke="#2a1a0e" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <!-- Three act blocks -->
+  <!-- Act 1: x=60-200 -->
+  <rect x="60" y="140" width="160" height="60" fill="#F5EFE8" stroke="#D4D4D4" stroke-width="1"/>
+  <text x="140" y="162" text-anchor="middle" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="10" letter-spacing="0.08em" fill="#545454">ACT ONE</text>
+  <text x="140" y="182" text-anchor="middle" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="12" font-weight="bold" fill="#2a1a0e">The problem</text>
+  <text x="140" y="224" text-anchor="middle" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="10" letter-spacing="0.08em" fill="#6B3520">CH 1 — 3</text>
+  <text x="140" y="250" text-anchor="middle" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="11" fill="#545454">The homework/quiz</text>
+  <text x="140" y="264" text-anchor="middle" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="11" fill="#545454">gap, named and</text>
+  <text x="140" y="278" text-anchor="middle" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="11" fill="#545454">measured.</text>
+
+  <!-- Act 2: x=240-440 -->
+  <rect x="240" y="140" width="220" height="60" fill="#F5EFE8" stroke="#D4D4D4" stroke-width="1"/>
+  <text x="350" y="162" text-anchor="middle" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="10" letter-spacing="0.08em" fill="#545454">ACT TWO</text>
+  <text x="350" y="182" text-anchor="middle" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="12" font-weight="bold" fill="#2a1a0e">The discipline</text>
+  <text x="350" y="224" text-anchor="middle" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="10" letter-spacing="0.08em" fill="#6B3520">CH 4 — 10</text>
+  <text x="350" y="250" text-anchor="middle" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="11" fill="#545454">Ask Mode gate, the five</text>
+  <text x="350" y="264" text-anchor="middle" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="11" fill="#545454">capacities, AGENTS.md,</text>
+  <text x="350" y="278" text-anchor="middle" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="11" fill="#545454">spec format, handoffs.</text>
+
+  <!-- Act 3: x=480-640 -->
+  <rect x="480" y="140" width="160" height="60" fill="#F5EFE8" stroke="#D4D4D4" stroke-width="1"/>
+  <text x="560" y="162" text-anchor="middle" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="10" letter-spacing="0.08em" fill="#545454">ACT THREE</text>
+  <text x="560" y="182" text-anchor="middle" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="12" font-weight="bold" fill="#2a1a0e">The build</text>
+  <text x="560" y="224" text-anchor="middle" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="10" letter-spacing="0.08em" fill="#6B3520">CH 11 — 14</text>
+  <text x="560" y="250" text-anchor="middle" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="11" fill="#545454">Plan, run, verify, and</text>
+  <text x="560" y="264" text-anchor="middle" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="11" fill="#545454">teach your conducted</text>
+  <text x="560" y="278" text-anchor="middle" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="11" fill="#545454">build.</text>
+
+  <!-- Bottom rule + caption -->
+  <line x1="32" y1="312" x2="668" y2="312" stroke="#D4D4D4" stroke-width="0.75" stroke-dasharray="4 3"/>
+  <text x="32" y="334" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="10" fill="#545454">Read the chapters in order the first time. After that, they can be consulted independently during a live build.</text>
+</svg>

@@ -1,0 +1,80 @@
+<svg viewBox="0 0 700 480" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">The cost-of-revision curve</title>
+  <desc id="desc">A line chart showing the cost of catching a framing mistake rising sharply across the phases of a build — Spec, Plan, Code, Verify, Ship. The cheap window is narrow and closes fast.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#2a1a0e"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="700" height="480" fill="#FFFFFF"/>
+
+  <text x="32" y="56" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="10" letter-spacing="0.08em" fill="#545454">FIGURE 8.1 — COST OF REVISION</text>
+  <text x="32" y="88" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="13" font-weight="bold" fill="#2a1a0e">The cheap window is narrow. It closes fast.</text>
+
+  <!-- Plot area: x from 80 to 640, y from 130 to 380 -->
+  <!-- Y axis -->
+  <line x1="80" y1="130" x2="80" y2="380" stroke="#2a1a0e" stroke-width="1"/>
+  <!-- X axis -->
+  <line x1="80" y1="380" x2="640" y2="380" stroke="#2a1a0e" stroke-width="1"/>
+
+  <!-- Y axis label -->
+  <text x="40" y="250" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="9" letter-spacing="0.08em" fill="#545454" transform="rotate(-90 40 250)">COST TO CHANGE</text>
+
+  <!-- Y axis tick labels (qualitative) -->
+  <text x="74" y="372" text-anchor="end" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="9" letter-spacing="0.08em" fill="#545454">~0</text>
+  <text x="74" y="260" text-anchor="end" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="9" letter-spacing="0.08em" fill="#545454">MED</text>
+  <text x="74" y="150" text-anchor="end" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="9" letter-spacing="0.08em" fill="#545454">HIGH</text>
+
+  <!-- Gridlines -->
+  <line x1="80" y1="260" x2="640" y2="260" stroke="#D4D4D4" stroke-width="0.5" stroke-dasharray="2 3"/>
+  <line x1="80" y1="200" x2="640" y2="200" stroke="#D4D4D4" stroke-width="0.5" stroke-dasharray="2 3"/>
+
+  <!-- Phase x-axis labels — five phases evenly distributed -->
+  <!-- Spec x=140, Plan x=240, Code x=340, Verify x=440, Ship x=600 -->
+  <text x="140" y="402" text-anchor="middle" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="9" letter-spacing="0.08em" fill="#2a1a0e">SPEC</text>
+  <text x="240" y="402" text-anchor="middle" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="9" letter-spacing="0.08em" fill="#2a1a0e">PLAN</text>
+  <text x="340" y="402" text-anchor="middle" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="9" letter-spacing="0.08em" fill="#2a1a0e">CODE</text>
+  <text x="440" y="402" text-anchor="middle" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="9" letter-spacing="0.08em" fill="#2a1a0e">VERIFY</text>
+  <text x="600" y="402" text-anchor="middle" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="9" letter-spacing="0.08em" fill="#C8102E" font-weight="bold">SHIP</text>
+
+  <!-- Tick marks at each phase -->
+  <line x1="140" y1="376" x2="140" y2="384" stroke="#2a1a0e" stroke-width="0.75"/>
+  <line x1="240" y1="376" x2="240" y2="384" stroke="#2a1a0e" stroke-width="0.75"/>
+  <line x1="340" y1="376" x2="340" y2="384" stroke="#2a1a0e" stroke-width="0.75"/>
+  <line x1="440" y1="376" x2="440" y2="384" stroke="#2a1a0e" stroke-width="0.75"/>
+  <line x1="600" y1="376" x2="600" y2="384" stroke="#2a1a0e" stroke-width="0.75"/>
+
+  <!-- Curve path: exponential rise.
+       Spec: (140, 372), Plan: (240, 352), Code: (340, 300), Verify: (440, 220), Ship: (600, 140) -->
+  <path d="M 140 372 C 180 372, 220 360, 240 352 C 270 340, 310 320, 340 300 C 380 280, 420 250, 440 220 C 500 180, 560 150, 600 140" fill="none" stroke="#C8102E" stroke-width="1.75"/>
+
+  <!-- Data points -->
+  <circle cx="140" cy="372" r="4" fill="#C8102E"/>
+  <circle cx="240" cy="352" r="4" fill="#C8102E"/>
+  <circle cx="340" cy="300" r="4" fill="#C8102E"/>
+  <circle cx="440" cy="220" r="4" fill="#C8102E"/>
+  <circle cx="600" cy="140" r="5" fill="#C8102E"/>
+
+  <!-- Annotations -->
+  <text x="148" y="362" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="10" font-style="italic" fill="#545454">change a sentence</text>
+
+  <text x="248" y="342" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="10" font-style="italic" fill="#545454">re-plan upstream</text>
+
+  <text x="348" y="290" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="10" font-style="italic" fill="#545454">discard prompts; restart</text>
+
+  <text x="446" y="208" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="10" font-style="italic" fill="#545454">debug + re-frame; tests stale</text>
+
+  <text x="490" y="128" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="10" font-style="italic" fill="#C8102E">side effects ran — irreversible</text>
+
+  <!-- Cheap window callout -->
+  <rect x="100" y="140" width="148" height="50" fill="#F5EFE8" stroke="#D4D4D4" stroke-width="1"/>
+  <text x="108" y="158" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="9" letter-spacing="0.08em" fill="#545454">THE CHEAP WINDOW</text>
+  <text x="108" y="174" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="10" fill="#2a1a0e">SPEC and PLAN — minutes,</text>
+  <text x="108" y="186" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="10" fill="#2a1a0e">not hours</text>
+
+  <!-- Bottom rule + caption -->
+  <line x1="32" y1="430" x2="668" y2="430" stroke="#D4D4D4" stroke-width="0.75" stroke-dasharray="4 3"/>
+  <text x="32" y="452" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="10" fill="#545454">The curve rises steeply after the first Code Mode prompt. By Ship the cost approaches irreversible —</text>
+  <text x="32" y="468" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="10" fill="#545454">side effects have run, state has changed, the cleanup itself becomes its own debugging session.</text>
+</svg>

@@ -1,0 +1,82 @@
+<svg viewBox="0 0 700 360" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">The consolidation chain</title>
+  <desc id="desc">A linear sequence of six nodes — Attempt, Prediction Error, Dopamine Release, BDNF Upregulation, Synaptic Strengthening, Consolidation. Removing the first link breaks the whole chain.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#2a1a0e"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="700" height="360" fill="#FFFFFF"/>
+
+  <text x="32" y="48" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="10" letter-spacing="0.08em" fill="#545454">FIGURE 2.1 — CONSOLIDATION CHAIN</text>
+  <text x="32" y="76" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="13" font-weight="bold" fill="#2a1a0e">Remove the first link, and the chain breaks</text>
+
+  <!-- Six nodes evenly distributed -->
+  <!-- Each node ~95w; gap ~15 -->
+  <!-- Node 1: Attempt (highlighted red) -->
+  <g>
+    <rect x="32" y="140" width="95" height="80" fill="#FFFFFF" stroke="#C8102E" stroke-width="1.5"/>
+    <text x="79.5" y="166" text-anchor="middle" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="10" letter-spacing="0.08em" fill="#C8102E">STEP 1</text>
+    <text x="79.5" y="186" text-anchor="middle" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="12" font-weight="bold" fill="#C8102E">Attempt</text>
+    <text x="79.5" y="206" text-anchor="middle" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="10" fill="#545454">you try</text>
+  </g>
+  <line x1="129" y1="180" x2="142" y2="180" stroke="#2a1a0e" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <!-- Node 2 -->
+  <g>
+    <rect x="144" y="140" width="95" height="80" fill="#F5EFE8" stroke="#D4D4D4" stroke-width="1"/>
+    <text x="191.5" y="166" text-anchor="middle" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="10" letter-spacing="0.08em" fill="#545454">STEP 2</text>
+    <text x="191.5" y="186" text-anchor="middle" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="12" font-weight="bold" fill="#2a1a0e">Prediction</text>
+    <text x="191.5" y="199" text-anchor="middle" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="12" font-weight="bold" fill="#2a1a0e">Error</text>
+    <text x="191.5" y="214" text-anchor="middle" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="10" fill="#545454">mismatch</text>
+  </g>
+  <line x1="241" y1="180" x2="254" y2="180" stroke="#2a1a0e" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <!-- Node 3 -->
+  <g>
+    <rect x="256" y="140" width="95" height="80" fill="#F5EFE8" stroke="#D4D4D4" stroke-width="1"/>
+    <text x="303.5" y="166" text-anchor="middle" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="10" letter-spacing="0.08em" fill="#545454">STEP 3</text>
+    <text x="303.5" y="186" text-anchor="middle" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="12" font-weight="bold" fill="#2a1a0e">Dopamine</text>
+    <text x="303.5" y="199" text-anchor="middle" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="12" font-weight="bold" fill="#2a1a0e">Release</text>
+    <text x="303.5" y="214" text-anchor="middle" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="10" fill="#545454">signal fires</text>
+  </g>
+  <line x1="353" y1="180" x2="366" y2="180" stroke="#2a1a0e" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <!-- Node 4 -->
+  <g>
+    <rect x="368" y="140" width="95" height="80" fill="#F5EFE8" stroke="#D4D4D4" stroke-width="1"/>
+    <text x="415.5" y="166" text-anchor="middle" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="10" letter-spacing="0.08em" fill="#545454">STEP 4</text>
+    <text x="415.5" y="186" text-anchor="middle" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="12" font-weight="bold" fill="#2a1a0e">BDNF</text>
+    <text x="415.5" y="199" text-anchor="middle" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="12" font-weight="bold" fill="#2a1a0e">Upregulation</text>
+    <text x="415.5" y="214" text-anchor="middle" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="10" fill="#545454">protein rises</text>
+  </g>
+  <line x1="465" y1="180" x2="478" y2="180" stroke="#2a1a0e" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <!-- Node 5 -->
+  <g>
+    <rect x="480" y="140" width="95" height="80" fill="#F5EFE8" stroke="#D4D4D4" stroke-width="1"/>
+    <text x="527.5" y="166" text-anchor="middle" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="10" letter-spacing="0.08em" fill="#545454">STEP 5</text>
+    <text x="527.5" y="186" text-anchor="middle" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="12" font-weight="bold" fill="#2a1a0e">Synaptic</text>
+    <text x="527.5" y="199" text-anchor="middle" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="12" font-weight="bold" fill="#2a1a0e">Strengthening</text>
+    <text x="527.5" y="214" text-anchor="middle" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="10" fill="#545454">spines form</text>
+  </g>
+  <line x1="577" y1="180" x2="590" y2="180" stroke="#2a1a0e" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <!-- Node 6 -->
+  <g>
+    <rect x="592" y="140" width="76" height="80" fill="#F5EFE8" stroke="#D4D4D4" stroke-width="1"/>
+    <text x="630" y="166" text-anchor="middle" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="10" letter-spacing="0.08em" fill="#545454">STEP 6</text>
+    <text x="630" y="186" text-anchor="middle" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="12" font-weight="bold" fill="#2a1a0e">Consoli-</text>
+    <text x="630" y="199" text-anchor="middle" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="12" font-weight="bold" fill="#2a1a0e">dation</text>
+    <text x="630" y="214" text-anchor="middle" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="10" fill="#545454">memory built</text>
+  </g>
+
+  <!-- Annotation bracket above step 1 -->
+  <text x="79.5" y="126" text-anchor="middle" font-family="'EB Garamond', Georgia, serif" font-size="10" font-style="italic" fill="#C8102E">remove this →</text>
+
+  <!-- Bottom rule + caption -->
+  <line x1="32" y1="266" x2="668" y2="266" stroke="#D4D4D4" stroke-width="0.75" stroke-dasharray="4 3"/>
+  <text x="32" y="290" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="10" fill="#545454">Each link is a physical event in the brain. When Codex does the attempt, prediction error never registers, dopamine never</text>
+  <text x="32" y="306" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="10" fill="#545454">fires for the right thing, BDNF never upregulates, no spines form. The output of the session is fine. The brain is unchanged.</text>
+</svg>

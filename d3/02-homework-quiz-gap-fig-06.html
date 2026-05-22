@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Figure 2.6 — Two students, six weeks apart</title>
+<style>
+:root {
+  --color-white: #FFFFFF;
+  --color-fill: #F5EFE8;
+  --color-ink: #2a1a0e;
+  --color-mark: #6B3520;
+  --color-red: #C8102E;
+  --color-slate: #1A3A5C;
+  --color-ochre: #C8860E;
+  --color-secondary: #545454;
+  --color-border: #D4D4D4;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-white: #111111;
+    --color-fill: #1a1612;
+    --color-ink: #F0EBE3;
+    --color-mark: #C8865E;
+    --color-red: #E8243A;
+    --color-slate: #6B8FB8;
+    --color-ochre: #D49A30;
+    --color-secondary: #A0978C;
+    --color-border: #2E2E2E;
+  }
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: var(--color-white); color: var(--color-ink); font-family: 'EB Garamond', Georgia, serif; padding: 24px; }
+#chart { width: 100%; min-height: 440px; }
+.tooltip { position: absolute; pointer-events: none; opacity: 0; background: var(--color-slate); color: var(--color-white); padding: 8px 12px; font-size: 12px; font-family: 'EB Garamond', Georgia, serif; max-width: 280px; line-height: 1.4; }
+text { font-family: 'EB Garamond', Georgia, serif; fill: var(--color-ink); }
+.caps { font-family: 'IBM Plex Mono', 'JetBrains Mono', monospace; letter-spacing: 0.08em; fill: var(--color-secondary); font-size: 10px; }
+.secondary { fill: var(--color-secondary); }
+.point { cursor: pointer; transition: r 120ms; }
+.point:hover { r: 8; }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+</style>
+</head>
+<body>
+<div id="chart" role="main"></div>
+<div class="tooltip" id="tt"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
+<script>
+function draw() {
+  d3.select('#chart').selectAll('*').remove();
+  const totalWidth = document.getElementById('chart').clientWidth || 700;
+  const totalHeight = 440;
+  const margin = { top: 64, right: 80, bottom: 80, left: 80 };
+  const chartWidth = totalWidth - margin.left - margin.right;
+  const chartHeight = totalHeight - margin.top - margin.bottom;
+
+  const svg = d3.select('#chart').append('svg')
+    .attr('width', totalWidth).attr('height', totalHeight)
+    .attr('role','img').attr('aria-labelledby','chart-title chart-desc');
+  svg.append('title').attr('id','chart-title').text('Two students, six weeks apart');
+  svg.append('desc').attr('id','chart-desc').text('Two-track timeline showing Student A flat at zero, Student B building incrementally. Both submit identical artifacts at week 1; quiz scores diverge at week 6.');
+
+  const g = svg.append('g').attr('transform', `translate(${margin.left},${margin.top})`);
+  g.append('text').attr('class','caps').attr('y',-32).text('FIGURE 2.6 — TWO STUDENTS, SIX WEEKS');
+  g.append('text').attr('y',-8).attr('font-weight','bold').attr('font-size',13).text('The artifact was identical. The practitioner was not.');
+
+  const tt = d3.select('#tt');
+  function showTip(html){ tt.html(html).style('opacity',1); }
+  function moveTip(e){ tt.style('left',(e.pageX+12)+'px').style('top',(e.pageY-8)+'px'); }
+  function hideTip(){ tt.style('opacity',0); }
+
+  g.append('rect').attr('x',0).attr('y',0).attr('width',chartWidth).attr('height',chartHeight)
+    .attr('fill','var(--color-fill)').attr('stroke','var(--color-border)').attr('stroke-width',1);
+
+  const weeks = [1,2,3,4,5,6];
+  const x = d3.scalePoint().domain(weeks).range([20, chartWidth-20]);
+  // y range: 0 (bottom) to 5 (top)
+  const y = d3.scaleLinear().domain([0, 5]).range([chartHeight-30, 30]);
+
+  // Student B builds 0,1,2,3,4,5
+  const seriesB = weeks.map((w,i)=>({week:w, val:i, tip:`Week ${w}: Student B asked Codex to explain, predicted, ran the code with print statements, modified one connection. Each session triggered prediction error.`}));
+  // Student A flat at 0
+  const seriesA = weeks.map(w => ({week:w, val:0, tip:`Week ${w}: Student A pasted the prompt into Codex, accepted the output, moved on. No prediction was attempted; no consolidation occurred.`}));
+
+  // axis tick labels
+  weeks.forEach(w => {
+    g.append('text').attr('x',x(w)).attr('y',chartHeight+20).attr('text-anchor','middle').attr('font-size',10)
+      .attr('font-weight', w===6?'bold':'normal').attr('fill', w===6?'var(--color-red)':'var(--color-secondary)').text(w===6?'W6: quiz':('W'+w));
+  });
+
+  // Student B line
+  const lineGen = d3.line().x(d=>x(d.week)).y(d=>y(d.val));
+  g.append('path').attr('d',lineGen(seriesB)).attr('stroke','var(--color-slate)').attr('stroke-width',2).attr('fill','none');
+  g.append('path').attr('d',lineGen(seriesA)).attr('stroke','var(--color-secondary)').attr('stroke-width',2).attr('fill','none');
+
+  // points
+  seriesB.forEach((d,i) => {
+    g.append('circle').attr('class','point').attr('cx',x(d.week)).attr('cy',y(d.val)).attr('r', i===5?6:4).attr('fill','var(--color-slate)')
+      .on('mouseenter',()=>showTip(`<strong>Student B — Week ${d.week}</strong><br/>${d.tip}`))
+      .on('mousemove',moveTip).on('mouseleave',hideTip);
+  });
+  seriesA.forEach((d,i) => {
+    g.append('circle').attr('class','point').attr('cx',x(d.week)).attr('cy',y(d.val)).attr('r', i===5?6:4).attr('fill','var(--color-secondary)')
+      .on('mouseenter',()=>showTip(`<strong>Student A — Week ${d.week}</strong><br/>${d.tip}`))
+      .on('mousemove',moveTip).on('mouseleave',hideTip);
+  });
+
+  // labels
+  g.append('text').attr('x',-8).attr('y',y(4.5)).attr('text-anchor','end').attr('font-size',10).attr('fill','var(--color-slate)').text('Student B');
+  g.append('text').attr('x',-8).attr('y',y(0)+4).attr('text-anchor','end').attr('font-size',10).attr('fill','var(--color-secondary)').text('Student A');
+
+  g.append('text').attr('class','caps').attr('transform',`translate(-56,${chartHeight/2}) rotate(-90)`).attr('text-anchor','middle').text('COGNITIVE ENGAGEMENT');
+
+  // W1 annotation
+  g.append('text').attr('x',x(1)).attr('y',y(2.5)).attr('text-anchor','middle').attr('font-size',10).attr('font-style','italic').attr('fill','var(--color-secondary)').text('same grade');
+  // W6 divergence annotation
+  g.append('line').attr('x1',x(6)).attr('x2',x(6)).attr('y1',y(0)).attr('y2',y(5)).attr('stroke','var(--color-red)').attr('stroke-dasharray','4 3').attr('stroke-width',1);
+  g.append('text').attr('x',x(6)+12).attr('y',y(2.5)+4).attr('font-size',10).attr('font-weight','bold').attr('fill','var(--color-red)').text('diverges');
+
+  // caption
+  g.append('line').attr('x1',0).attr('y1',chartHeight+44).attr('x2',chartWidth+60).attr('y2',chartHeight+44)
+    .attr('stroke','var(--color-border)').attr('stroke-width',0.75).attr('stroke-dasharray','4 3');
+  g.append('text').attr('class','secondary').attr('y',chartHeight+64).attr('font-size',10).text('The difference is not detectable at week one. It is exactly detectable at the unassisted task.');
+}
+draw();
+const ro = new ResizeObserver(() => draw());
+ro.observe(document.getElementById('chart'));
+</script>
+</body>
+</html>

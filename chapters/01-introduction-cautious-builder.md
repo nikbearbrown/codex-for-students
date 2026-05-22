@@ -7,19 +7,20 @@
 
 Here is something that happened in an AP Computer Science class, and it is worth sitting with before we say anything else.
 
-A student — call him Seth — was sitting across from a friend who had just finished the problem set in about thirty seconds. The assignment was to implement a linked list. The friend typed the assignment into Codex, accepted what came back, pasted it into the editor, and was already on his phone. The code compiled. It passed the test cases. The friend got an A.
+A student — call him Seth — was sitting across from a friend who had just finished the problem set in about thirty seconds. The assignment was to trace a small event-driven program — a Godot-style signal handler with a publisher node, two subscribers, and an emit order to follow. The friend pasted the prompt into Codex, accepted what came back, pasted it into the editor, and was already on his phone. The code compiled. It passed the test cases. The friend got an A.
 
-Two weeks later there was an in-class quiz. No laptop. No Codex. The quiz had a variant of the same linked-list problem — slightly different operation, needed to be traced by hand. The friend froze. Wrote something. Crossed it out. Turned in a quiz about a third complete.
+Two weeks later there was an in-class quiz. No laptop. No Codex. The quiz had a variant of the same problem — slightly different emit order, needed to be traced by hand. The friend froze. Wrote something. Crossed it out. Turned in a quiz about a third complete.
 
-Seth had done the same problem set. He had used Codex, too. But he had asked Codex to walk through the operations step by step, predicted each result before reading the response, run the code with intermediate prints to watch the list mutate, then modified one operation to see what would change. The homework took him an hour and a half. On the quiz he wrote out the variant from scratch in twenty minutes.
+Seth had done the same problem set. He had used Codex, too. But he had asked Codex to walk through the signal flow step by step, predicted each subscriber's response before reading the answer, run the code with print statements at each connect and emit to watch the order resolve, then modified one connection to see what would change. The homework took him an hour and a half. On the quiz he wrote out the variant from scratch in twenty minutes.
 
 Same homework grade. Different quiz score. Six weeks later: two different practitioners.
 
-The thing Seth saw has a name. It is the **homework/quiz gap** — and it is the central failure mode of AI-assisted learning when the AI substitutes for the cognitive work the homework was meant to develop. The friend had borrowed capability from Codex. Seth had built it. The code looked identical; the learning was not.
+The thing Seth saw has a name. It is the **homework/quiz gap** — and it is the central failure mode of AI-assisted learning when the AI substitutes for the cognitive work the homework was meant to develop. The friend had borrowed capability from Codex. Seth had built it. The traced answer looked identical; the learning was not.
 
 This book is about how to use Codex so that you build capability rather than borrow it. The discipline has a name too: *conducting*. The rest of the book is how.
 
-<!-- → [DIAGRAM: Seth's arc from observer to practitioner — simple two-point timeline showing "watches friends" → "builds the discipline". Minimal. Editorial style. No color.] -->
+![Two-point timeline showing Seth's arc from observer ("watches friends") to practitioner ("builds the discipline").](images/01-introduction-cautious-builder-fig-01.png)
+*Figure 1.1 — Seth's arc from observer to practitioner*
 
 ---
 
@@ -27,15 +28,16 @@ This book is about how to use Codex so that you build capability rather than bor
 
 Let me be precise about what is happening, because the mechanism matters.
 
-When Seth's friend typed the assignment into Codex and pasted the result, Codex did the thing the homework was designed to make the friend do. Not assist — replace. The cognitive work of building a mental model of linked-list traversal, of predicting what happens when you modify a node, of debugging when your pointer is wrong — that work is the homework. The correct code is the *evidence* that the work happened. If the code appears without the work, there is no evidence of learning because there was no learning.
+When Seth's friend typed the assignment into Codex and pasted the result, Codex did the thing the homework was designed to make the friend do. Not assist — replace. The cognitive work of building a mental model of signal flow, of predicting which subscriber fires when, of debugging when a connection is missed — that work is the homework. The correct trace is the *evidence* that the work happened. If the trace appears without the work, there is no evidence of learning because there was no learning.
 
-This is not a new problem dressed in new clothes. It is the same problem that existed when students could buy summaries of books they were supposed to read, or copy a friend's lab report, or look up the answer key before the problem was attempted. What's new is how fast the gap opens and how fluent the borrowed result looks. The friend's linked-list implementation was not suspicious. It was clean. It compiled. It passed tests. It looked exactly like what a student who understood linked lists would produce.
+This is not a new problem dressed in new clothes. It is the same problem that existed when students could buy summaries of books they were supposed to read, or copy a friend's lab report, or look up the answer key before the problem was attempted. What's new is how fast the gap opens and how fluent the borrowed result looks. The friend's traced answer was not suspicious. It was clean. It compiled. It passed tests. It looked exactly like what a student who understood event-driven code would produce.
 
 The Bastani et al. randomized controlled trial (which Chapter 2 covers properly) measured this with precision. Students who used AI assistance during problem sets scored 17 percentage points lower on unassisted exams than their practice scores predicted. Students who used AI assistance *with guardrails* — something closer to what this book teaches — showed no such gap. The gap is not a story about AI being bad. It is a story about what happens when the wrong part of the work gets delegated.
 
-<!-- → [CHART: line chart showing Bastani et al. results — practice score vs. unassisted exam score for three groups: no AI, AI without guardrails, AI with guardrails. The AI-without-guardrails line shows the 17-point drop. Student should see that the gap is in the unassisted condition only.] -->
+![Line chart of Bastani et al. — three groups (no AI, AI without guardrails, AI with guardrails) plotted from practice score to unassisted exam. The AI-without-guardrails line rises 48 points on practice and drops 17 points below baseline on the exam.](images/01-introduction-cautious-builder-fig-02.png)
+*Figure 1.2 — The Bastani RCT: practice score vs. unassisted exam*
 
-The mechanism underneath this is not subtle. You learn to traverse a linked list by traversing linked lists — by holding the state of the list in your head, advancing a pointer, predicting what happens, finding out you were wrong, adjusting. That is the cognitive work that builds the mental model. If Codex does the traversal, the model does not form. The quiz is not a different kind of test than the homework; it is the same test with the scaffolding removed. When the scaffolding was Codex, removing it leaves nothing.
+The mechanism underneath this is not subtle. You learn to trace event-driven code by tracing it — by holding the connection graph in your head, advancing one emit at a time, predicting which subscribers fire, finding out you were wrong, adjusting. That is the cognitive work that builds the mental model. If Codex does the trace, the model does not form. The quiz is not a different kind of test than the homework; it is the same test with the scaffolding removed. When the scaffolding was Codex, removing it leaves nothing.
 
 ---
 
@@ -55,7 +57,8 @@ Codex has two modes. *Ask Mode* is read-and-plan: Codex reads your project, answ
 
 This is not a bureaucratic step. It is the moment where you think. When Codex proposes a plan, reading that plan is the act of checking whether you understand what it is about to do. If you cannot read the plan and form an expectation — *that will create a new function here, that will modify this file here, that will call the API once here and once in the loop there* — then approving the plan means ceding the judgment to Codex. The gate is the place where the conductor listens before the orchestra plays.
 
-<!-- → [DIAGRAM: Ask Mode → Code Mode gate as a two-node flow. Left node: "Ask Mode (plan, read, propose)". Arrow labeled "human reviews plan". Right node: "Code Mode (write, execute, iterate)". Clean, functional. No decoration.] -->
+![Two-node flow: Ask Mode (plan, read, propose) connected by an arrow labeled "human reviews plan" to Code Mode (write, execute, iterate).](images/01-introduction-cautious-builder-fig-03.png)
+*Figure 1.3 — The Ask Mode → Code Mode gate*
 
 Chapter 4 makes the gate concrete — what to look for in a plan, what to ask when something is unclear, what to do when the plan looks right but the scope seems larger than the task required. Here, the gate is just the thing to hold in mind: *nothing executes until I have reviewed the plan.*
 
@@ -81,7 +84,8 @@ Three acts. Fourteen chapters.
 
 **Act One (Chapters 1–3)** establishes the problem. Chapter 1 is this introduction. Chapter 2 gives the homework/quiz gap an empirical foundation — the Bastani RCT, the Kosmyna EEG study (brain connectivity drops by up to 55% during AI-assisted writing compared to unassisted writing), the Anthropic 2026 coding-skills study. Chapter 3 maps what you are good at versus what Codex is better at — not to assign permanent roles but to name the trade space clearly. Chapter 4 explains why technical fluency with the tool *without* the conducting discipline is the specific danger zone, and why school is not yet teaching the discipline most students need.
 
-<!-- → [INFOGRAPHIC: three-act arc of the book — Act One (problem), Act Two (discipline), Act Three (build) — with chapter numbers mapped to each act. Simple horizontal timeline. Shows where the reader is entering and where they are headed.] -->
+![Horizontal timeline of the book's three acts — Act One (problem, Ch 1-3), Act Two (discipline, Ch 4-10), Act Three (build, Ch 11-14).](images/01-introduction-cautious-builder-fig-04.png)
+*Figure 1.4 — The three-act arc of the book*
 
 **Act Two (Chapters 4–10)** teaches the discipline. Chapter 4 introduces the Ask Mode → Code Mode gate in operational detail. Chapter 5 names the five things the human does that Codex cannot: Plausibility Auditing, Problem Formulation, Tool Orchestration, Interpretive Judgment, Executive Integration. Chapter 6 introduces AGENTS.md — the file Codex reads at every session, the place where your project's persistent context lives and where the human's preferences and constraints are encoded so that Codex is not starting from zero each time. Chapter 7 is problem formulation — the work that happens *before* the first prompt. Chapter 8 is the five-element specification format. Chapter 9 covers handoff conditions and the dangerous middle of a build, when Codex is mid-execution and something has gone slightly wrong. Chapter 10 is the Brutalist three-file system for creative builds — a lightweight structure that keeps scope contained.
 
@@ -109,7 +113,13 @@ You are better than Codex at a different class of tasks — tasks that don't loo
 
 **Executive Integration:** Holding the project toward a goal across multiple Codex sessions, across days, when the scope has shifted and the original plan needs adjustment. Codex starts fresh each session. You don't.
 
-<!-- → [TABLE: five supervisory capacities — columns: capacity name, what it means, what goes wrong when Codex substitutes for it. Rows: Plausibility Auditing, Problem Formulation, Tool Orchestration, Interpretive Judgment, Executive Integration.] -->
+| Capacity | What it means | What goes wrong when Codex substitutes for it |
+|---|---|---|
+| Plausibility Auditing | Hearing whether the output matches the domain before the tests can catch it | Passing code that's wrong for your use case ships forward — sorts run, GPAs round, nothing throws |
+| Problem Formulation | Turning a vague goal into a specification precise enough to execute against | Codex fills the gaps from its training distribution, not from your actual constraints |
+| Tool Orchestration | Choosing which tools — tests, linters, version control, external APIs — to bring in and in what order | Codex reaches for whatever it knows; the reach goes unaudited and the wrong tool gets normalized |
+| Interpretive Judgment | Deciding when the technically correct answer is wrong for your users or context | Plausible, "correct" output that quietly violates the thing you actually cared about |
+| Executive Integration | Holding the build's whole across multiple sessions, days, and scope shifts | Each session restarts the framing; drift accumulates and the original goal blurs |
 
 The conducting discipline is the practice of exercising these five capacities deliberately, on every build, so they become reflex. That is why the book exists alongside the Codex documentation rather than replacing it. The documentation tells you what Codex can do. This book tells you what you need to keep doing yourself.
 
@@ -117,9 +127,15 @@ The conducting discipline is the practice of exercising these five capacities de
 
 ## Seth, eighteen months later
 
-Seth is the co-author of this book. He is that AP CS student, eighteen months after the quiz, after he had worked out the conducting discipline on his own and started teaching it informally to other students in his class. The book is written in two voices: Seth's voice, when the chapter is doing narrative work or recounting a specific build moment; and the author's voice, when the chapter is doing framework work. The shift is signaled in the text.
+Seth is the co-author of this book. He is that AP CS student, eighteen months after the quiz — but the practice on which the discipline rests didn't happen in AP CS. It happened on his own builds.
 
-That distinction matters for what the book is doing. A framework written only by adults about how students should behave has a certain shape. A framework developed by a student who noticed a real pattern, tested it on real builds, and then helped articulate it — that has a different shape. The discipline in this book has Seth's fingerprints on it specifically because he developed it under the constraints that students actually have: deadlines, partial knowledge, teachers who may or may not understand Codex, classmates who are borrowing capability as fast as possible.
+Seth is a self-taught game developer in Troy, Missouri. By the time he sat for that quiz, he had already shipped a mobile arcade game to Google Play (*Bubble Pop*, with AdMob integration and full Play Console paperwork), built a Roblox/Luau horror game with cinematic intro and modular networked architecture (*Midnight Fuel*), and was mid-migration of a co-op horror survival game from Unreal Engine to Godot 4 (*Haunt & Harvest*) — a system-by-system rewrite of AI, inventory, and networked co-op. He runs *Zebonastic*, a Next.js platform on which he publishes weekly on horror game psychology and adrenaline mechanics. He works across GDScript, Lua/Luau, Python, JavaScript, Java, and C#. He used Codex on every one of those projects.
+
+The conducting discipline in this book was worked out under that pressure: real deadlines on real software, with the agentic tool sitting next to him for hours at a time. The AP CS classroom is where the pattern *surfaced* — where he saw, in his friend's frozen quiz, the cost of borrowing capability. The discipline itself was built on the games.
+
+The book is written in two voices. Seth's voice, when the chapter is doing narrative work or recounting a specific build moment. The author's voice, when the chapter is doing framework work. The shift is signaled in the text.
+
+That distinction matters for what the book is doing. A framework written only by adults about how students should behave has a certain shape. A framework developed by a practitioner who noticed the pattern on his own work, tested the discipline on shipped builds, and then helped articulate the structure — that has a different shape, and a different authority. The discipline in this book has Seth's fingerprints on it specifically because he developed it under the constraints students actually have: deadlines, partial knowledge, teachers still calibrating to AI, classmates borrowing capability as fast as possible.
 
 ---
 
@@ -200,3 +216,43 @@ The feeling Seth had — watching the friend ace homework and freeze on the quiz
 ---
 
 [^1]: Wiener, N. *The Human Use of Human Beings: Cybernetics and Society*. Houghton Mifflin, 1950; revised 1954. The 1954 edition is the standard citation.
+
+---
+
+## Prompts
+
+Use these prompts with Claude to generate interactive D3 v7 versions of the figures in this chapter. Each produces a standalone HTML file you can open in a browser and modify freely.
+
+**Prerequisites:** Load `brutalist/CLAUDE.md` and `brutalist/DESIGN.md` into your Claude project context before using these prompts. They define the stack, naming conventions, color system, and typography the figures use.
+
+---
+
+### Figure 1.1 — Seth's arc from observer to practitioner
+
+Build a two-point timeline in D3 v7. A horizontal arrow runs across the canvas; two filled circles sit on it as anchors. Above each anchor place a small `--color-fill` card with a monospace ALL CAPS label (`OBSERVER`, `PRACTITIONER`) and a one-line bold title (`Watches friends`, `Builds the discipline`). Below each anchor write three short lines: two plain-text in `--color-secondary`, one italic. Left card describes the friend who froze on the quiz; right card describes the eighteen-months-later builder shipping games. Tooltips on each card give the longer story. Dashed horizontal divider beneath, then a single-line footer about what the rest of the book teaches.
+
+> Reference implementation: `d3/01-introduction-cautious-builder-fig-01.html`
+
+---
+
+### Figure 1.2 — The Bastani RCT: practice score vs. unassisted exam
+
+Build a small-multiples line chart in D3 v7. X axis: two categorical points — `Practice score`, `Unassisted exam`. Y axis: points relative to baseline, domain about `[-30, 55]`. Plot three lines connecting the two points: a flat slate line at zero (`No AI`), a near-flat `--color-mark` line slightly above zero (`AI + guardrails`), and a heavy `--color-red` line that runs from `+48` down to `-17` (`AI, no guardrails`). Use `scaleLinear` for Y, `scalePoint` for X. Endpoint dots, value labels at each endpoint, dashed zero baseline. A single italic annotation mid-chart names the 65-point divergence. Hovering any dot shows the group's reading and a short note. Footer caption cites Cohen's d and p-value.
+
+> Reference implementation: `d3/01-introduction-cautious-builder-fig-02.html`
+
+---
+
+### Figure 1.3 — The Ask Mode → Code Mode gate
+
+Build a two-node flow in D3 v7. Two rectangular `--color-fill` cards positioned left and right, each with a monospace ALL CAPS label (`ASK MODE`, `CODE MODE`), a bold title (`Plan, read, propose` / `Write, execute, iterate`), and two short lines of body text. Between them, a horizontal arrow with marker-end pointing right and an italic mid-arrow label `human reviews plan`. Hovering either card or the arrow label shows a tooltip explaining what that stage does. Dashed footer rule, then a one-line caption: the gate is the moment where the conductor listens before the orchestra plays.
+
+> Reference implementation: `d3/01-introduction-cautious-builder-fig-03.html`
+
+---
+
+### Figure 1.4 — The three-act arc of the book
+
+Build a horizontal timeline in D3 v7. A single arrow runs across the canvas. Three `--color-fill` cards sit above it, sized to suggest each act's chapter range — Act One narrower, Act Two wider, Act Three narrower. Each card has a monospace ALL CAPS label (`ACT ONE`, `ACT TWO`, `ACT THREE`), a bold title (`The problem`, `The discipline`, `The build`), a monospace chapter range in `--color-mark` (`CH 1 — 3`, `CH 4 — 10`, `CH 11 — 14`), and three short lines of description. Hovering any card shows the longer chapter-by-chapter detail. Dashed footer rule, then a single-line footer caption.
+
+> Reference implementation: `d3/01-introduction-cautious-builder-fig-04.html`

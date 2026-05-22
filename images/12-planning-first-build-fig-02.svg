@@ -1,0 +1,84 @@
+<svg viewBox="0 0 700 540" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">Annotated plan diff — three corrections in Step 5</title>
+  <desc id="desc">A before/after plan revision. Left column shows Codex's original seven-step plan; right column shows Seth's corrected version with three inline annotations: a platform-format assumption corrected, a hardcoded-rules assumption corrected, and a missing output-format spec added.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#2a1a0e"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="700" height="540" fill="#FFFFFF"/>
+
+  <text x="32" y="48" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="10" letter-spacing="0.08em" fill="#545454">FIGURE 12.2 — ANNOTATED PLAN DIFF</text>
+  <text x="32" y="76" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="13" font-weight="bold" fill="#2a1a0e">Three corrections in Step 5 — each worth more than the five minutes the review took</text>
+
+  <!-- Left panel: Codex draft -->
+  <g>
+    <rect x="32" y="108" width="300" height="368" fill="#FFFFFF" stroke="#D4D4D4" stroke-width="1"/>
+    <rect x="32" y="108" width="300" height="32" fill="#F5EFE8" stroke="#D4D4D4" stroke-width="1"/>
+    <text x="44" y="128" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="10" letter-spacing="0.08em" fill="#2a1a0e">BEFORE — CODEX DRAFT</text>
+
+    <text x="44" y="160" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="10" fill="#2a1a0e">1. SQLite schema; migration script.</text>
+    <text x="44" y="184" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="10" fill="#2a1a0e">2. Export-log parser.</text>
+    <text x="44" y="208" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="10" fill="#2a1a0e">3. Deduplication logic against</text>
+    <text x="44" y="222" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="10" fill="#2a1a0e">   existing history.</text>
+    <text x="44" y="246" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="10" fill="#2a1a0e">4. Categorization rule engine.</text>
+    <text x="44" y="270" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="10" fill="#2a1a0e">5. Per-build summary generator</text>
+    <text x="44" y="284" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="10" fill="#2a1a0e">   with deltas.</text>
+    <text x="44" y="308" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="10" fill="#2a1a0e">6. Main script orchestration.</text>
+    <text x="44" y="332" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="10" fill="#2a1a0e">7. Tests for each module.</text>
+
+    <!-- Markers along the left margin opposite the problem lines -->
+    <circle cx="38" cy="180" r="3" fill="#C8102E"/>
+    <circle cx="38" cy="242" r="3" fill="#C8102E"/>
+    <circle cx="38" cy="266" r="3" fill="#C8102E"/>
+
+    <line x1="44" y1="368" x2="320" y2="368" stroke="#D4D4D4" stroke-width="0.75" stroke-dasharray="3 2"/>
+    <text x="44" y="392" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="11" font-weight="bold" fill="#C8102E">→ Three buried assumptions</text>
+    <text x="44" y="414" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="10" fill="#545454">Single log format. Hardcoded</text>
+    <text x="44" y="428" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="10" fill="#545454">categorization rules. Output</text>
+    <text x="44" y="442" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="10" fill="#545454">format unspecified.</text>
+
+    <text x="44" y="464" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="10" font-style="italic" fill="#545454">If approved here, the silent failures</text>
+    <text x="44" y="478" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="10" font-style="italic" fill="#545454">surface at hour two.</text>
+  </g>
+
+  <!-- Arrow between panels -->
+  <line x1="344" y1="290" x2="368" y2="290" stroke="#2a1a0e" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="356" y="278" text-anchor="middle" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="9" letter-spacing="0.08em" fill="#545454">REVIEW</text>
+
+  <!-- Right panel: Seth's correction -->
+  <g>
+    <rect x="380" y="108" width="288" height="368" fill="#FFFFFF" stroke="#C8102E" stroke-width="1"/>
+    <rect x="380" y="108" width="288" height="32" fill="#F5EFE8" stroke="#C8102E" stroke-width="1"/>
+    <text x="392" y="128" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="10" letter-spacing="0.08em" fill="#C8102E">AFTER — SETH'S CORRECTION</text>
+
+    <text x="392" y="160" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="10" fill="#2a1a0e">1. SQLite schema; migration.</text>
+
+    <text x="392" y="184" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="10" fill="#2a1a0e">2. Parser — Win/Mac formats,</text>
+    <text x="392" y="198" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="10" fill="#C8102E">   header-row detection per file.</text>
+    <text x="392" y="218" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="10" font-style="italic" fill="#C8102E">   scope cut: single-format assumption</text>
+
+    <text x="392" y="242" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="10" fill="#2a1a0e">3. Dedup against build history.</text>
+
+    <text x="392" y="266" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="10" fill="#2a1a0e">4. Categorization engine —</text>
+    <text x="392" y="280" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="10" fill="#C8102E">   rules loaded from config file.</text>
+    <text x="392" y="300" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="10" font-style="italic" fill="#C8102E">   added: config-file requirement</text>
+
+    <text x="392" y="324" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="10" fill="#2a1a0e">5. Summary generator —</text>
+    <text x="392" y="338" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="10" fill="#C8102E">   &lt;200 lines, four named sections.</text>
+    <text x="392" y="358" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="10" font-style="italic" fill="#C8102E">   added: output format made explicit</text>
+
+    <text x="392" y="382" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="10" fill="#545454">6. Main script orchestration.</text>
+    <text x="392" y="402" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="10" fill="#545454">7. Tests for each module.</text>
+    <text x="392" y="422" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="10" font-style="italic" fill="#545454">   deferred to v2: trend-chart view</text>
+
+    <line x1="392" y1="438" x2="656" y2="438" stroke="#D4D4D4" stroke-width="0.75" stroke-dasharray="3 2"/>
+    <text x="392" y="460" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="10" font-weight="bold" fill="#C8102E">→ Five minutes of review</text>
+    <text x="392" y="474" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="10" font-style="italic" fill="#545454">recovered ninety minutes of debugging.</text>
+  </g>
+
+  <!-- Bottom rule + caption -->
+  <line x1="32" y1="500" x2="668" y2="500" stroke="#D4D4D4" stroke-width="0.75" stroke-dasharray="4 3"/>
+  <text x="32" y="522" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="10" fill="#545454">The three red marks on the left are the assumptions Codex made silently. The italic notes on the right are the corrections Seth wrote into the plan.</text>
+</svg>

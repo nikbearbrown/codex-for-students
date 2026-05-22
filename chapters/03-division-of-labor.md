@@ -28,7 +28,13 @@ Codex cannot do supervisory judgment. Not because it is bad at it. Because it do
 
 That distinction — not a matter of quality, but a matter of *access to information* — is the structural fact this chapter is built on.
 
-<!-- → [TABLE: Division of labor — two columns: Codex does / Human does. Rows: pattern completion, code generation, syntax resolution, test execution (Codex) vs. plausibility auditing, problem formulation, interpretive judgment, tool orchestration, executive integration (Human). No color.] -->
+| Codex does | Human does |
+|---|---|
+| Pattern completion across billions of training examples | Plausibility auditing — hearing the wrong note before tests can catch it |
+| Code generation from a specified prompt | Problem formulation — deciding what the build *is* before Codex sees it |
+| Syntax resolution and library-idiom translation | Interpretive judgment — deciding what "old," "average," "valid" mean for *this* project |
+| Test execution and mechanical iteration against output | Tool orchestration — Ask vs. Code Mode, best-of-N, by-hand, in what order |
+| Searching the corpus for a documented pattern | Executive integration — holding the build's whole across sessions and days |
 
 ---
 
@@ -44,7 +50,8 @@ Some of that is real. The training data contains a huge amount of implicit reaso
 
 What I am confident is true: pattern completion excels at **syntax** (the exact API call, the right argument order, the exception handling shape for this library in this version), **idiom** (the conventional way to structure this kind of code, the expected loop pattern), **recall** (library flags and functions you'd have to look up, which Codex has effectively memorized), and **translation** (converting natural-language descriptions into code, which it is genuinely good at in a way that would have seemed implausible five years ago).
 
-<!-- → [INFOGRAPHIC: The four pattern-completion strengths — four labeled zones in a 2×2 or horizontal strip: Syntax / Idiom / Recall / Translation. One-line description under each. No data, purely conceptual. Helps readers anchor the taxonomy before the chapter complicates it.] -->
+![Four labeled cards in a horizontal strip — Syntax, Idiom, Recall, Translation — each with a one-line bold description and a short italic gloss underneath.](images/03-division-of-labor-fig-01.png)
+*Figure 3.1 — Four pattern-completion strengths*
 
 What I am equally confident is true: none of those four capabilities give Codex access to what you mean, what your codebase contains, what your data looks like, or what success looks like for this user on this deadline.
 
@@ -68,7 +75,8 @@ This requires five distinct capacities, which the book develops at length later.
 
 **Executive integration.** Holding the whole build toward a single goal across many prompts, many sessions, many days. Codex has no memory across conversations. The arc of the project is yours to maintain.
 
-<!-- → [INFOGRAPHIC: The five supervisory capacities as a vertical stack or spoke diagram — Plausibility Auditing / Problem Formulation / Interpretive Judgment / Tool Orchestration / Executive Integration. Each with a three-to-five word gloss. Designed as a reference card the reader will return to in later chapters.] -->
+![Vertical stack of five rows — PA Plausibility Auditing, PF Problem Formulation, IJ Interpretive Judgment, TO Tool Orchestration, EI Executive Integration — each with a short title and an italic gloss.](images/03-division-of-labor-fig-02.png)
+*Figure 3.2 — The five supervisory capacities*
 
 None of these has a horizon on which a model release closes it. That claim needs a defense.
 
@@ -84,7 +92,8 @@ There is a practical consequence of this that reshapes how AI-assisted work actu
 
 Codex generates faster than you can verify. This is not a temporary condition. It is getting more pronounced, not less, as generation speed increases. The function appears in two seconds. Reading it carefully — understanding what it does, checking it against your actual intent, considering the edge cases in your actual data — takes longer than that.
 
-<!-- → [DIAGRAM: The solve-verify asymmetry — simple timeline. Codex's solve speed increasing over time. Human verification capacity stable. The gap widens. The human's job is not to solve faster but to verify better.] -->
+![Timeline with two lines. Codex solve speed rises sharply along the time axis; human verification capacity stays flat. A dashed annotation marks where the gap widens.](images/03-division-of-labor-fig-03.png)
+*Figure 3.3 — The solve-verify asymmetry*
 
 This asymmetry has a direct operational implication. In AI-assisted work, your time is *almost entirely* verification time. The generation is essentially free. The bottleneck is you, checking.
 
@@ -110,7 +119,11 @@ A function to validate user input looks like pattern work. Codex generates sensi
 
 A function to compute "the average" looks like pattern work. `sum(xs) / len(xs)` is the pattern. But "average" in your domain means median, or your data contains outliers that should be excluded, or the empty-list case should return a sentinel. The function is right on average and wrong for your case.
 
-<!-- → [TABLE: Three dangerous-middle examples side by side — columns: Task / What Codex assumes / What your situation requires / Where the gap hides. Rows: file filtering, input validation, average computation. Helps readers see the shape of the category, not just three individual examples.] -->
+| Task | What Codex assumes | What your situation requires | Where the gap hides |
+|---|---|---|---|
+| Filter files "older than seven days" | OS modification time, generic filesystem | Your own definition of "old" — possibly creation time, possibly last-touched-by-editor | A recent file you know is recent quietly lands in the "old" pile |
+| Validate user input | Reject empty, overlong, or specially-charactered strings — average web-form user | Non-ASCII names, accented characters, scripts the corpus underrepresents | Legitimate users are rejected; the validation looks "sensible" in review |
+| Compute "the average" | `sum(xs) / len(xs)` over a non-empty list | Median, or mean with outliers excluded, or a sentinel on empty input | The number prints; nobody notices it's the wrong statistic until a downstream decision is wrong |
 
 What distinguishes the dangerous middle is not that the output is bad. The output is often good — it compiles, the obvious tests pass, it handles the generic case correctly. What distinguishes it is that *the part it gets wrong is the part specific to your situation*, and your situation is precisely what Codex cannot see.
 
@@ -124,29 +137,30 @@ Chapter 9 develops this at length. For now, recognizing the shape is enough.
 
 Here is a worked example that makes the abstract concrete. I want you to see supervisory intelligence in operation — not described, but running.
 
-Seth needs a function. He's building a grading tool. Given a directory of student CSV submissions, he wants a summary table of word counts per submission.
+Seth needs a function. He's building an article-review tool for Zebonastic, his dark-neon platform where he publishes a weekly piece on horror-game psychology. The target is 1500 words per article. Given a directory of CSV exports from his draft editor — one row per article, with the body in a `content` column — he wants a summary table of word counts per draft so he can see at a glance which ones are under-length, over-length, or close to target.
 
-**Run one.** Seth types the request. Codex generates a function using `pandas` to read CSVs and `apply` to compute word counts. The function returns a DataFrame. Seth runs it on three sample CSVs. The counts look right. He uses the function.
+**Run one.** Seth types the request. Codex generates a function using `pandas` to read CSVs and `apply` to compute word counts. The function returns a DataFrame. Seth runs it on three sample exports. The counts look right. He uses the function.
 
-A month later, a student's submission has unusual quoting in the CSV. The `pandas` reader misinterprets the column boundaries. The word counts for that submission are wildly wrong. Seth finds out when the student asks why their essay counted as 200 words when it was over 1,000. Seth debugs, finds the cause, re-runs, apologizes. The afternoon is gone.
+A month later, one of his drafts has a quoted block of dialogue from a horror game — the kind with embedded commas and curly quotes — that breaks the CSV's column boundaries. The `pandas` reader misinterprets the row. The word count for that draft is wildly wrong. Seth finds out when his weekly scheduler flags a 200-word article that he knows is over 1,500. He debugs, finds the cause, re-runs, regenerates the schedule. The afternoon is gone.
 
 **Run two.** Same request. Same function from Codex. Then Seth does the supervisory work.
 
 *Plausibility audit:* The function uses `pandas` for what could be a simple standard-library task. Codex defaults to `pandas` for tabular data; it's reasonable for most cases. But Seth's case is simple. PA fires: investigate.
 
-*Problem formulation revisit:* Seth's actual task is word counts for student feedback. He doesn't need the full `pandas` machinery. He needs to count words. PF revisits: a simpler function would be more reliable and easier to debug.
+*Problem formulation revisit:* Seth's actual task is word counts against a 1500-word target. He doesn't need the full `pandas` machinery. He needs to count words. PF revisits: a simpler function would be more reliable and easier to debug.
 
-*Tool orchestration:* Seth asks Codex to rewrite the function using the standard library, with explicit handling of quoting and empty cells. Ask Mode surfaces edge cases: non-UTF-8 files, embedded newlines in fields, empty rows. Seth notes these as test cases.
+*Tool orchestration:* Seth asks Codex to rewrite the function using the standard library, with explicit handling of quoting and embedded newlines. Ask Mode surfaces edge cases: non-UTF-8 files, curly-quote and em-dash characters inside fields, empty rows. Seth notes these as test cases.
 
-*Interpretive judgment:* What is a "word"? Codex's default is split-on-whitespace. Seth's rubric counts hyphenated terms as one. The default matches. He adds a `WORD_DEFINITION` comment so future-Seth doesn't re-derive it.
+*Interpretive judgment:* What is a "word"? Codex's default is split-on-whitespace. Seth's articles use compound horror-game terms — "jump-scare," "sound-cue" — that he counts as one word, not two. The default matches if he strips hyphenated forms before splitting. He adds a `WORD_DEFINITION` comment so future-Seth doesn't re-derive it.
 
-*Executive integration:* The function's output — a list of dicts with `submission_id`, `word_count`, and `errors` — needs to match what the downstream summary script expects. Seth checks. It does.
+*Executive integration:* The function's output — a list of dicts with `article_id`, `word_count`, and `errors` — needs to match what the downstream length-check script expects. Seth checks. It does.
 
-<!-- → [IMAGE: Side-by-side annotated code snippets — Run one (pandas version) on the left, Run two (stdlib version with explicit quoting and error handling) on the right. Annotations call out the specific lines where supervisory intelligence changed the output. Caption: "Same prompt, same Codex. Different outcomes because of what happened after the generation."] -->
+![Two-panel annotated code listing. Left: Run one, a pandas-based word-count function with the read_csv line highlighted in red. Right: Run two, a stdlib version with explicit csv.DictReader and quoting=QUOTE_ALL, highlighted in slate. Each panel ends with an outcome line.](images/03-division-of-labor-fig-04.png)
+*Figure 3.4 — Same prompt, same Codex, different outcomes*
 
-The function ships. A month later, the unusual-quoting submission arrives. The function's explicit error-handling catches the parsing issue and flags the submission for manual review. Seth catches it before the grade is finalized.
+The function ships. A month later, another draft with a quoted dialogue block arrives. The function's explicit error-handling catches the parsing issue and flags the draft for manual review. Seth catches it before the weekly schedule is generated.
 
-The supervisory work took fifteen extra minutes upfront. It saved an afternoon of debugging and an apology to a student. The math is favorable; the friction is real. The discipline is what made the difference.
+The supervisory work took fifteen extra minutes upfront. It saved an afternoon of debugging and a botched publishing schedule. The math is favorable; the friction is real. The discipline is what made the difference.
 
 ---
 
@@ -209,3 +223,43 @@ You can now name the capacities. The next chapter asks why school isn't teaching
 ---
 
 [^1]: Taylor, F. W. *The Principles of Scientific Management*. Harper & Brothers, 1911.
+
+---
+
+## Prompts
+
+Use these prompts with Claude to generate interactive D3 v7 versions of the figures in this chapter. Each produces a standalone HTML file you can open in a browser and modify freely.
+
+**Prerequisites:** Load `brutalist/CLAUDE.md` and `brutalist/DESIGN.md` into your Claude project context before using these prompts. They define the stack, naming conventions, color system, and typography the figures use.
+
+---
+
+### Figure 3.1 — Four pattern-completion strengths
+
+Build a four-column card layout in D3 v7. Each column is a rectangular card with a `--color-fill` header strip containing a monospace ALL CAPS label (`SYNTAX`, `IDIOM`, `RECALL`, `TRANSLATION`) and a body containing a three-line bold title and a three-line italic gloss in `--color-secondary`. Cards are evenly distributed across the chart width. Hovering any card shows a tooltip with the longer description of what that strength looks like in practice and where it pays off. Dashed footer rule, then a one-line footer caption noting that fighting Codex on these four is a waste of time.
+
+> Reference implementation: `d3/03-division-of-labor-fig-01.html`
+
+---
+
+### Figure 3.2 — The five supervisory capacities
+
+Build a five-row stack layout in D3 v7. Each row is a wide rectangular card with a `--color-fill` left-side label panel containing a monospace two-letter code (`PA`, `PF`, `IJ`, `TO`, `EI`) and a two-line bold capacity name. The right side carries a one-line bold title and an italic short gloss in `--color-secondary`. Rows stacked top to bottom with a small gap between them. Hovering any row shows a tooltip with the longer definition tying the capacity to its named precedent (Polanyi, Suchman, Schön, Brooks, etc.). Dashed footer rule plus a single-line caption: none of these has a horizon on which a model release closes it.
+
+> Reference implementation: `d3/03-division-of-labor-fig-02.html`
+
+---
+
+### Figure 3.3 — The solve-verify asymmetry
+
+Build a two-line chart in D3 v7. X axis: abstract time, domain `[0, 10]`. Y axis: abstract speed/capacity, domain `[0, 10]`. Plot two curves: `Codex solve speed` as a Catmull-Rom curve in `--color-red` rising from low at t=0 to high at t=10 (use `1 + Math.pow(t, 1.5)/4` for shape); `Human verification` as a flat line in `--color-slate` at y=3.5. Endpoint dots and labels on each line. At about t=7, draw a vertical dashed `--color-red` segment connecting the two curves with an italic mid-segment label `the gap widens`. X-axis label `TIME →` and Y-axis label `SPEED / CAPACITY` in monospace ALL CAPS. Hover either line for a longer description.
+
+> Reference implementation: `d3/03-division-of-labor-fig-03.html`
+
+---
+
+### Figure 3.4 — Same prompt, same Codex, different outcomes
+
+Build a two-panel side-by-side annotated code display in D3 v7. Each panel is a rectangular card with a `--color-fill` header strip containing a monospace ALL CAPS title (`RUN ONE — PANDAS`, `RUN TWO — STDLIB + AUDIT`). Inside each panel, render about ten lines of monospace code (`IBM Plex Mono`, 9px). In Run one, color the `pd.read_csv` line in `--color-red`. In Run two, color the `csv.DictReader` block in `--color-slate`. Place a small colored dot at the left margin opposite the highlighted line. Below the code, place a bold annotation in the highlight color (`→ no quoting / dialect handling`, `→ explicit quoting, error path`), followed by two short `--color-secondary` lines, then an italic `Outcome:` label and two outcome lines. Hovering either panel shows the longer narrative. Dashed footer rule plus a caption summarizing the trade.
+
+> Reference implementation: `d3/03-division-of-labor-fig-04.html`

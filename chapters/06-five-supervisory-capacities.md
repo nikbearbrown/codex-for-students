@@ -24,7 +24,9 @@ A build that goes wrong is not a mystery. It is one of five named failures. The 
 
 There is a practical note on the abbreviations. The capacities have two-letter codes — PA, PF, TO, IJ, EI — because you will use them in build logs. The same five appear across the companion books for Claude Code and GitHub Copilot CLI. The abbreviations are interoperable. When you read someone else's annotated build log, you will be reading the same vocabulary.
 
-<!-- → [DIAGRAM: The five supervisory capacities as a pentagon or five-column layout. Each entry: abbreviation (PA, PF, TO, IJ, EI), plain-language name, one-sentence definition. Editorial style, no color.] -->
+![Pentagon with five labeled vertices — PA, PF, TO, IJ, EI — each carrying a two-letter code, a plain-language name, and a one-sentence definition. The five capacities frame supervisory intelligence as a single whole; PA is highlighted because it was the capacity Seth exercised in the chapter opening.](images/06-five-supervisory-capacities-fig-01.png)
+
+*Figure 6.1 — The five supervisory capacities. Each vertex names one capacity Codex does not supply; together they constitute supervisory intelligence.*
 
 ---
 
@@ -36,7 +38,9 @@ Here is the structure of what PA does. Codex generates output calibrated for acc
 
 The feeling is real before you can articulate the content. Seth felt it before he could say *default parameter, next sprint*. The feeling is data. PA is the discipline of attending to the feeling rather than overriding it in the interest of shipping.
 
-<!-- → [IMAGE: A simple two-panel illustration — left panel: Codex output that looks correct (green checkmarks, passing tests); right panel: the same output with one detail circled in amber, labeled "PA fires here." Caption: "PA catches the divergence the surface checks miss."] -->
+![Two panels comparing the same fluent Codex output. Panel A — PA Fires: the surface checks pass but the off-feeling registers, prompting the supervisor to stop, investigate, and fix upstream. Panel B — PA Dormant: the off-feeling is absent or overridden, the output ships, and a silent failure propagates downstream.](images/06-five-supervisory-capacities-fig-02.png)
+
+*Figure 6.2 — PA fires, PA dormant. The Codex output is identical; the supervisor's attention is the entire difference.*
 
 What PA is not: paranoia. The practice is vigilance, not anxiety. You are not suspecting all output. You are attending to the off-feeling when it arises. In most prompts PA stays quiet. When it fires, you investigate.
 
@@ -56,7 +60,9 @@ There is an observation from an OpenAI internal document on how their engineers 
 
 What PF looks like in practice: before you type a Code Mode prompt, you have decided what the function does, what it takes as input, what it returns, what it does not do, and where it lives in the codebase. Not in Codex's mind — in yours. The Ask Mode interrogation from Chapter 4 is the operational tool for PF. *What would I need to know about the existing code before adding this feature?* is a PF question. The interrogation surfaces frames you had not considered before you commit to one.
 
-<!-- → [INFOGRAPHIC: PF as a funnel — wide top labeled "vague intent" narrowing to a point labeled "well-specified prompt." Annotations on the funnel walls: "what does it do / what does it take / what does it return / what does it NOT do / where does it live." Shows what PF converts before Codex sees the prompt.] -->
+![A funnel narrowing from a wide top labeled vague intent down to a narrow bottom labeled well-specified prompt. The funnel passes through interrogation, scope-and-invariants, and shape-and-done stages. Side annotations name the PF questions on the left and the failure modes the funnel excludes on the right.](images/06-five-supervisory-capacities-fig-03.png)
+
+*Figure 6.3 — Problem Formulation as a funnel. PF collapses vague intent into the single sentence that becomes the prompt.*
 
 PF is the most under-exercised of the five. The pressure to get going skips it. The student who pauses to formulate properly produces builds that work. The student who jumps to suggest produces builds that spend the next hour recovering. The time cost of PF is measured in minutes. The time cost of skipping it is measured in hours.
 
@@ -72,7 +78,12 @@ TO is the conducting metaphor at its most literal. You are deciding which instru
 
 The mistake TO prevents is using Code Mode when Ask Mode should have run first. This is the most common sequencing error. The student generates code against a prompt, finds the code is architecturally wrong for the codebase, and has to redo it — not because the code was bad but because the interrogation step was skipped. Ask Mode would have surfaced the architectural constraint in thirty seconds. Code Mode without Ask Mode spent two hours to produce the same thirty seconds of information, buried in a function that has to be thrown away.
 
-<!-- → [TABLE: TO decision guide — four rows: Ask Mode / Code Mode / Best-of-N / By hand. Two columns: "use when" and "common mistake." Designed as a quick reference for tool-choice junctions.] -->
+| Tool | Use when | Common mistake |
+|---|---|---|
+| Ask Mode | You need to understand the codebase, surface constraints, or plan a multi-step change | Skipping it and discovering the architectural conflict in Code Mode two hours later |
+| Code Mode | The plan is reviewed, the spec is tight, and execution is the only thing left | Running it on a vague prompt and treating the resulting rollback as Codex's fault |
+| Best-of-N | The spec under-constrains the answer — two reasonable approaches and judgment decides | Running it on a determined task and burning generation budget on cosmetic variation |
+| By hand | The operation is too small to prompt for, or too consequential to delegate | Using Codex anyway because "it's faster" — then spending longer reviewing than typing |
 
 TO also governs trust calibration. Not all Codex output deserves the same level of review. A utility function with clear inputs and outputs warrants less review than a function with side effects touching shared state. TO includes the judgment of which outputs you read carefully and which you accept with lighter review — and the discipline of not collapsing that judgment into "I trust Codex" across the board.
 
@@ -98,11 +109,13 @@ The fifth capacity operates at the longest range. **Executive integration** is t
 
 A long Codex session has many prompts. Each is locally reasonable. Without EI, you finish the session and find that the cumulative result violates a constraint you set thirty prompts ago — because Codex does not remember the constraint, and you stopped checking against it.
 
-An example. Three prompts ago you agreed with yourself that the grading tool would never generate a final grade. The current Code Mode output is generating grades. EI fires: stop. The constraint from three prompts ago is being violated. Revert the prompt; respecify.
+An example. Three prompts ago you agreed with yourself that the article-review tool would never rewrite the article's voice — it would only flag length and structure issues. The current Code Mode output is producing a rewritten draft. EI fires: stop. The constraint from three prompts ago is being violated. Revert the prompt; respecify.
 
 EI is the integration check. It is what makes the build coherent across its duration. It is also the capacity that most benefits from an external artifact — because holding all constraints in working memory across a multi-hour session is not reliable. AGENTS.md, which the next chapter develops in full, is the persistent record for EI. The constraint that Codex cannot remember between sessions is the constraint EI will catch this session *if* it is in AGENTS.md. Without the file, EI depends entirely on your memory. With it, EI has a scaffold.
 
-<!-- → [DIAGRAM: EI as a timeline — horizontal axis is session duration (many prompts left to right). A constraint set at prompt 3 is marked. Drift accumulates silently across prompts 4–12. EI fires at prompt 13 when the cumulative result violates the original constraint. Shows the long-range nature of EI vs. the prompt-level focus of PA and IJ.] -->
+![Horizontal timeline of a Codex session. A decision marker at prompt 3 sets a constraint. A drift zone runs through prompts 4 through 12, with a small redirect at prompt 7 and a pivot at prompt 11. At prompt 13 EI fires — the cumulative result violates the prompt-3 constraint and the build stops before shipping.](images/06-five-supervisory-capacities-fig-04.png)
+
+*Figure 6.4 — EI across a session. The long-range capacity catches drift that no single prompt-level check would notice.*
 
 The failure mode EI prevents is drift. Not dramatic failure — the build doesn't crash — but quiet drift away from the original intent, one locally-reasonable prompt at a time, until the cumulative result is something you did not mean to build.
 
@@ -130,7 +143,21 @@ Here is a small feature build with the capacities labeled at each step. I want y
 
 Thirteen steps. All five capacities fired. Step 8 and step 12 have no capacity label — not every step is supervisory work. The generation itself is Codex's. The verification in step 12 is a mechanical check, not a supervisory judgment. The discipline is not about labeling everything; it is about knowing which steps require your attention and why.
 
-<!-- → [TABLE: The worked sequence annotated — same thirteen rows, with a fifth column "Why this capacity, not another?" filling in the reasoning at each labeled step. Helps the reader internalize the distinctions rather than just seeing the labels.] -->
+| Step | Action | Capacity | Why this capacity, not another? |
+|---|---|---|---|
+| 1 | Decide what the feature is — one-sentence formulation | **PF** | The frame is being set; no output exists yet to audit or interpret |
+| 2 | Open Ask Mode; ask Codex to read the relevant files | **TO** | A tool-choice junction — Ask before Code, not the other way around |
+| 3 | Read the Ask Mode summary; notice a convention I forgot | **PA + IJ** | PA fires on the surprise; IJ supplies the meaning of the convention |
+| 4 | Update the formulation to respect the convention | **PF revisit** | The frame has new information; the spec must catch up before code runs |
+| 5 | Ask Mode plan for the implementation | **TO** | Another tool-choice junction — plan first, execute second |
+| 6 | Read the plan; correct one assumption Codex made | **IJ** | The plan is fluent; what it means for *this* project is the human's call |
+| 7 | Switch to Code Mode | **TO** | The plan is reviewed; the right instrument changes |
+| 8 | Codex implements; I read the output | — | Generation is Codex's; no supervisory act yet |
+| 9 | Output looks correct; tests pass; something feels off about an edge case | **PA** | The off-feeling is the signature of PA, not IJ — it precedes the articulation |
+| 10 | Investigate; find Codex used a default that conflicts with the convention | **IJ + PA** | PA pointed; IJ named what the conflict meant in context |
+| 11 | Update Code Mode prompt with explicit constraint; rerun | **PF revisit** | The spec was insufficient; the fix is upstream, not in another rollback |
+| 12 | Output now correct; verify handoff conditions | — | Mechanical check, not supervisory judgment |
+| 13 | Update AGENTS.md with the lesson about the convention | **EI** | The constraint must survive the session; that is EI's job, not PA's |
 
 ---
 
@@ -142,7 +169,13 @@ Output is fluent but wrong, and there were no warning signs — PA was absent, o
 
 The post-mortem is structured. Not *what should I have done* but *which of the five was absent, where, and what would the build have looked like if it had fired?* The structured question makes the next build better. The un-structured question produces guilt, not improvement.
 
-<!-- → [TABLE: Diagnostic guide — two columns: symptom / absent capacity. Five rows. Designed as a reference card for post-mortems.] -->
+| Symptom | Absent capacity |
+|---|---|
+| Fluent, passing output that turns out to be wrong, with no warning signs noticed in the moment | **PA** — fired faintly or was overridden |
+| The whole build solves the wrong problem; the elegance is real and pointed in the wrong direction | **PF** — the frame was set badly or never set |
+| The right work happened in the wrong order; Code Mode produced what Ask Mode should have surfaced | **TO** — the tool-choice junction was skipped |
+| Output is technically correct but means the wrong thing for *this* project's terms or users | **IJ** — the interpretation in context wasn't supplied |
+| The final result violates a constraint set thirty prompts ago; drift, not crash | **EI** — long-range integration broke |
 
 ---
 
@@ -200,3 +233,43 @@ You have the capacities. The next chapter introduces AGENTS.md — the file Code
 
 [^1]: OpenAI engineers, "How OpenAI Engineers use Codex to Tackle Big Projects with Rigor" (forum.openai.com, December 4, 2025).
 [^2]: Engelbart, D. C. *Augmenting Human Intellect: A Conceptual Framework*. SRI Project No. 3578 (Air Force Office of Scientific Research), 1962. Available via the Doug Engelbart Institute.
+
+---
+
+## Prompts
+
+Use these prompts with Claude to generate interactive D3 v7 versions of the figures in this chapter. Each produces a standalone HTML file you can open in a browser and modify freely.
+
+**Prerequisites:** Load `brutalist/CLAUDE.md` and `brutalist/DESIGN.md` into your Claude project context before using these prompts. They define the stack, naming conventions, color system, and typography the figures use.
+
+---
+
+### Figure 6.1 — The five supervisory capacities
+
+Build a pentagon diagram in D3 v7. Five vertices arranged on a regular pentagon centered in the canvas. Each vertex carries a filled dot, a monospace ALL CAPS two-letter code (`PA`, `PF`, `TO`, `IJ`, `EI`), a one-line bold plain-language name (`Plausibility Auditing`, `Problem Formulation`, `Tool Orchestration`, `Interpretive Judgment`, `Executive Integration`), and a two-line italic gloss in `--color-secondary`. The pentagon body is `--color-fill` with a `--color-border` hairline. Centered inside the pentagon is a small monospace ALL CAPS label `SUPERVISORY INTELLIGENCE` with an italic line beneath: *all five required*. The PA vertex is highlighted in `--color-red`. Hovering any vertex shows a tooltip with the longer definition. Dashed footer rule plus a one-line caption naming why PA is highlighted.
+
+> Reference implementation: `d3/06-five-supervisory-capacities-fig-01.html`
+
+---
+
+### Figure 6.2 — PA fires, PA dormant
+
+Build a two-panel side-by-side comparison in D3 v7. Each panel is a rectangular card with a `--color-fill` header strip. Left panel header `PANEL A — PA FIRES` with a `--color-red` border. Right panel header `PANEL B — PA DORMANT` with a `--color-border` border. Inside each panel: an inner card labeled `CODEX OUTPUT` containing two lines describing fluent, passing output — identical in both panels. Below the inner card: a label (`PA — OFF-FEELING` in red, or `PA — QUIET` in secondary) followed by an italic two-line gloss. Below a dashed divider: an `OUTCOME` label and a two-line bold outcome — red and corrective on the left, ink and propagating on the right. Hover either panel for the narrative. Dashed footer rule plus a caption stating the Codex output is identical and the supervisor's attention is the difference.
+
+> Reference implementation: `d3/06-five-supervisory-capacities-fig-02.html`
+
+---
+
+### Figure 6.3 — Problem Formulation as a funnel
+
+Build a funnel infographic in D3 v7. A trapezoidal funnel centered on the canvas, wide at the top and narrow at the bottom, filled `--color-fill` with a `--color-border` hairline. Five stacked stages from top to bottom, separated by dashed horizontal rules: `VAGUE INTENT` (with italic gloss "a feedback notifier"), `INTERROGATION` (Ask Mode surfaces blind spots), `SCOPE + INVARIANTS` (touches; never touches), `SHAPE + DONE` (where it lives; how to check), and `WELL-SPECIFIED` highlighted in `--color-red`. To the left of the funnel: a monospace ALL CAPS column `QUESTIONS PF ASKS` with em-dash bullet questions. To the right: a column `WHAT GETS EXCLUDED` with em-dash bullet failure modes. Below the funnel a downward arrow in `--color-ink` ending in a monospace ALL CAPS label `→ CODEX SEES THIS`. Hover any stage for the longer description. Dashed footer rule plus a caption stating PF is the most under-exercised of the five.
+
+> Reference implementation: `d3/06-five-supervisory-capacities-fig-03.html`
+
+---
+
+### Figure 6.4 — EI across a session
+
+Build a horizontal timeline diagram in D3 v7. A single horizontal axis in `--color-ink` with an arrowhead at the right end. Twelve tick marks between `PROMPT 1` (left label) and `PROMPT 13 + SHIP` (right label). Italic mid-axis annotation: *session duration — many prompts, hours, sometimes days*. Four event markers along the axis: at prompt 3 a `DECISION` callout above the axis ("constraint set: no rewrites"); at prompt 7 a smaller `REDIRECT` callout below; at prompt 11 a `PIVOT` callout above; at prompt 13 a `--color-red` dot with a `EI FIRES — STOP` callout below in `--color-red` border, with a two-line outcome ("cumulative result violates / the prompt-3 constraint"). Between prompts 3 and 11, a dashed `--color-fill` band labeled `DRIFT — LOCALLY REASONABLE PROMPTS` with an italic gloss. Hover any event for the longer tip. Dashed footer rule plus a caption naming AGENTS.md as the scaffold that makes EI scale across sessions.
+
+> Reference implementation: `d3/06-five-supervisory-capacities-fig-04.html`

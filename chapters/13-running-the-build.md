@@ -5,15 +5,15 @@
 
 ---
 
-Seth's personal-finance build, Phase 1. The plan from Chapter 12 is open on one side. Codex is open on the other. The first step is the SQLite schema.
+Seth's Haunt & Harvest asset-budget build, Phase 1. The plan from Chapter 12 is open on one side. Codex is open on the other. The first step is the SQLite schema.
 
-He pastes the relevant AGENTS.md sections plus the spec's Architecture section into a Code Mode prompt. He references the plan: *"Step 1 from the plan: SQLite schema for the transactions table. Per the spec, the database lives at `~/finance/finance.db`."* He writes the full five-element specification for this step. The CLI returns a schema migration script. Seth reads it. The script creates a `transactions` table with the columns the spec implied. He runs `gh copilot explain` mentally against the script — *what does each column do, what are the constraints, what is the primary key?* The explanation matches his prediction.
+He pastes the relevant AGENTS.md sections plus the spec's Architecture section into a Code Mode prompt. He references the plan: *"Step 1 from the plan: SQLite schema for the build_assets table. Per the spec, the database lives at `~/HauntAndHarvest/budget.db`."* He writes the full five-element specification for this step. The CLI returns a schema migration script. Seth reads it. The script creates a `build_assets` table with the columns the spec implied. He runs `gh copilot explain` mentally against the script — *what does each column do, what are the constraints, what is the primary key?* The explanation matches his prediction.
 
 He runs the migration. The database is created.
 
 Then he pauses.
 
-The schema uses an `INTEGER` primary key auto-incremented. The spec said idempotency was a user need — running the script twice should produce the same output. With auto-incremented integer keys, importing the same CSV twice would create duplicate transactions with different keys. The dedup logic at Step 3 would have to detect duplicates by content, not by key. That is fine in principle; the spec did not specify a different key strategy. But the dedup logic would be simpler with a content-hash key, and the SQL inserts would become idempotent automatically with an `INSERT OR IGNORE`.
+The schema uses an `INTEGER` primary key auto-incremented. The spec said idempotency was a user need — running the script twice should produce the same output. With auto-incremented integer keys, importing the same export log twice would create duplicate asset rows with different keys. The dedup logic at Step 3 would have to detect duplicates by content, not by key. That is fine in principle; the spec did not specify a different key strategy. But the dedup logic would be simpler with a content-hash key (over build version + asset path + size), and the SQL inserts would become idempotent automatically with an `INSERT OR IGNORE`.
 
 Seth reverts the migration. He updates the plan to reflect the schema change. He re-prompts with the revised specification. The new schema is created.
 
@@ -31,7 +31,9 @@ Reference the plan: *"Per Step N: do X with Y conditions."* Paste the relevant A
 
 That is the loop. One or two minutes per step on smooth runs. When the discipline catches something, the loop pauses and the catch is handled. The catch is where the build's quality is built.
 
-<!-- → [DIAGRAM: The build loop. Specification → Codex executes in Code Mode → Handoff condition check → Pass: next step / Fail: revert and respecify. Supervisory capacity label at the check step.] -->
+![A five-node cycle — Read plan, Pick step, Execute, Verify, Next — arranged around a central hub labeled ONE PROMPT WIDE. The Verify node is highlighted in red. A dashed red branch leaves Execute on failure to a Stop — Revert node.](images/13-running-the-build-fig-01.png)
+
+*Figure 13.1 — The build loop. Verify is highlighted because quality is built in at the check, not inspected in at the end. The stop branch fires after two failed corrections on the same step.*
 
 The loop is not bureaucratic overhead. It is the shape of the supervisory capacities in practice. The five-element specification is Problem Formulation. Reading the output against a prediction is Plausibility Auditing. Verifying against the handoff condition is Plausibility Auditing made explicit. Updating AGENTS.md is Executive Integration applied to the project's persistent context. The loop is the operational form of everything Chapter 6 named.
 
@@ -45,7 +47,7 @@ Every multi-step build produces at least three moments where the discipline matt
 
 A step's output fails its handoff condition. The temptation is to write a follow-up prompt to fix the result. The discipline is to revert and respecify.
 
-The schema example above is a soft version — the handoff condition technically passed but the plausibility audit caught a design issue. The hard version is when the condition actually fails. In Seth's build, this happened at Step 4, the categorization rule engine. The first Code Mode prompt produced an engine that hardcoded the rules — directly contradicting the spec, which required rules loaded from a config file. Seth used `/rewind` to restore to before the failed step. He revised the prompt to make the config-file requirement explicit as a negative constraint. The next prompt produced what the spec required.
+The schema example above is a soft version — the handoff condition technically passed but the plausibility audit caught a design issue. The hard version is when the condition actually fails. In Seth's build, this happened at Step 4, the asset categorization rule engine. The first Code Mode prompt produced an engine that hardcoded the folder-to-category mapping — directly contradicting the spec, which required rules loaded from a config file. Seth used `/rewind` to restore to before the failed step. He revised the prompt to make the config-file requirement explicit as a negative constraint. The next prompt produced what the spec required.
 
 After two failed corrections on the same step, the session context is too polluted to recover cleanly. The accumulated failures are now noise that Codex is reasoning against. Use `/clear` or open a new session. Fresh start with a tighter specification. The cost feels high in the moment; it is consistently lower than the cost of continuing.
 
@@ -53,7 +55,7 @@ After two failed corrections on the same step, the session context is too pollut
 
 Codex generates an output that does the requested step and offers to do something adjacent. The adjacent thing might be useful. It is not the current step.
 
-In Seth's build, this happened at Step 5, the summary generator. Codex offered to also generate a year-over-year comparison view. Useful future feature. Not in the spec. Seth logged it in the spec's "Out of scope (later)" section and declined. The current step's focus was preserved. The suggestion survives in writing.
+In Seth's build, this happened at Step 5, the per-build summary generator. Codex offered to also generate a release-over-release trend chart across the last ten builds. Useful future feature. Not in the spec. Seth logged it in the spec's "Out of scope (later)" section and declined. The current step's focus was preserved. The suggestion survives in writing.
 
 The discipline is not to dismiss the suggestion — it may be genuinely useful — but to hold the boundary. The adjacent thing goes in the log. The current step gets finished first.
 
@@ -65,7 +67,9 @@ The schema choice is this moment. The migration worked. The handoff condition pa
 
 The discipline is to investigate that feeling. Do not dismiss it because the handoff passed. The handoff condition you wrote was the condition you thought to write. The feeling is the condition you did not think to write. That is the dangerous middle from Chapter 10, arriving again, in the shape of a correct output that does not fully serve the situation.
 
-<!-- → [INFOGRAPHIC: three pivotal moments as a decision tree — handoff failure (→ revert/respecify), scope creep (→ log/decline), plausibility-audit fire (→ investigate/revise). Each branch shows the discipline and the cost of the alternative. Student should see the three moments as distinct triggers with distinct responses.] -->
+![Three labeled boxes side by side. Plan deviation: do this — /rewind, respecify with the failure as a negative constraint. Test failure (highlighted in red): do this — investigate the feeling; the condition you wrote was the condition you thought to write. Scope drift: do this — log it, decline now.](images/13-running-the-build-fig-02.png)
+
+*Figure 13.2 — Three pivotal moments. Distinct triggers, distinct responses. The middle moment is the hardest — the discipline is to investigate a feeling rather than dismiss it because the tests passed.*
 
 ---
 
@@ -73,13 +77,19 @@ The discipline is to investigate that feeling. Do not dismiss it because the han
 
 Not every step in the build is a Codex prompt. Some are human tasks — work that should not be delegated.
 
-For Seth's finance build, human tasks included the schema choice in the opening (a design judgment). Manually categorizing the first few "uncategorized" transactions to seed the rule engine — the categorization is Seth's judgment, not a pattern Codex can supply without being told what the categories mean. Reviewing the summary markdown for the first month: is it the summary Seth wanted, or has it drifted to a more generic shape? Deciding what to do with the edge case the dedup logic surfaced — an exact-amount-same-day entry that turned out to be two real transactions, not a duplicate, and therefore not something the dedup rule should collapse.
+For Seth's asset-budget build, human tasks included the schema choice in the opening (a design judgment). Manually categorizing the first few "uncategorized" assets to seed the rule engine — the categorization is Seth's judgment, not a pattern Codex can supply without being told what `scenes/ai/` means versus `scenes/inventory/`. Reviewing the summary markdown for the first build: is it the summary Seth wanted, or has it drifted to a more generic shape? Deciding what to do with the edge case the dedup logic surfaced — two assets with the same path and identical byte size across builds that turned out to be two genuinely different audio cues, not a duplicate, and therefore not something the dedup rule should collapse.
 
 The plan labels which steps are Codex tasks and which are human. The build log labels which supervisory capacity — PA, PF, TO, IJ, EI — was exercised at each human step. Together, the labels make the supervisory work visible: at the end of the build, Seth can look at his build log and see exactly which steps required his judgment and which capacity each one exercised.
 
 That visibility is not for the teacher. It is for Seth. The build log is the record of the conducting discipline applied to a real project. It is the artifact that converts the experience of building into the capacity to teach building — the Feynman test, applied to the whole build.
 
-<!-- → [TABLE: Seth's Phase 1 build log — columns: step number, task description, Codex or human, supervisory capacity exercised, handoff condition written, result (pass/revise/revert). Shows three Codex steps and two human steps.] -->
+| # | Task | Codex / Human | Capacity | Handoff condition | Result |
+|---|---|---|---|---|---|
+| 1 | Generate SQLite schema migration for `build_assets` table | Codex | — | "Migration script exists, runs cleanly against an empty DB, creates the columns the spec implies" | Pass mechanically, **revise** on PA — auto-increment key replaced with content-hash to make Step 3 idempotent |
+| 2 | Decide the key strategy and rewrite the schema spec | Human | **IJ + PA** | "Schema uses `(build_version, asset_path, size)` hash as primary key; `INSERT OR IGNORE` is idempotent" | Pass |
+| 3 | Implement dedup logic against existing build history | Codex | — | "Running the importer twice on the same log produces zero new rows on the second run; `pytest tests/test_dedup.py` green" | Pass |
+| 4 | Seed initial folder→category rules by hand for the first three categories | Human | **IJ** | "`config/categories.yaml` contains `scenes/ai/`, `scenes/inventory/`, `audio/sfx/` mapped to their categories; file is valid YAML" | Pass |
+| 5 | Implement per-build markdown summary generator with deltas | Codex | — | "Generator writes `~/HauntAndHarvest/budgets/v{build}.md` under 200 lines; sections for total budget, by-folder counts, audio counts, uncategorized list" | **Revert** on scope creep — Codex offered an extra release-over-release trend chart; logged to Out-of-scope, re-prompted without it, then pass |
 
 ---
 
@@ -89,7 +99,7 @@ There is a move from the practitioner literature that reduces the number of obvi
 
 If your specification includes a test command or a verification script, Codex will iterate against it. From the OpenAI engineering retrospective: *"When Codex has some way to check its work — like run tests or screenshot the UI — it can iterate and get dramatically better results."*[^1]
 
-For Seth's build, the dedup-logic specification included: *"After implementation, run `python -m pytest tests/test_dedup.py` and fix any failures before reporting done."* Codex ran the test suite, iterated twice against failures, and reported done with all tests passing. Seth then read the final code and ran the plausibility audit. The in-prompt verification had already eliminated the mechanical failures; Seth's review was on the design and domain correctness.
+For Seth's build, the dedup-logic specification included: *"After implementation, run `python -m pytest tests/test_dedup.py` and fix any failures before reporting done."* Codex ran the test suite, iterated twice against failures, and reported done with all tests passing. Seth then read the final code and ran the plausibility audit. The in-prompt verification had already eliminated the mechanical failures; Seth's review was on the design and domain correctness — specifically, whether the dedup rule respected the case where two same-sized audio files at the same path were in fact different cues.
 
 This is the division of labor the loop assumes. Codex is responsible for mechanical correctness — the tests you gave it pass. You are responsible for design correctness and domain fitness — the tests you gave it were the right tests, the code does what the situation actually requires, the behavior in the non-tested cases is sane. Mechanical correctness is verifiable by machine. Design correctness and domain fitness require the supervisory capacities.
 
@@ -179,3 +189,27 @@ The build is done when it passes the handoff conditions. Chapter 14 defines what
 
 [^1]: OpenAI engineers, "How OpenAI Engineers use Codex to Tackle Big Projects with Rigor" (forum.openai.com, December 4, 2025).
 [^2]: Deming, W. E. *Out of the Crisis*. MIT Press, 1986; reissued 2018. PDCA is articulated across his work; the 1986 book is the standard reference.
+
+---
+
+## Prompts
+
+Use these prompts with Claude to generate interactive D3 v7 versions of the figures in this chapter. Each produces a standalone HTML file you can open in a browser and modify freely.
+
+**Prerequisites:** Load `brutalist/CLAUDE.md` and `brutalist/DESIGN.md` into your Claude project context before using these prompts. They define the stack, naming conventions, color system, and typography the figures use.
+
+---
+
+### Figure 13.1 — The build loop
+
+Build a five-node clockwise cycle in D3 v7 inside a `--color-fill` plot rectangle. Five rectangular cards with a `--color-fill` header strip and a monospace ALL CAPS code (`READ PLAN`, `PICK STEP`, `EXECUTE`, `VERIFY`, `NEXT`), arranged in a clock-face pattern around a central hub. Connect the five nodes with curved single-headed arrows that share one `<defs>` arrowhead marker. The `VERIFY` node is highlighted in `--color-red` — header text, code label, and card stroke all switch to red. From `EXECUTE`, draw a dashed red branch to a sixth card (`STOP — REVERT`, `/rewind → respecify`) using a second red-filled arrowhead marker; label the branch `fail` in red italic. At the centre of the cycle, place a monospace ALL CAPS label `ONE PROMPT / WIDE` over an italic secondary line `PDCA at prompt granularity`. Hovering any card shows a tooltip with the longer step description. Dashed footer rule plus a caption naming why Verify is highlighted.
+
+> Reference implementation: `d3/13-running-the-build-fig-01.html`
+
+---
+
+### Figure 13.2 — Three pivotal moments
+
+Build a three-column box layout in D3 v7. Each column is a tall rectangular card with a `--color-fill` header strip containing a monospace ALL CAPS code (`PLAN DEVIATION`, `TEST FAILURE`, `SCOPE DRIFT`). Inside each box, three labeled sub-sections: a bold `Trigger` heading with two `--color-secondary` body lines; a bold `Temptation` heading with two italic `--color-secondary` lines; a bold red `Do this` heading with a monospace red action line (`/rewind`, `investigate the feeling`, `log it, decline now`) followed by three `--color-ink` instruction lines. The middle card (`TEST FAILURE`) is the highlighted one — header text and card stroke switch to `--color-red`. Hovering any card shows a tooltip explaining the trigger and the discipline. Dashed footer rule plus a two-line caption naming the middle moment as the hardest — the discipline is investigating a feeling rather than dismissing it because the tests passed.
+
+> Reference implementation: `d3/13-running-the-build-fig-02.html`

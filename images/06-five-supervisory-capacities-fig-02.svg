@@ -1,0 +1,64 @@
+<svg viewBox="0 0 700 480" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">PA fires versus PA dormant</title>
+  <desc id="desc">Two panels. Panel A shows PA firing — the supervisor catches an issue before tests confirm. Panel B shows PA dormant — the same fluent output passes the surface checks and the error propagates downstream.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#2a1a0e"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="700" height="480" fill="#FFFFFF"/>
+
+  <text x="32" y="56" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="10" letter-spacing="0.08em" fill="#545454">FIGURE 6.2 — PA FIRES, PA DORMANT</text>
+  <text x="32" y="88" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="13" font-weight="bold" fill="#2a1a0e">Same fluent output. The supervisor's attention is the only difference.</text>
+
+  <!-- Panel A — PA fires — left -->
+  <g>
+    <rect x="32" y="110" width="306" height="270" fill="#FFFFFF" stroke="#C8102E" stroke-width="1"/>
+    <rect x="32" y="110" width="306" height="32" fill="#F5EFE8" stroke="#C8102E" stroke-width="1"/>
+    <text x="46" y="131" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="10" letter-spacing="0.08em" fill="#C8102E" font-weight="bold">PANEL A — PA FIRES</text>
+
+    <!-- Codex output box -->
+    <rect x="48" y="158" width="274" height="68" fill="#F5EFE8" stroke="#D4D4D4" stroke-width="1"/>
+    <text x="58" y="178" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="9" letter-spacing="0.08em" fill="#545454">CODEX OUTPUT</text>
+    <text x="58" y="196" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="11" fill="#2a1a0e">fluent function, tests pass,</text>
+    <text x="58" y="212" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="11" fill="#2a1a0e">surface checks all green</text>
+
+    <!-- Off-feeling -->
+    <text x="48" y="252" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="9" letter-spacing="0.08em" fill="#C8102E">PA — OFF-FEELING</text>
+    <text x="48" y="270" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="11" font-style="italic" fill="#2a1a0e">"the default value is about</text>
+    <text x="48" y="284" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="11" font-style="italic" fill="#2a1a0e">to change next sprint"</text>
+
+    <!-- Outcome -->
+    <line x1="48" y1="312" x2="322" y2="312" stroke="#D4D4D4" stroke-width="0.75" stroke-dasharray="4 3"/>
+    <text x="48" y="332" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="9" letter-spacing="0.08em" fill="#545454">OUTCOME</text>
+    <text x="48" y="350" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="11" fill="#C8102E" font-weight="bold">stop. investigate. fix upstream.</text>
+    <text x="48" y="366" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="10" fill="#545454">fifteen extra minutes; no Tuesday outage.</text>
+  </g>
+
+  <!-- Panel B — PA dormant — right -->
+  <g>
+    <rect x="362" y="110" width="306" height="270" fill="#FFFFFF" stroke="#D4D4D4" stroke-width="1"/>
+    <rect x="362" y="110" width="306" height="32" fill="#F5EFE8" stroke="#D4D4D4" stroke-width="1"/>
+    <text x="376" y="131" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="10" letter-spacing="0.08em" fill="#545454" font-weight="bold">PANEL B — PA DORMANT</text>
+
+    <rect x="378" y="158" width="274" height="68" fill="#F5EFE8" stroke="#D4D4D4" stroke-width="1"/>
+    <text x="388" y="178" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="9" letter-spacing="0.08em" fill="#545454">CODEX OUTPUT</text>
+    <text x="388" y="196" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="11" fill="#2a1a0e">fluent function, tests pass,</text>
+    <text x="388" y="212" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="11" fill="#2a1a0e">surface checks all green</text>
+
+    <text x="378" y="252" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="9" letter-spacing="0.08em" fill="#545454">PA — QUIET</text>
+    <text x="378" y="270" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="11" font-style="italic" fill="#545454">no off-feeling registered,</text>
+    <text x="378" y="284" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="11" font-style="italic" fill="#545454">or overridden in the rush to ship</text>
+
+    <line x1="378" y1="312" x2="652" y2="312" stroke="#D4D4D4" stroke-width="0.75" stroke-dasharray="4 3"/>
+    <text x="378" y="332" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="9" letter-spacing="0.08em" fill="#545454">OUTCOME</text>
+    <text x="378" y="350" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="11" fill="#2a1a0e" font-weight="bold">ship. propagate. silently produce</text>
+    <text x="378" y="366" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="11" fill="#2a1a0e" font-weight="bold">wrong results next Tuesday.</text>
+  </g>
+
+  <!-- Bottom rule + caption -->
+  <line x1="32" y1="408" x2="668" y2="408" stroke="#D4D4D4" stroke-width="0.75" stroke-dasharray="4 3"/>
+  <text x="32" y="432" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="10" fill="#545454">PA is what fires when fluent output and your knowledge of the situation diverge. The feeling is data —</text>
+  <text x="32" y="448" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="10" fill="#545454">attended to in Panel A, overridden in Panel B. The Codex output is identical.</text>
+</svg>

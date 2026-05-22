@@ -1,0 +1,61 @@
+<svg viewBox="0 0 700 480" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">Technical fluency × domain depth</title>
+  <desc id="desc">Two-axis quadrant chart. X axis: technical fluency (low to high). Y axis: domain depth (low to high). Four quadrants labeled — low/low beginner (protected by hesitation), high/low DANGER ZONE (highlighted red), low/high expert learner, high/high target state. An arrow labeled "the conducting discipline" runs from the danger quadrant to the target.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#2a1a0e"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="700" height="480" fill="#FFFFFF"/>
+
+  <text x="32" y="48" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="10" letter-spacing="0.08em" fill="#545454">FIGURE 4.1 — THE DANGER ZONE</text>
+  <text x="32" y="76" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="13" font-weight="bold" fill="#2a1a0e">Technical fluency without domain depth is the dangerous configuration</text>
+
+  <!-- Plot area -->
+  <!-- 4-quadrant grid centered. X axis from 120 to 600 (480w). Y from 120 to 400 (280h). -->
+  <rect x="120" y="120" width="480" height="280" fill="#F5EFE8" stroke="#D4D4D4" stroke-width="1"/>
+
+  <!-- Mid divider lines -->
+  <line x1="360" y1="120" x2="360" y2="400" stroke="#D4D4D4" stroke-width="1" stroke-dasharray="4 3"/>
+  <line x1="120" y1="260" x2="600" y2="260" stroke="#D4D4D4" stroke-width="1" stroke-dasharray="4 3"/>
+
+  <!-- Quadrant labels -->
+  <!-- Top-left: low fluency / high depth — Expert learner -->
+  <text x="240" y="158" text-anchor="middle" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="10" letter-spacing="0.08em" fill="#545454">EXPERT LEARNER</text>
+  <text x="240" y="184" text-anchor="middle" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="12" font-weight="bold" fill="#2a1a0e">low fluency · high depth</text>
+  <text x="240" y="208" text-anchor="middle" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="11" fill="#545454">Sees mistakes but is</text>
+  <text x="240" y="222" text-anchor="middle" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="11" fill="#545454">slow with the tool.</text>
+
+  <!-- Top-right: high fluency / high depth — Target -->
+  <rect x="380" y="138" width="200" height="100" fill="#FFFFFF" stroke="#1A3A5C" stroke-width="1.5"/>
+  <text x="480" y="158" text-anchor="middle" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="10" letter-spacing="0.08em" fill="#1A3A5C">TARGET</text>
+  <text x="480" y="184" text-anchor="middle" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="12" font-weight="bold" fill="#1A3A5C">high fluency · high depth</text>
+  <text x="480" y="208" text-anchor="middle" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="11" fill="#1A3A5C">Conducts the tool and</text>
+  <text x="480" y="222" text-anchor="middle" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="11" fill="#1A3A5C">catches its mistakes.</text>
+
+  <!-- Bottom-left: low fluency / low depth — Beginner -->
+  <text x="240" y="298" text-anchor="middle" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="10" letter-spacing="0.08em" fill="#545454">BEGINNER · PROTECTED</text>
+  <text x="240" y="324" text-anchor="middle" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="12" font-weight="bold" fill="#2a1a0e">low fluency · low depth</text>
+  <text x="240" y="348" text-anchor="middle" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="11" fill="#545454">Hesitation protects.</text>
+  <text x="240" y="362" text-anchor="middle" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="11" fill="#545454">Asks for help.</text>
+
+  <!-- Bottom-right: high fluency / low depth — DANGER ZONE (RED highlight) -->
+  <rect x="380" y="278" width="200" height="100" fill="#FFFFFF" stroke="#C8102E" stroke-width="1.5"/>
+  <text x="480" y="298" text-anchor="middle" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="10" letter-spacing="0.08em" fill="#C8102E">DANGER ZONE</text>
+  <text x="480" y="324" text-anchor="middle" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="12" font-weight="bold" fill="#C8102E">high fluency · low depth</text>
+  <text x="480" y="348" text-anchor="middle" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="11" fill="#C8102E">Runs the tool fast,</text>
+  <text x="480" y="362" text-anchor="middle" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="11" fill="#C8102E">can't catch errors.</text>
+
+  <!-- Arrow from danger to target -->
+  <line x1="480" y1="278" x2="480" y2="240" stroke="#2a1a0e" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="600" y="262" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="11" font-style="italic" fill="#2a1a0e">the conducting discipline</text>
+
+  <!-- Axis labels -->
+  <text x="360" y="425" text-anchor="middle" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="10" letter-spacing="0.08em" fill="#545454">TECHNICAL FLUENCY  →</text>
+  <text x="80" y="260" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="10" letter-spacing="0.08em" fill="#545454" transform="rotate(-90 80 260)">DOMAIN DEPTH  →</text>
+
+  <!-- Bottom rule + caption -->
+  <line x1="32" y1="446" x2="668" y2="446" stroke="#D4D4D4" stroke-width="0.75" stroke-dasharray="4 3"/>
+  <text x="32" y="468" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="10" fill="#545454">Most current students sit in the lower-right quadrant. The conducting discipline is the operational substitute until depth is built.</text>
+</svg>

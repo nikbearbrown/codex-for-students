@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Figure 1.3 — Ask Mode → Code Mode gate</title>
+<style>
+:root {
+  --color-white: #FFFFFF;
+  --color-fill: #F5EFE8;
+  --color-ink: #2a1a0e;
+  --color-mark: #6B3520;
+  --color-red: #C8102E;
+  --color-slate: #1A3A5C;
+  --color-ochre: #C8860E;
+  --color-secondary: #545454;
+  --color-border: #D4D4D4;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-white: #111111;
+    --color-fill: #1a1612;
+    --color-ink: #F0EBE3;
+    --color-mark: #C8865E;
+    --color-red: #E8243A;
+    --color-slate: #6B8FB8;
+    --color-ochre: #D49A30;
+    --color-secondary: #A0978C;
+    --color-border: #2E2E2E;
+  }
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: var(--color-white); color: var(--color-ink); font-family: 'EB Garamond', Georgia, serif; padding: 24px; }
+#chart { width: 100%; min-height: 380px; }
+.tooltip { position: absolute; pointer-events: none; opacity: 0; background: var(--color-slate); color: var(--color-white); padding: 8px 12px; font-size: 12px; font-family: 'EB Garamond', Georgia, serif; max-width: 260px; line-height: 1.4; }
+text { font-family: 'EB Garamond', Georgia, serif; fill: var(--color-ink); }
+.caps { font-family: 'IBM Plex Mono', 'JetBrains Mono', monospace; letter-spacing: 0.08em; fill: var(--color-secondary); font-size: 10px; }
+.secondary { fill: var(--color-secondary); }
+.node-box { fill: var(--color-fill); stroke: var(--color-border); stroke-width: 1; cursor: pointer; transition: fill 120ms; }
+.node-box:hover { fill: var(--color-white); }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+</style>
+</head>
+<body>
+<div id="chart" role="main"></div>
+<div class="tooltip" id="tt"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
+<script>
+function draw() {
+  d3.select('#chart').selectAll('*').remove();
+  const totalWidth = document.getElementById('chart').clientWidth || 700;
+  const totalHeight = 360;
+  const margin = { top: 56, right: 32, bottom: 64, left: 32 };
+  const chartWidth = totalWidth - margin.left - margin.right;
+
+  const svg = d3.select('#chart').append('svg')
+    .attr('width', totalWidth).attr('height', totalHeight)
+    .attr('role','img').attr('aria-labelledby','chart-title chart-desc');
+  svg.append('title').attr('id','chart-title').text('Ask Mode → Code Mode gate');
+  svg.append('desc').attr('id','chart-desc').text('Two-node flow with a human-review arrow between Ask Mode and Code Mode.');
+
+  svg.append('defs').append('marker').attr('id','arrow-d3').attr('markerWidth',8).attr('markerHeight',6)
+    .attr('refX',7).attr('refY',3).attr('orient','auto').append('polygon').attr('points','0 0, 8 3, 0 6').attr('fill','var(--color-ink)');
+
+  const g = svg.append('g').attr('transform', `translate(${margin.left},${margin.top})`);
+  g.append('text').attr('class','caps').attr('y',-24).text('FIGURE 1.3 — ASK MODE → CODE MODE');
+  g.append('text').attr('y',0).attr('font-weight','bold').attr('font-size',13).text('Nothing moves to Code Mode until you have reviewed the plan');
+
+  const tt = d3.select('#tt');
+  function showTip(html){ tt.html(html).style('opacity',1); }
+  function moveTip(e){ tt.style('left',(e.pageX+12)+'px').style('top',(e.pageY-8)+'px'); }
+  function hideTip(){ tt.style('opacity',0); }
+
+  const nodes = [
+    { x: 28, label: 'ASK MODE', title: 'Plan, read, propose',
+      body: ['Codex reads files,','answers, proposes.'],
+      tip: 'Read-only. Codex inspects the project, answers questions, proposes a plan. Nothing changes on disk. Your job: interrogate and formulate.' },
+    { x: 388, label: 'CODE MODE', title: 'Write, execute, iterate',
+      body: ['Codex writes files,','runs commands.'],
+      tip: 'Executing. Codex writes and modifies files, runs commands. Side effects accumulate. Your job: execute the reviewed plan and verify the handoff condition.' }
+  ];
+
+  nodes.forEach(n => {
+    g.append('rect').attr('class','node-box').attr('x',n.x).attr('y',92).attr('width',220).attr('height',120)
+      .on('mouseenter',()=>showTip(`<strong>${n.label} — ${n.title}</strong><br/>${n.tip}`))
+      .on('mousemove',moveTip).on('mouseleave',hideTip);
+    g.append('text').attr('class','caps').attr('x',n.x+110).attr('y',118).attr('text-anchor','middle').text(n.label);
+    g.append('text').attr('x',n.x+110).attr('y',146).attr('text-anchor','middle').attr('font-weight','bold').attr('font-size',13).text(n.title);
+    n.body.forEach((line, i) => {
+      g.append('text').attr('class','secondary').attr('x',n.x+110).attr('y',174+i*16).attr('text-anchor','middle').attr('font-size',11).text(line);
+    });
+  });
+
+  // arrow
+  const arrowStart = 28+220+10;
+  const arrowEnd = 388-10;
+  g.append('line').attr('x1',arrowStart).attr('y1',152).attr('x2',arrowEnd).attr('y2',152)
+    .attr('stroke','var(--color-ink)').attr('stroke-width',1.5).attr('marker-end','url(#arrow-d3)');
+  g.append('text').attr('x',(arrowStart+arrowEnd)/2).attr('y',142).attr('text-anchor','middle').attr('font-size',11).attr('font-style','italic').attr('fill','var(--color-ink)')
+    .on('mouseenter',()=>showTip('<strong>The gate.</strong> Read the plan with a specific purpose: find the assumptions Codex made that you did not state. Confirm or correct each one before any code is written.'))
+    .on('mousemove',moveTip).on('mouseleave',hideTip)
+    .style('cursor','pointer').text('human reviews plan');
+
+  g.append('line').attr('x1',0).attr('y1',236).attr('x2',chartWidth).attr('y2',236)
+    .attr('stroke','var(--color-border)').attr('stroke-width',0.75).attr('stroke-dasharray','4 3');
+  g.append('text').attr('class','secondary').attr('y',258).attr('font-size',10).text('The gate is the moment where the conductor listens before the orchestra plays.');
+}
+draw();
+const ro = new ResizeObserver(() => draw());
+ro.observe(document.getElementById('chart'));
+</script>
+</body>
+</html>

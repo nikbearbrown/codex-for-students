@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Figure 12.3 — Planned vs. unplanned timelines</title>
+<style>
+:root {
+  --color-white: #FFFFFF;
+  --color-fill: #F5EFE8;
+  --color-ink: #2a1a0e;
+  --color-mark: #6B3520;
+  --color-red: #C8102E;
+  --color-slate: #1A3A5C;
+  --color-ochre: #C8860E;
+  --color-secondary: #545454;
+  --color-border: #D4D4D4;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-white: #111111;
+    --color-fill: #1a1612;
+    --color-ink: #F0EBE3;
+    --color-mark: #C8865E;
+    --color-red: #E8243A;
+    --color-slate: #6B8FB8;
+    --color-ochre: #D49A30;
+    --color-secondary: #A0978C;
+    --color-border: #2E2E2E;
+  }
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: var(--color-white); color: var(--color-ink); font-family: 'EB Garamond', Georgia, serif; padding: 24px; }
+#chart { width: 100%; min-height: 500px; }
+.tooltip { position: absolute; pointer-events: none; opacity: 0; background: var(--color-slate); color: var(--color-white); padding: 8px 12px; font-size: 12px; font-family: 'EB Garamond', Georgia, serif; max-width: 280px; line-height: 1.4; transition: opacity 150ms; }
+text { font-family: 'EB Garamond', Georgia, serif; fill: var(--color-ink); }
+.caps { font-family: 'IBM Plex Mono', 'JetBrains Mono', monospace; letter-spacing: 0.08em; fill: var(--color-secondary); font-size: 10px; }
+.secondary { fill: var(--color-secondary); }
+.segment { stroke: var(--color-border); stroke-width: 1; cursor: pointer; transition: fill 120ms; }
+.segment.forward { fill: var(--color-white); }
+.segment.rework { fill: var(--color-fill); stroke: var(--color-red); }
+.segment.frame { fill: var(--color-fill); pointer-events: none; }
+.segment.frame.unplanned { stroke: var(--color-red); }
+.segment:hover { fill: var(--color-fill); }
+@media (prefers-reduced-motion: reduce) { *, .tooltip { transition: none !important; animation: none !important; } }
+</style>
+</head>
+<body>
+<div id="chart" role="main"></div>
+<div class="tooltip" id="tt"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
+<script>
+function draw() {
+  d3.select('#chart').selectAll('*').remove();
+  const totalWidth = document.getElementById('chart').clientWidth || 700;
+  const totalHeight = 500;
+  const margin = { top: 56, right: 32, bottom: 80, left: 32 };
+  const chartWidth = totalWidth - margin.left - margin.right;
+
+  const svg = d3.select('#chart').append('svg')
+    .attr('viewBox', `0 0 ${totalWidth} ${totalHeight}`)
+    .attr('role', 'img').attr('aria-labelledby', 'chart-title chart-desc');
+  svg.append('title').attr('id', 'chart-title').text('Planned versus unplanned timelines');
+  svg.append('desc').attr('id', 'chart-desc').text('Two horizontal timelines stacked. The planned timeline is steady, finishing at 2 hours 10 minutes. The unplanned timeline is jagged with three rework loops, finishing at 3 hours.');
+
+  const g = svg.append('g').attr('transform', `translate(${margin.left},${margin.top})`);
+  g.append('text').attr('class', 'caps').attr('y', -24).text('FIGURE 12.3 — PLANNED VS. UNPLANNED');
+  g.append('text').attr('y', 0).attr('font-weight', 'bold').attr('font-size', 13)
+    .text('Same build, two trajectories — the unplanned one finishes later');
+
+  const tt = d3.select('#tt');
+  const showTip = (html) => tt.html(html).style('opacity', 1);
+  const moveTip = (e) => tt.style('left', (e.pageX + 12) + 'px').style('top', (e.pageY - 8) + 'px');
+  const hideTip = () => tt.style('opacity', 0);
+
+  // scale: 0..180 minutes maps across full chart width (540 originally / 700)
+  // use 540 width scaled
+  const scaleW = chartWidth;
+  const totalMin = 210;
+  const mx = (m) => (m / totalMin) * scaleW;
+
+  // Planned timeline
+  const plannedY = 76;
+  const barH = 56;
+  g.append('text').attr('class', 'caps').attr('x', 0).attr('y', plannedY - 12).text('PLANNED — 2h 10m');
+  g.append('rect').attr('class', 'segment frame').attr('x', 0).attr('y', plannedY).attr('width', scaleW).attr('height', barH);
+
+  const plannedSegs = [
+    { m0: 0, m: 40, label: 'thinking', sub: '40 min', tip: 'Forty minutes of planning — interrogation, formulation, spec, plan, review. No Code Mode prompts yet.' },
+    { m0: 40, m: 90, label: 'build', sub: '90 min', tip: 'Ninety minutes of Code Mode execution. The prompts reference a reviewed plan; the plan references a written spec.' }
+  ];
+  plannedSegs.forEach(s => {
+    g.append('rect').attr('class', 'segment forward').attr('x', mx(s.m0)).attr('y', plannedY).attr('width', mx(s.m)).attr('height', barH)
+      .on('mouseenter', () => showTip(`<strong>${s.label} — ${s.sub}</strong><br/>${s.tip}`))
+      .on('mousemove', moveTip).on('mouseleave', hideTip);
+    g.append('text').attr('x', mx(s.m0) + mx(s.m) / 2).attr('y', plannedY + 24).attr('text-anchor', 'middle').attr('font-size', 10).attr('pointer-events', 'none').text(s.label);
+    g.append('text').attr('x', mx(s.m0) + mx(s.m) / 2).attr('y', plannedY + 38).attr('text-anchor', 'middle').attr('font-size', 9).attr('class', 'secondary').attr('pointer-events', 'none').text(s.sub);
+  });
+  // finish marker
+  g.append('line').attr('x1', mx(130)).attr('y1', plannedY - 8).attr('x2', mx(130)).attr('y2', plannedY + barH + 12)
+    .attr('stroke', 'var(--color-slate)').attr('stroke-width', 1.5);
+  g.append('text').attr('class', 'caps').attr('x', mx(130) + 4).attr('y', plannedY + barH + 20).attr('fill', 'var(--color-slate)').text('DONE 2:10');
+
+  // Unplanned timeline
+  const unY = 196;
+  g.append('text').attr('class', 'caps').attr('x', 0).attr('y', unY - 12).attr('fill', 'var(--color-red)').text('UNPLANNED — 3h 00m');
+  g.append('rect').attr('class', 'segment frame unplanned').attr('x', 0).attr('y', unY).attr('width', scaleW).attr('height', barH);
+
+  const unplannedSegs = [
+    { m0: 0, m: 40, label: 'build', sub: '40 min', kind: 'forward', tip: 'Started Code Mode immediately. No spec, no plan — Codex generates against the one-line prompt and its averaged prior.' },
+    { m0: 40, m: 20, label: 'rework', kind: 'rework', tip: 'Discovered the single-format log assumption was wrong. Twenty minutes of corrections in flight.' },
+    { m0: 60, m: 30, label: 'build', sub: '30 min', kind: 'forward', tip: 'Forward work continues with the patched code path.' },
+    { m0: 90, m: 30, label: 'rework', kind: 'rework', tip: 'Hardcoded categorization rules surface as a problem when a new folder appears. Thirty minutes of corrections.' },
+    { m0: 120, m: 40, label: 'build', sub: '40 min', kind: 'forward', tip: 'More forward work — but the output format is still undefined.' },
+    { m0: 160, m: 20, label: 'rework', kind: 'rework', tip: 'Output format ambiguity surfaces during review. Twenty minutes of restructuring.' },
+    { m0: 180, m: 20, label: 'build', sub: '20 min', kind: 'forward', tip: 'Final wrap-up. The build is done — ninety minutes after the planned timeline finished.' }
+  ];
+  unplannedSegs.forEach(s => {
+    g.append('rect').attr('class', 'segment ' + s.kind).attr('x', mx(s.m0)).attr('y', unY).attr('width', mx(s.m)).attr('height', barH)
+      .on('mouseenter', () => showTip(`<strong>${s.label}</strong><br/>${s.tip}`))
+      .on('mousemove', moveTip).on('mouseleave', hideTip);
+    g.append('text').attr('x', mx(s.m0) + mx(s.m) / 2).attr('y', unY + 24).attr('text-anchor', 'middle').attr('font-size', 10)
+      .attr('font-style', s.kind === 'rework' ? 'italic' : 'normal')
+      .attr('fill', s.kind === 'rework' ? 'var(--color-red)' : 'var(--color-ink)')
+      .attr('pointer-events', 'none').text(s.label);
+    if (s.sub) {
+      g.append('text').attr('x', mx(s.m0) + mx(s.m) / 2).attr('y', unY + 38).attr('text-anchor', 'middle').attr('font-size', 9).attr('class', 'secondary').attr('pointer-events', 'none').text(s.sub);
+    }
+  });
+  // finish marker
+  g.append('line').attr('x1', mx(200)).attr('y1', unY - 8).attr('x2', mx(200)).attr('y2', unY + barH + 12)
+    .attr('stroke', 'var(--color-red)').attr('stroke-width', 1.5);
+  g.append('text').attr('class', 'caps').attr('x', mx(200) + 4).attr('y', unY + barH + 20).attr('fill', 'var(--color-red)').text('DONE 3:00');
+
+  // shared time axis
+  const axisY = unY + barH + 50;
+  g.append('line').attr('x1', 0).attr('y1', axisY).attr('x2', scaleW).attr('y2', axisY).attr('stroke', 'var(--color-border)').attr('stroke-width', 0.5);
+  const ticks = [0, 30, 60, 90, 120, 180];
+  ticks.forEach(t => {
+    g.append('text').attr('class', 'caps').attr('x', mx(t)).attr('y', axisY + 16).attr('text-anchor', t === 0 ? 'start' : 'middle').text(t === 0 ? '0:00' : `${Math.floor(t / 60)}:${(t % 60).toString().padStart(2, '0')}`);
+  });
+  g.append('text').attr('class', 'caps').attr('x', scaleW / 2).attr('y', axisY + 32).attr('text-anchor', 'middle').text('TIME →');
+
+  // legend
+  const legY = axisY + 56;
+  g.append('rect').attr('class', 'segment forward').attr('x', 0).attr('y', legY).attr('width', 14).attr('height', 10);
+  g.append('text').attr('x', 20).attr('y', legY + 9).attr('font-size', 10).attr('class', 'secondary').text('forward work');
+  g.append('rect').attr('class', 'segment rework').attr('x', 128).attr('y', legY).attr('width', 14).attr('height', 10);
+  g.append('text').attr('x', 148).attr('y', legY + 9).attr('font-size', 10).attr('class', 'secondary').text('rework loop');
+}
+draw();
+const ro = new ResizeObserver(() => draw());
+ro.observe(document.getElementById('chart'));
+</script>
+</body>
+</html>

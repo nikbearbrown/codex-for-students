@@ -26,7 +26,7 @@ The classmates' work was not plagiarized. They had written the prompts. They had
 
 Voice is what remains when you subtract the average. The classmates' work had subtracted the average and left nothing.
 
-<!-- → [IMAGE: two-panel illustration — left panel: a polished portfolio page with generic sans-serif font, blue accent color, standard card grid, labeled "most-probable output"; right panel: same content with specific serif face, muted earth palette, annotation-style labels, labeled "specified output." Caption: "Both are technically correct. Only one has an author."] -->
+<!-- → [IMAGE: two-panel illustration — left panel: a polished platform homepage with generic sans-serif font, blue accent color, standard card grid, labeled "most-probable output"; right panel: same content with deep blue-black background, hot-neon-pink accents, phosphor-green code blocks, JetBrains Mono labels, labeled "specified output." Caption: "Both are technically correct. Only one has an author."] -->
 
 ---
 
@@ -48,30 +48,30 @@ The classmates' work was voiceless partly because there was no DESIGN.md. Codex 
 
 A DESIGN.md prevents this by being *brutally specific*. Not "use a professional color palette" — that is an invitation to sample the average. Six named color variables, with hex values. Two typefaces, named, with sizes. An explicit interaction vocabulary listing what the system does *and* what it explicitly never does.
 
-For a personal portfolio:
+For Zebonastic — Seth's dark-neon Next.js platform where developers and educators create game templates, with a weekly article on horror-game psychology and adrenaline mechanics:
 
 ```markdown
-# DESIGN.md — Personal Portfolio
+# DESIGN.md — Zebonastic
 
 ## Color system (six variables, no others)
---background:  #f8f5f0   /* warm white */
---ink:         #1f1f1f   /* near-black, body */
---accent:      #b54232   /* deep red, links and emphasis */
---muted:       #6b6b6b   /* gray, secondary text */
---code-bg:     #1f1f1f   /* dark background for code blocks */
---code-fg:     #f8f5f0   /* light foreground for code blocks */
+--background:  #0a0a12   /* near-black, deep blue-black */
+--ink:         #e8e8f0   /* off-white, body */
+--accent:      #ff2e88   /* hot neon pink, links and emphasis */
+--muted:       #6b6b85   /* dim violet-gray, secondary text */
+--code-bg:     #11111c   /* slightly lighter than background */
+--code-fg:     #b5ffd5   /* phosphor green, code */
 
 ## Typography (two faces, no others)
-Display + body: Iowan Old Style, Charter, serif. 18px body.
-Code:           SF Mono, Menlo, monospace. 15px.
+Display + body: Inter, system-ui, sans-serif. 17px body.
+Code:           JetBrains Mono, monospace. 14px.
 
-No sans-serif. No script. No display face other than the serif above.
+No serif. No script. No display face other than Inter.
 
 ## Interaction vocabulary
 ALLOWED:
-- Hover on links: underline darkens; no other change.
-- Click on project card: navigate to project page.
-- Keyboard navigation: standard tab order; visible focus ring.
+- Hover on links: the underline glows from --muted to --accent over 120ms.
+- Click on template card: navigate to template page.
+- Keyboard navigation: standard tab order; visible focus ring in --accent.
 
 NEVER:
 - Animations or transitions over 200ms.
@@ -81,7 +81,7 @@ NEVER:
 
 ## Accessibility
 - All text at least 16px.
-- Color contrast meets WCAG AA at minimum.
+- Color contrast meets WCAG AA at minimum on the dark background.
 - All interactive elements have keyboard-accessible focus.
 - Images have alt text or are explicitly marked decorative.
 ```
@@ -100,63 +100,75 @@ PROJECT.md has two layers, and the distinction between them is the heart of the 
 
 Layer 1 is what you write and Codex reads but does not modify. If Codex proposes a change to Layer 1, you reject it; the proposal goes to Layer 2 as a question for you to decide. The Intent Layer is the author's domain. The Technical State is the executor's working surface.
 
-For the portfolio:
+For Zebonastic:
 
 ```markdown
-# PROJECT.md — Personal Portfolio
+# PROJECT.md — Zebonastic
 
 ## Layer 1: Intent (Human Layer — never overwritten by Codex)
 
 What this project is:
-A personal portfolio that shows the work I have done and signals — through
-its design choices — that I think about what I make. It is not a resume.
-It is not a job application. It is the artifact a curious person reads when
-they want to know what kind of person I am as a builder.
+A dark-neon platform where developers and educators publish game templates
+and short articles on horror-game psychology and adrenaline mechanics.
+It is not a portfolio. It is not a marketplace. It is the place where the
+craft of building scary games gets taken apart in public, weekly.
 
 What the visitor should understand after using it:
-- What kinds of problems I am drawn to (specific examples, not categories).
-- That I have an aesthetic — that the visual choices were deliberate.
-- That I write about what I make, not just produce artifacts.
+- That horror in games is a designed effect, not a vibe — and there is
+  a literature for it.
+- That the templates are working starting points, not finished games.
+- That the writing is for builders, not consumers — second-person,
+  specifics over genre talk.
 
 What questions it answers:
-- What has this person built? (Project cards with brief descriptions.)
-- What is this person interested in? (The selection itself is the answer.)
-- How does this person write? (One essay per project, linked from the card.)
+- What is a "scare event" and how do you build one? (Articles.)
+- How do other people structure their horror prototypes? (Templates.)
+- What is this week's piece? (Front page, dated, one-click.)
 
 What questions it refuses to answer:
-- "Are they available for hire?" (Not on this site; reach out by email.)
-- "How many GitHub stars?" (Vanity metrics are not the point.)
-- "What is their resume?" (Different artifact.)
+- "Top 10 horror games of all time?" (Not a listicle site.)
+- "Buy my course?" (Nothing is monetized on Zebonastic.)
+- "Will this article scare me?" (Wrong reader.)
 
 The tone:
 Matter-of-fact. No marketing voice. No "passionate about..." or
-"results-driven..." Direct second-person where the visitor is addressed.
-Specifics over generic claims.
+"unleash your creativity." Direct second-person where the builder is
+addressed. Specifics over generic claims.
 
 ## Layer 2: Technical State (Codex Layer)
 
 What is built:
-- HTML scaffold with project cards.
-- CSS with the six variables defined.
+- Next.js scaffold with the article and template routes.
+- Tailwind config with the six variables defined.
 
 What is pending:
-- The essays linked from each project card.
-- The contact section.
-- The dark-mode toggle.
+- The MDX pipeline for weekly articles.
+- The template-card index.
+- The dark-mode-only enforcement (no light-mode toggle).
 
 Generation log: [will populate during build]
 
 Open technical questions:
-- Markdown rendered to HTML at build time, or written as HTML directly?
+- MDX rendered at build time with `next-mdx-remote`, or as static MDX routes?
 ```
 
 The Intent Layer is what makes the project yours. It is 200 words of specificity that excludes the entire space of most-probable defaults. Codex, reading it, cannot produce the voiceless output from the chapter opening — the output would directly contradict the specified intent.
+
+The Intent Layer's job is to protect a register that already exists. Seth's actual writing on Zebonastic — the weekly horror-game-psychology articles the platform is built around — opens in this register:
+
+> Here is the foundational fact: your brain cannot distinguish between a threat that will kill you and a threat that will not. The amygdala — the almond-shaped structure buried in your temporal lobe — fires identically whether you see a bear charging at you in a forest or a sprite of a creature lunging at you on a screen. Cortisol spikes. Heart rate climbs. Muscles tense. This is not a metaphor. It is a measurable physiological response documented in fMRI studies, most famously Mathiak & Weber's 2006 work showing that first-person shooter gameplay reliably activates regions associated with real threat response — including the amygdala and anterior cingulate cortex. The brain's threat-detection architecture predates our ability to distinguish fiction from reality by millions of years. Horror games exploit a firmware bug in Homo sapiens.
+
+That register — *the amygdala fires identically*; *firmware bug in Homo sapiens*; the cited 2006 fMRI study; the willingness to use clinical neuroscience vocabulary inside a piece about video games — is the thing the Intent Layer exists to preserve. Without the layer, Codex's most-probable output for "an article about horror games" samples the average of every horror-game article ever written: introductory, atmospheric, oriented to the casual reader. With the layer, Codex's output stays in Seth's register: rigorous, specific, technically grounded, willing to put neurochemistry and game mechanics in the same sentence. The Intent Layer is not instructing Codex how to write. It is naming the register that already exists and must not be averaged away.
 
 The phase gate: **Code Mode does not begin until both layers of PROJECT.md are populated.** Not as a suggestion. As a gate. The classmates' work was voiceless because there was no Intent Layer to start from. Codex filled in defaults for everything the Intent Layer would have specified.
 
 <!-- → [DIAGRAM: The three-file system as three nested layers. Outer: CLAUDE.md / AGENTS.md (technical constitution). Middle: DESIGN.md (visual constitution). Inner: PROJECT.md (project state — Intent Layer is human, always). Editorial style.] -->
 
-<!-- → [TABLE: three-file responsibility matrix — three rows (AGENTS.md, DESIGN.md, PROJECT.md), four columns: file name, what it holds, who writes it, what happens if it's missing. Student should be able to explain the purpose of each file and the failure mode its absence produces.] -->
+| File | What it holds | Who writes it | What happens if it's missing |
+|---|---|---|---|
+| AGENTS.md | Technical constitution — commands, stack, conventions, invariants, lessons learned | The builder (human), updated after each session | Codex re-infers conventions every session; the same misalignment is rediscovered again and again |
+| DESIGN.md | Visual constitution — the six colors, type ramp, spacing scale, allowed and forbidden interactions | The builder (human), once and rarely revised | The build drifts to the most-probable visual default — Bootstrap-shaped, gradient-shaped, voiceless |
+| PROJECT.md | Project state in two layers — Intent Layer (human-only) and Technical State (Codex-updatable) | Intent Layer: human, always. Technical State: collaborative | Codex fills the intent gap with the average of "an article platform" and the voice is averaged away |
 
 ---
 
@@ -200,7 +212,7 @@ Same Codex. Same data. Same 45-minute build. The 30 minutes of three-file work a
 
 A forcing function that keeps creative builds appropriately sized: **if writing all three files takes more than 45 minutes, the project is too large for a first creative build.**
 
-The portfolio in the worked example passes the test — the three files can be written in 30–40 minutes if the intent is clear. A more ambitious project (a multi-page interactive essay, a small game, a custom data visualization with non-standard interactions) takes longer to specify and benefits from being scoped down for the first build.
+The Zebonastic example passes the test — the three files can be written in 30–40 minutes if the intent is clear. A more ambitious project (a multi-page interactive essay, a small game, a custom data visualization with non-standard interactions) takes longer to specify and benefits from being scoped down for the first build.
 
 The test is not about whether you *can* write longer files. It is about whether the first creative build should be ambitious enough to *need* longer files. The answer is almost always no. Make it small. Make it complete. Ship it. Then build the next one larger. The discipline of completing a small, specified project builds the skill the larger projects will need.
 
@@ -215,6 +227,12 @@ The test is not about whether you *can* write longer files. It is about whether 
 **It is not about distrust of Codex.** Codex's defaults are reasonable. They are the average of what has worked across its training data. The three-file system is not a claim that Codex's defaults are bad. It is a claim that your specific choices are not the average, and the files are how you specify the difference.
 
 **It is not a substitute for having aesthetic opinions.** The DESIGN.md needs to specify six colors. If you do not have opinions about which six colors, the DESIGN.md will be vague, and Codex will sample the average anyway. The discipline works only if you have made the decisions the files are asking you to make. Making those decisions is part of the work.
+
+---
+
+## Reference implementations at full strength
+
+The Brutalist three-file system specifies a creative project. The same discipline — a structured specification with allowed and forbidden moves, phase gates, refusals as features — also produces strong AI agents. The appendix (`chapters/98-appendix-walker-and-zelda.md`) reproduces Walker and Zelda, two production agent prompts Seth and I co-built, public at humanitarians.ai/tools. Zelda in particular is the closest cousin to this chapter: a senior game-design consultant with a 34-command library across five phases, a phase-gate enforcement layer, a pushback layer that refuses weak input, and a 7-failure-mode audit pass. Read as Brutalist files at full strength: every command specified, every refusal explicit, every phase gated. When a creative build's three files start to feel skeletal, the appendix shows what the form scales to.
 
 ---
 
@@ -270,7 +288,7 @@ You have the full conducting discipline — technical and creative. The next cha
 
 1. *(Tests: what the creative fluency trap is)* Explain in your own words why the classmates' work at the chapter opening was voiceless — not in terms of what they did wrong, but in terms of what cognitive event did not occur. Connect your answer to the mechanism described in Chapter 2.
 
-2. *(Tests: file responsibilities)* For each of the following decisions, name which file it belongs in and explain why: (a) the project uses vanilla HTML/CSS with no build step; (b) links use a deep red accent on hover; (c) the portfolio is for a curious peer, not a recruiter; (d) the `dist/` folder should never be modified by Codex; (e) no animations longer than 200ms.
+2. *(Tests: file responsibilities)* For each of the following decisions, name which file it belongs in and explain why: (a) the project uses Next.js with no static-export step; (b) link hover underlines glow from muted violet-gray to hot neon pink; (c) Zebonastic is for builders, not consumers; (d) the `.next/` folder should never be modified by Codex; (e) no animations longer than 200ms.
 
 3. *(Tests: the forbidden list)* A DESIGN.md includes an ALLOWED section but no NEVER section. What is the likely consequence for the build? What specific kind of output would the missing NEVER section have prevented?
 

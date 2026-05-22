@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Figure 5.1 — Right seat, wrong seat</title>
+<style>
+:root {
+  --color-white: #FFFFFF;
+  --color-fill: #F5EFE8;
+  --color-ink: #2a1a0e;
+  --color-mark: #6B3520;
+  --color-red: #C8102E;
+  --color-slate: #1A3A5C;
+  --color-ochre: #C8860E;
+  --color-secondary: #545454;
+  --color-border: #D4D4D4;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-white: #111111;
+    --color-fill: #1a1612;
+    --color-ink: #F0EBE3;
+    --color-mark: #C8865E;
+    --color-red: #E8243A;
+    --color-slate: #6B8FB8;
+    --color-ochre: #D49A30;
+    --color-secondary: #A0978C;
+    --color-border: #2E2E2E;
+  }
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: var(--color-white); color: var(--color-ink); font-family: 'EB Garamond', Georgia, serif; padding: 24px; }
+#chart { width: 100%; min-height: 440px; }
+.tooltip { position: absolute; pointer-events: none; opacity: 0; background: var(--color-slate); color: var(--color-white); padding: 8px 12px; font-size: 12px; font-family: 'EB Garamond', Georgia, serif; max-width: 300px; line-height: 1.4; }
+text { font-family: 'EB Garamond', Georgia, serif; fill: var(--color-ink); }
+.caps { font-family: 'IBM Plex Mono', 'JetBrains Mono', monospace; letter-spacing: 0.08em; fill: var(--color-secondary); font-size: 10px; }
+.secondary { fill: var(--color-secondary); }
+.panel { fill: var(--color-fill); stroke: var(--color-border); stroke-width: 1; cursor: pointer; transition: fill 120ms; }
+.panel:hover { fill: var(--color-white); }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+</style>
+</head>
+<body>
+<div id="chart" role="main"></div>
+<div class="tooltip" id="tt"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
+<script>
+function draw() {
+  d3.select('#chart').selectAll('*').remove();
+  const totalWidth = document.getElementById('chart').clientWidth || 700;
+  const totalHeight = 440;
+  const margin = { top: 56, right: 24, bottom: 80, left: 24 };
+  const chartWidth = totalWidth - margin.left - margin.right;
+
+  const svg = d3.select('#chart').append('svg')
+    .attr('width', totalWidth).attr('height', totalHeight)
+    .attr('role','img').attr('aria-labelledby','chart-title chart-desc');
+  svg.append('title').attr('id','chart-title').text('Right seat, wrong seat');
+  svg.append('desc').attr('id','chart-desc').text('Two panels — conductor at podium vs conductor in the violin section.');
+
+  const g = svg.append('g').attr('transform', `translate(${margin.left},${margin.top})`);
+  g.append('text').attr('class','caps').attr('y',-24).text('FIGURE 5.1 — RIGHT SEAT, WRONG SEAT');
+  g.append('text').attr('y',0).attr('font-weight','bold').attr('font-size',13).text('The failure mode is not incompetence. It is being in the wrong seat.');
+
+  const tt = d3.select('#tt');
+  function showTip(html){ tt.html(html).style('opacity',1); }
+  function moveTip(e){ tt.style('left',(e.pageX+12)+'px').style('top',(e.pageY-8)+'px'); }
+  function hideTip(){ tt.style('opacity',0); }
+
+  const panelW = (chartWidth - 28) / 2;
+
+  // Panel A
+  g.append('rect').attr('class','panel').attr('x',0).attr('y',32).attr('width',panelW).attr('height',240)
+    .on('mouseenter',()=>showTip('<strong>At the podium.</strong> The conductor reads the score, holds the intended sound in their head, listens to what the orchestra produces, intervenes when it diverges. Meaning is held by someone.'))
+    .on('mousemove',moveTip).on('mouseleave',hideTip);
+  g.append('text').attr('class','caps').attr('x',panelW/2).attr('y',56).attr('text-anchor','middle').text('PANEL A — AT THE PODIUM');
+
+  // Stage line
+  g.append('line').attr('x1',32).attr('x2',panelW-32).attr('y1',220).attr('y2',220).attr('stroke','var(--color-secondary)');
+  // Podium
+  g.append('rect').attr('x',panelW/2-24).attr('y',182).attr('width',48).attr('height',38).attr('fill','var(--color-white)').attr('stroke','var(--color-ink)').attr('stroke-width',1.5);
+  // Conductor
+  g.append('circle').attr('cx',panelW/2).attr('cy',146).attr('r',9).attr('fill','var(--color-white)').attr('stroke','var(--color-ink)').attr('stroke-width',1.5);
+  g.append('line').attr('x1',panelW/2).attr('y1',155).attr('x2',panelW/2).attr('y2',182).attr('stroke','var(--color-ink)').attr('stroke-width',1.5);
+  g.append('line').attr('x1',panelW/2).attr('y1',162).attr('x2',panelW/2+16).attr('y2',148).attr('stroke','var(--color-ink)').attr('stroke-width',1.5);
+  g.append('line').attr('x1',panelW/2+16).attr('y1',148).attr('x2',panelW/2+32).attr('y2',130).attr('stroke','var(--color-ink)').attr('stroke-width',1.2);
+  g.append('line').attr('x1',panelW/2).attr('y1',162).attr('x2',panelW/2-16).attr('y2',170).attr('stroke','var(--color-ink)').attr('stroke-width',1.5);
+  // Orchestra dots
+  [-92,-72,-52,52,72,92].forEach((dx, i) => {
+    const ys = [198,208,212,212,208,198];
+    g.append('circle').attr('cx',panelW/2+dx).attr('cy',ys[i]).attr('r',6).attr('fill','var(--color-white)').attr('stroke','var(--color-secondary)');
+  });
+  g.append('text').attr('class','secondary').attr('x',panelW/2).attr('y',246).attr('text-anchor','middle').attr('font-size',11).text('listens, judges, intervenes');
+
+  // Panel B
+  const x2 = panelW + 28;
+  g.append('rect').attr('class','panel').attr('x',x2).attr('y',32).attr('width',panelW).attr('height',240)
+    .on('mouseenter',()=>showTip('<strong>In the violin section.</strong> The same conductor — sitting in the section, playing a part. Each note is technically correct. The podium is empty. No one is holding the meaning of the performance.'))
+    .on('mousemove',moveTip).on('mouseleave',hideTip);
+  g.append('text').attr('class','caps').attr('x',x2+panelW/2).attr('y',56).attr('text-anchor','middle').text('PANEL B — IN THE SECTION');
+  g.append('line').attr('x1',x2+32).attr('x2',x2+panelW-32).attr('y1',220).attr('y2',220).attr('stroke','var(--color-secondary)');
+  // Empty podium
+  g.append('rect').attr('x',x2+panelW/2-24).attr('y',182).attr('width',48).attr('height',38).attr('fill','var(--color-white)').attr('stroke','var(--color-red)').attr('stroke-width',1.5).attr('stroke-dasharray','4 3');
+  g.append('text').attr('class','secondary').attr('x',x2+panelW/2).attr('y',176).attr('text-anchor','middle').attr('font-size',9).attr('font-style','italic').attr('fill','var(--color-red)').text('empty');
+
+  // Conductor seated in violin row (red)
+  g.append('circle').attr('cx',x2+52).attr('cy',182).attr('r',9).attr('fill','var(--color-white)').attr('stroke','var(--color-red)').attr('stroke-width',1.5);
+  g.append('line').attr('x1',x2+52).attr('y1',191).attr('x2',x2+52).attr('y2',212).attr('stroke','var(--color-red)').attr('stroke-width',1.5);
+  g.append('rect').attr('x',x2+60).attr('y',188).attr('width',22).attr('height',6).attr('fill','var(--color-white)').attr('stroke','var(--color-red)').attr('stroke-width',1.2);
+
+  // Other violinists
+  [72,92].forEach(dx => {
+    g.append('circle').attr('cx',x2+dx).attr('cy',182).attr('r',7).attr('fill','var(--color-white)').attr('stroke','var(--color-secondary)');
+    g.append('rect').attr('x',x2+dx+8).attr('y',188).attr('width',22).attr('height',6).attr('fill','var(--color-white)').attr('stroke','var(--color-secondary)');
+  });
+  // Right side
+  [192,212,232,252].forEach((dx, i) => {
+    const ys = [208,206,202,198];
+    g.append('circle').attr('cx',x2+dx).attr('cy',ys[i]).attr('r',6).attr('fill','var(--color-white)').attr('stroke','var(--color-secondary)');
+  });
+
+  g.append('text').attr('class','secondary').attr('x',x2+panelW/2).attr('y',246).attr('text-anchor','middle').attr('font-size',11).text('plays a part. no one holds the meaning.');
+
+  // bottom caption
+  g.append('line').attr('x1',0).attr('y1',296).attr('x2',chartWidth).attr('y2',296)
+    .attr('stroke','var(--color-border)').attr('stroke-width',0.75).attr('stroke-dasharray','4 3');
+  g.append('text').attr('class','secondary').attr('y',316).attr('font-size',10).text('The orchestra keeps producing notes. The notes are technically correct. No one is checking whether they are the right notes for this piece.');
+}
+draw();
+const ro = new ResizeObserver(() => draw());
+ro.observe(document.getElementById('chart'));
+</script>
+</body>
+</html>

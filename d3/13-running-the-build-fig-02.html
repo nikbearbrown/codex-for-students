@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Figure 13.2 — Three pivotal moments</title>
+<style>
+:root {
+  --color-white: #FFFFFF;
+  --color-fill: #F5EFE8;
+  --color-ink: #2a1a0e;
+  --color-mark: #6B3520;
+  --color-red: #C8102E;
+  --color-slate: #1A3A5C;
+  --color-ochre: #C8860E;
+  --color-secondary: #545454;
+  --color-border: #D4D4D4;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-white: #111111;
+    --color-fill: #1a1612;
+    --color-ink: #F0EBE3;
+    --color-mark: #C8865E;
+    --color-red: #E8243A;
+    --color-slate: #6B8FB8;
+    --color-ochre: #D49A30;
+    --color-secondary: #A0978C;
+    --color-border: #2E2E2E;
+  }
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: var(--color-white); color: var(--color-ink); font-family: 'EB Garamond', Georgia, serif; padding: 24px; }
+#chart { width: 100%; min-height: 500px; }
+.tooltip { position: absolute; pointer-events: none; opacity: 0; background: var(--color-slate); color: var(--color-white); padding: 8px 12px; font-size: 12px; font-family: 'EB Garamond', Georgia, serif; max-width: 280px; line-height: 1.4; transition: opacity 150ms; }
+text { font-family: 'EB Garamond', Georgia, serif; fill: var(--color-ink); }
+.caps { font-family: 'IBM Plex Mono', 'JetBrains Mono', monospace; letter-spacing: 0.08em; fill: var(--color-secondary); font-size: 10px; }
+.mono { font-family: 'IBM Plex Mono', 'JetBrains Mono', monospace; }
+.secondary { fill: var(--color-secondary); }
+.box-body { fill: var(--color-white); stroke: var(--color-border); stroke-width: 1; cursor: pointer; transition: fill 120ms; }
+.box-header { fill: var(--color-fill); stroke: var(--color-border); stroke-width: 1; pointer-events: none; }
+.box-body.highlight { stroke: var(--color-red); }
+.box-header.highlight { stroke: var(--color-red); }
+.box-body:hover { fill: var(--color-fill); }
+@media (prefers-reduced-motion: reduce) { *, .tooltip { transition: none !important; animation: none !important; } }
+</style>
+</head>
+<body>
+<div id="chart" role="main"></div>
+<div class="tooltip" id="tt"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
+<script>
+function draw() {
+  d3.select('#chart').selectAll('*').remove();
+  const totalWidth = document.getElementById('chart').clientWidth || 700;
+  const totalHeight = 500;
+  const margin = { top: 56, right: 32, bottom: 80, left: 32 };
+  const chartW = totalWidth - margin.left - margin.right;
+
+  const svg = d3.select('#chart').append('svg')
+    .attr('viewBox', `0 0 ${totalWidth} ${totalHeight}`)
+    .attr('role', 'img').attr('aria-labelledby', 'chart-title chart-desc');
+  svg.append('title').attr('id', 'chart-title').text('Three pivotal moments in the build');
+  svg.append('desc').attr('id', 'chart-desc').text('Three boxes side by side. Plan deviation: revert. Test failure (highlighted): investigate the plausibility-audit fire. Scope drift: log and decline.');
+
+  const g = svg.append('g').attr('transform', `translate(${margin.left},${margin.top})`);
+  g.append('text').attr('class', 'caps').attr('y', -24).text('FIGURE 13.2 — THREE PIVOTAL MOMENTS');
+  g.append('text').attr('y', 0).attr('font-weight', 'bold').attr('font-size', 13)
+    .text('Distinct triggers, distinct responses — the discipline is recognizing them');
+
+  const tt = d3.select('#tt');
+  const showTip = (html) => tt.html(html).style('opacity', 1);
+  const moveTip = (e) => tt.style('left', (e.pageX + 12) + 'px').style('top', (e.pageY - 8) + 'px');
+  const hideTip = () => tt.style('opacity', 0);
+
+  const moments = [
+    { code: 'PLAN DEVIATION',
+      trigger: ['Output contradicts the spec', 'or fails the handoff condition.'],
+      temptation: ['Write a follow-up prompt', 'to fix it forward.'],
+      action: '/rewind',
+      detail: ['Revert. Respecify with the', 'failure mode as an explicit', 'negative constraint.'],
+      tip: 'Plan deviation — the handoff condition failed or the output contradicts the spec. Use /rewind. Then respecify the prompt with the failure mode written in as a negative constraint.' },
+    { code: 'TEST FAILURE',
+      trigger: ['The handoff passed but the', 'plausibility audit fires.'],
+      temptation: ['Dismiss it — the tests', 'passed, ship it.'],
+      action: 'investigate the feeling',
+      detail: ['The condition you wrote was', 'the condition you thought to', 'write. PA is the gap.'],
+      highlight: true,
+      tip: 'Plausibility-audit fire — the handoff passed but something feels off. This is the hardest moment because the temptation to dismiss is highest. The condition you wrote was the condition you thought to write. The feeling is the condition you didn\'t.' },
+    { code: 'SCOPE DRIFT',
+      trigger: ['Codex offers an adjacent', 'feature not in the spec.'],
+      temptation: ['It\'s useful — let it stay', 'in the output, just this once.'],
+      action: 'log it, decline now',
+      detail: ['Add it to Out-of-scope.', 'Re-prompt without it.', 'Hold the current boundary.'],
+      tip: 'Scope drift — Codex offers an adjacent feature. Log it (it may be useful later); decline now. The suggestion survives in writing; the current step stays focused.' }
+  ];
+
+  const gap = 16;
+  const boxW = (chartW - 2 * gap) / 3;
+  const boxH = 280;
+  const headerH = 36;
+  const yTop = 60;
+
+  moments.forEach((m, i) => {
+    const x = i * (boxW + gap);
+    const isH = m.highlight;
+    g.append('rect').attr('class', 'box-body' + (isH ? ' highlight' : ''))
+      .attr('x', x).attr('y', yTop).attr('width', boxW).attr('height', boxH)
+      .on('mouseenter', () => showTip(`<strong>${m.code}</strong><br/>${m.tip}`))
+      .on('mousemove', moveTip).on('mouseleave', hideTip);
+    g.append('rect').attr('class', 'box-header' + (isH ? ' highlight' : ''))
+      .attr('x', x).attr('y', yTop).attr('width', boxW).attr('height', headerH);
+    g.append('text').attr('class', 'caps').attr('x', x + boxW / 2).attr('y', yTop + 23).attr('text-anchor', 'middle').attr('font-size', 11)
+      .attr('fill', isH ? 'var(--color-red)' : 'var(--color-ink)').text(m.code);
+
+    g.append('text').attr('x', x + 12).attr('y', yTop + 58).attr('font-weight', 'bold').attr('font-size', 11).attr('pointer-events', 'none').text('Trigger');
+    m.trigger.forEach((l, j) => {
+      g.append('text').attr('x', x + 12).attr('y', yTop + 74 + j * 14).attr('font-size', 10).attr('class', 'secondary').attr('pointer-events', 'none').text(l);
+    });
+
+    g.append('text').attr('x', x + 12).attr('y', yTop + 116).attr('font-weight', 'bold').attr('font-size', 11).attr('pointer-events', 'none').text('Temptation');
+    m.temptation.forEach((l, j) => {
+      g.append('text').attr('x', x + 12).attr('y', yTop + 132 + j * 14).attr('font-size', 10).attr('font-style', 'italic').attr('class', 'secondary').attr('pointer-events', 'none').text(l);
+    });
+
+    g.append('text').attr('x', x + 12).attr('y', yTop + 182).attr('font-weight', 'bold').attr('font-size', 11).attr('fill', 'var(--color-red)').attr('pointer-events', 'none').text('Do this');
+    g.append('text').attr('class', 'mono').attr('x', x + 12).attr('y', yTop + 202).attr('font-size', 10).attr('fill', 'var(--color-red)').attr('pointer-events', 'none').text(m.action);
+    m.detail.forEach((l, j) => {
+      g.append('text').attr('x', x + 12).attr('y', yTop + 224 + j * 14).attr('font-size', 10).attr('pointer-events', 'none').text(l);
+    });
+  });
+
+  // bottom rule + caption
+  const footY = yTop + boxH + 28;
+  g.append('line').attr('x1', 0).attr('y1', footY).attr('x2', chartW).attr('y2', footY).attr('stroke', 'var(--color-border)').attr('stroke-width', 0.75).attr('stroke-dasharray', '4 3');
+  g.append('text').attr('class', 'secondary').attr('y', footY + 20).attr('font-size', 10).text('Each moment is a distinct trigger with a distinct response. The highlighted moment is the hardest:');
+  g.append('text').attr('class', 'secondary').attr('y', footY + 36).attr('font-size', 10).text('the discipline is to investigate a feeling rather than dismiss it because the tests passed.');
+}
+draw();
+const ro = new ResizeObserver(() => draw());
+ro.observe(document.getElementById('chart'));
+</script>
+</body>
+</html>

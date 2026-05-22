@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Figure 12.4 — The planning-time U-curve</title>
+<style>
+:root {
+  --color-white: #FFFFFF;
+  --color-fill: #F5EFE8;
+  --color-ink: #2a1a0e;
+  --color-mark: #6B3520;
+  --color-red: #C8102E;
+  --color-slate: #1A3A5C;
+  --color-ochre: #C8860E;
+  --color-secondary: #545454;
+  --color-border: #D4D4D4;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-white: #111111;
+    --color-fill: #1a1612;
+    --color-ink: #F0EBE3;
+    --color-mark: #C8865E;
+    --color-red: #E8243A;
+    --color-slate: #6B8FB8;
+    --color-ochre: #D49A30;
+    --color-secondary: #A0978C;
+    --color-border: #2E2E2E;
+  }
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: var(--color-white); color: var(--color-ink); font-family: 'EB Garamond', Georgia, serif; padding: 24px; }
+#chart { width: 100%; min-height: 500px; }
+.tooltip { position: absolute; pointer-events: none; opacity: 0; background: var(--color-slate); color: var(--color-white); padding: 8px 12px; font-size: 12px; font-family: 'EB Garamond', Georgia, serif; max-width: 280px; line-height: 1.4; transition: opacity 150ms; }
+text { font-family: 'EB Garamond', Georgia, serif; fill: var(--color-ink); }
+.caps { font-family: 'IBM Plex Mono', 'JetBrains Mono', monospace; letter-spacing: 0.08em; fill: var(--color-secondary); font-size: 10px; }
+.secondary { fill: var(--color-secondary); }
+.plot { fill: var(--color-fill); stroke: var(--color-border); stroke-width: 1; }
+.curve { stroke: var(--color-red); stroke-width: 2.5; fill: none; cursor: pointer; }
+@media (prefers-reduced-motion: reduce) { *, .tooltip { transition: none !important; animation: none !important; } }
+</style>
+</head>
+<body>
+<div id="chart" role="main"></div>
+<div class="tooltip" id="tt"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
+<script>
+function draw() {
+  d3.select('#chart').selectAll('*').remove();
+  const totalWidth = document.getElementById('chart').clientWidth || 700;
+  const totalHeight = 500;
+  const margin = { top: 88, right: 32, bottom: 100, left: 64 };
+  const chartW = totalWidth - margin.left - margin.right;
+  const chartH = totalHeight - margin.top - margin.bottom;
+
+  const svg = d3.select('#chart').append('svg')
+    .attr('viewBox', `0 0 ${totalWidth} ${totalHeight}`)
+    .attr('role', 'img').attr('aria-labelledby', 'chart-title chart-desc');
+  svg.append('title').attr('id', 'chart-title').text('The planning-time U-curve');
+  svg.append('desc').attr('id', 'chart-desc').text('A U-shaped line chart. X-axis is minutes spent planning from 0 to 90. Y-axis is total session time. The minimum is around 30 to 45 minutes; both extremes lengthen the session.');
+
+  const g = svg.append('g').attr('transform', `translate(${margin.left},${margin.top})`);
+  svg.append('text').attr('class', 'caps').attr('x', margin.left).attr('y', 24).text('FIGURE 12.4 — THE PLANNING-TIME U-CURVE');
+  svg.append('text').attr('x', margin.left).attr('y', 52).attr('font-weight', 'bold').attr('font-size', 13)
+    .text('Too little planning lengthens the session — too much does too');
+
+  const tt = d3.select('#tt');
+  const showTip = (html) => tt.html(html).style('opacity', 1);
+  const moveTip = (e) => tt.style('left', (e.pageX + 12) + 'px').style('top', (e.pageY - 8) + 'px');
+  const hideTip = () => tt.style('opacity', 0);
+
+  // plot area
+  g.append('rect').attr('class', 'plot').attr('x', 0).attr('y', 0).attr('width', chartW).attr('height', chartH);
+
+  // scales
+  const x = d3.scaleLinear().domain([0, 90]).range([0, chartW]);
+  const y = d3.scaleLinear().domain([90, 200]).range([chartH, 0]); // minutes total session (90 = 1.5h baseline at minimum)
+
+  // U-curve points: total session time (minutes) as function of planning minutes
+  // captures: 0→180, 15→160, 30→135, 45→130, 60→145, 75→175, 90→185
+  const pts = [
+    { px: 0, mins: 180, tip: 'No planning — start typing into Code Mode. Drift, rework, late-discovered assumptions. Three hours of session for a 90-minute build.' },
+    { px: 8, mins: 170 },
+    { px: 15, mins: 158, tip: 'Light planning — a sentence of formulation, no spec. Catches some assumptions; misses others. Still long.' },
+    { px: 22, mins: 145 },
+    { px: 30, mins: 135, tip: 'Half-page spec, Ask Mode plan. Most assumptions surface upstream. Build runs clean.' },
+    { px: 38, mins: 130 },
+    { px: 45, mins: 132, tip: 'Sweet spot — about 30 to 45 minutes for a first build. The half-page contract is enough.' },
+    { px: 52, mins: 138 },
+    { px: 60, mins: 148, tip: 'Past the sweet spot — over-specified. Time spent writing detail the half-page did not need.' },
+    { px: 68, mins: 162 },
+    { px: 75, mins: 175, tip: 'Long planning — a three-page spec for a ninety-minute build. The ratio is wrong; the spec governs the build instead of guiding it.' },
+    { px: 82, mins: 182 },
+    { px: 90, mins: 188, tip: 'Excess planning — overhead with diminishing returns. The build has not started; the plan has become its own product.' }
+  ];
+
+  const line = d3.line().x(d => x(d.px)).y(d => y(d.mins)).curve(d3.curveCatmullRom.alpha(0.5));
+  g.append('path').datum(pts).attr('class', 'curve').attr('d', line)
+    .on('mouseenter', () => showTip('<strong>The U-curve</strong><br/>Total session time as a function of minutes spent planning. Both extremes cost time — the question is whether the cost lands upstream as planning or downstream as rework.'))
+    .on('mousemove', moveTip).on('mouseleave', hideTip);
+
+  // hover dots for labeled points
+  pts.filter(p => p.tip).forEach(p => {
+    g.append('circle').attr('cx', x(p.px)).attr('cy', y(p.mins)).attr('r', 4).attr('fill', 'var(--color-red)').attr('cursor', 'pointer')
+      .on('mouseenter', () => showTip(`<strong>${p.px} min planning</strong><br/>${p.tip}`))
+      .on('mousemove', moveTip).on('mouseleave', hideTip);
+  });
+
+  // sweet-spot marker
+  g.append('circle').attr('cx', x(38)).attr('cy', y(130)).attr('r', 5).attr('fill', 'var(--color-red)').attr('pointer-events', 'none');
+  g.append('line').attr('x1', x(38)).attr('y1', y(130)).attr('x2', x(38)).attr('y2', chartH).attr('stroke', 'var(--color-red)').attr('stroke-width', 0.75).attr('stroke-dasharray', '3 2');
+  g.append('text').attr('x', x(38) + 8).attr('y', y(130) - 8).attr('font-weight', 'bold').attr('font-size', 11).attr('fill', 'var(--color-red)').text('sweet spot');
+  g.append('text').attr('x', x(38) + 8).attr('y', y(130) + 6).attr('font-size', 10).attr('font-style', 'italic').attr('fill', 'var(--color-red)').text('≈ 30–45 min');
+
+  // zone labels
+  g.append('text').attr('x', x(8)).attr('y', y(180) - 10).attr('font-weight', 'bold').attr('font-size', 11).text('too little');
+  g.append('text').attr('x', x(0) + 6).attr('y', y(180) + 4).attr('font-size', 10).attr('class', 'secondary').text('rework loops at hour two');
+  g.append('text').attr('x', x(82) - 32).attr('y', y(185) - 10).attr('font-weight', 'bold').attr('font-size', 11).text('too much');
+  g.append('text').attr('x', x(82) - 56).attr('y', y(185) + 4).attr('font-size', 10).attr('class', 'secondary').text('over-specified, slow start');
+
+  // x axis ticks
+  [0, 15, 30, 45, 60, 75, 90].forEach(t => {
+    g.append('line').attr('x1', x(t)).attr('y1', chartH).attr('x2', x(t)).attr('y2', chartH + 4).attr('stroke', 'var(--color-secondary)').attr('stroke-width', 0.75);
+    g.append('text').attr('class', 'caps').attr('x', x(t)).attr('y', chartH + 18).attr('text-anchor', 'middle').text(t);
+  });
+  g.append('text').attr('class', 'caps').attr('x', chartW / 2).attr('y', chartH + 36).attr('text-anchor', 'middle').text('MINUTES PLANNING →');
+
+  // y axis hints
+  [{ v: 180, lbl: '3h' }, { v: 120, lbl: '2h' }, { v: 90, lbl: '1.5h' }].forEach(t => {
+    if (t.v <= 200 && t.v >= 90) {
+      g.append('text').attr('class', 'caps').attr('x', -8).attr('y', y(t.v) + 3).attr('text-anchor', 'end').text(t.lbl);
+    }
+  });
+  g.append('text').attr('class', 'caps').attr('transform', `translate(-44, ${chartH / 2}) rotate(-90)`).attr('text-anchor', 'middle').text('TOTAL SESSION TIME →');
+
+  // bottom rule + caption
+  const footY = chartH + 56;
+  g.append('line').attr('x1', -margin.left + 32).attr('y1', footY).attr('x2', chartW + margin.right - 32).attr('y2', footY).attr('stroke', 'var(--color-border)').attr('stroke-width', 0.75).attr('stroke-dasharray', '4 3');
+  g.append('text').attr('class', 'secondary').attr('y', footY + 20).attr('font-size', 10).text('Both extremes cost time. Zero planning spends it downstream as rework. Excess planning spends it upstream as over-specification.');
+}
+draw();
+const ro = new ResizeObserver(() => draw());
+ro.observe(document.getElementById('chart'));
+</script>
+</body>
+</html>

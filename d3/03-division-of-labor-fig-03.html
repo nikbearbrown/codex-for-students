@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Figure 3.3 — The solve-verify asymmetry</title>
+<style>
+:root {
+  --color-white: #FFFFFF;
+  --color-fill: #F5EFE8;
+  --color-ink: #2a1a0e;
+  --color-mark: #6B3520;
+  --color-red: #C8102E;
+  --color-slate: #1A3A5C;
+  --color-ochre: #C8860E;
+  --color-secondary: #545454;
+  --color-border: #D4D4D4;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-white: #111111;
+    --color-fill: #1a1612;
+    --color-ink: #F0EBE3;
+    --color-mark: #C8865E;
+    --color-red: #E8243A;
+    --color-slate: #6B8FB8;
+    --color-ochre: #D49A30;
+    --color-secondary: #A0978C;
+    --color-border: #2E2E2E;
+  }
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: var(--color-white); color: var(--color-ink); font-family: 'EB Garamond', Georgia, serif; padding: 24px; }
+#chart { width: 100%; min-height: 420px; }
+.tooltip { position: absolute; pointer-events: none; opacity: 0; background: var(--color-slate); color: var(--color-white); padding: 8px 12px; font-size: 12px; font-family: 'EB Garamond', Georgia, serif; max-width: 280px; line-height: 1.4; }
+text { font-family: 'EB Garamond', Georgia, serif; fill: var(--color-ink); }
+.caps { font-family: 'IBM Plex Mono', 'JetBrains Mono', monospace; letter-spacing: 0.08em; fill: var(--color-secondary); font-size: 10px; }
+.secondary { fill: var(--color-secondary); }
+.line { cursor: pointer; transition: stroke-width 120ms; }
+.line:hover { stroke-width: 3.5; }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+</style>
+</head>
+<body>
+<div id="chart" role="main"></div>
+<div class="tooltip" id="tt"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
+<script>
+function draw() {
+  d3.select('#chart').selectAll('*').remove();
+  const totalWidth = document.getElementById('chart').clientWidth || 700;
+  const totalHeight = 420;
+  const margin = { top: 64, right: 100, bottom: 80, left: 80 };
+  const chartWidth = totalWidth - margin.left - margin.right;
+  const chartHeight = totalHeight - margin.top - margin.bottom;
+
+  const svg = d3.select('#chart').append('svg')
+    .attr('width', totalWidth).attr('height', totalHeight)
+    .attr('role','img').attr('aria-labelledby','chart-title chart-desc');
+  svg.append('title').attr('id','chart-title').text('The solve-verify asymmetry');
+  svg.append('desc').attr('id','chart-desc').text('Codex solve speed rises while human verification stays flat. The gap widens.');
+
+  const g = svg.append('g').attr('transform', `translate(${margin.left},${margin.top})`);
+  g.append('text').attr('class','caps').attr('y',-32).text('FIGURE 3.3 — SOLVE-VERIFY ASYMMETRY');
+  g.append('text').attr('y',-8).attr('font-weight','bold').attr('font-size',13).text('Codex generates faster than you can verify — and the gap widens');
+
+  const tt = d3.select('#tt');
+  function showTip(html){ tt.html(html).style('opacity',1); }
+  function moveTip(e){ tt.style('left',(e.pageX+12)+'px').style('top',(e.pageY-8)+'px'); }
+  function hideTip(){ tt.style('opacity',0); }
+
+  g.append('rect').attr('x',0).attr('y',0).attr('width',chartWidth).attr('height',chartHeight)
+    .attr('fill','var(--color-fill)').attr('stroke','var(--color-border)').attr('stroke-width',1);
+
+  const x = d3.scaleLinear().domain([0, 10]).range([0, chartWidth]);
+  const y = d3.scaleLinear().domain([0, 10]).range([chartHeight, 0]);
+
+  // Codex curve — exponential-ish
+  const codexPts = d3.range(0, 10.01, 0.5).map(t => ({t, v: 1 + Math.pow(t, 1.5)/4}));
+  const lineGen = d3.line().x(d=>x(d.t)).y(d=>y(d.v)).curve(d3.curveCatmullRom);
+  g.append('path').attr('class','line').attr('d',lineGen(codexPts)).attr('stroke','var(--color-red)').attr('stroke-width',2.5).attr('fill','none')
+    .on('mouseenter',()=>showTip('<strong>Codex solve speed.</strong> Generation gets faster with each model generation. A function appears in two seconds. The trend is up and to the right.'))
+    .on('mousemove',moveTip).on('mouseleave',hideTip);
+
+  // Human verification — flat
+  const humanPts = [{t:0, v:3.5}, {t:10, v:3.5}];
+  g.append('path').attr('class','line').attr('d',lineGen(humanPts)).attr('stroke','var(--color-slate)').attr('stroke-width',2).attr('fill','none')
+    .on('mouseenter',()=>showTip('<strong>Human verification capacity.</strong> Reading code carefully, checking it against intent, considering edge cases — these operations are bounded by the speed of attention. They do not scale with the model.'))
+    .on('mousemove',moveTip).on('mouseleave',hideTip);
+
+  // Endpoint dots and labels
+  g.append('circle').attr('cx',x(10)).attr('cy',y(1+Math.pow(10,1.5)/4)).attr('r',5).attr('fill','var(--color-red)');
+  g.append('text').attr('x',x(10)+10).attr('y',y(1+Math.pow(10,1.5)/4)+4).attr('font-size',11).attr('font-weight','bold').attr('fill','var(--color-red)').text('Codex');
+  g.append('text').attr('x',x(10)+10).attr('y',y(1+Math.pow(10,1.5)/4)+18).attr('font-size',10).attr('fill','var(--color-red)').text('solve speed');
+
+  g.append('circle').attr('cx',x(10)).attr('cy',y(3.5)).attr('r',5).attr('fill','var(--color-slate)');
+  g.append('text').attr('x',x(10)+10).attr('y',y(3.5)+4).attr('font-size',11).attr('font-weight','bold').attr('fill','var(--color-slate)').text('Human');
+  g.append('text').attr('x',x(10)+10).attr('y',y(3.5)+18).attr('font-size',10).attr('fill','var(--color-slate)').text('verification');
+
+  // gap annotation
+  const tGap = 7;
+  const codexAt7 = 1+Math.pow(7,1.5)/4;
+  g.append('line').attr('x1',x(tGap)).attr('x2',x(tGap)).attr('y1',y(codexAt7)).attr('y2',y(3.5))
+    .attr('stroke','var(--color-red)').attr('stroke-dasharray','4 3').attr('stroke-width',1);
+  g.append('text').attr('x',x(tGap)+10).attr('y',y((codexAt7+3.5)/2)+4).attr('font-size',11).attr('font-style','italic').attr('fill','var(--color-red)').text('the gap widens');
+
+  // axis labels
+  g.append('text').attr('class','caps').attr('x',chartWidth/2).attr('y',chartHeight+40).attr('text-anchor','middle').text('TIME →');
+  g.append('text').attr('class','caps').attr('transform',`translate(-52,${chartHeight/2}) rotate(-90)`).attr('text-anchor','middle').text('SPEED / CAPACITY');
+
+  // caption
+  g.append('line').attr('x1',0).attr('y1',chartHeight+56).attr('x2',chartWidth+90).attr('y2',chartHeight+56)
+    .attr('stroke','var(--color-border)').attr('stroke-width',0.75).attr('stroke-dasharray','4 3');
+  g.append('text').attr('class','secondary').attr('y',chartHeight+76).attr('font-size',10).text('In AI-assisted work, your time is almost entirely verification time. The generation is essentially free.');
+}
+draw();
+const ro = new ResizeObserver(() => draw());
+ro.observe(document.getElementById('chart'));
+</script>
+</body>
+</html>

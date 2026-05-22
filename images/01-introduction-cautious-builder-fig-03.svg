@@ -1,0 +1,36 @@
+<svg viewBox="0 0 700 360" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">Ask Mode → Code Mode gate</title>
+  <desc id="desc">Two-node flow. Ask Mode (plan, read, propose) flows through a human-review arrow into Code Mode (write, execute, iterate). The gate is the human review.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#2a1a0e"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="700" height="360" fill="#FFFFFF"/>
+
+  <text x="32" y="48" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="10" letter-spacing="0.08em" fill="#545454">FIGURE 1.3 — ASK MODE → CODE MODE</text>
+  <text x="32" y="76" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="13" font-weight="bold" fill="#2a1a0e">Nothing moves to Code Mode until you have reviewed the plan</text>
+
+  <!-- Ask Mode node -->
+  <rect x="60" y="140" width="220" height="120" fill="#F5EFE8" stroke="#D4D4D4" stroke-width="1"/>
+  <text x="170" y="166" text-anchor="middle" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="10" letter-spacing="0.08em" fill="#545454">ASK MODE</text>
+  <text x="170" y="194" text-anchor="middle" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="13" font-weight="bold" fill="#2a1a0e">Plan, read, propose</text>
+  <text x="170" y="222" text-anchor="middle" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="11" fill="#545454">Codex reads files,</text>
+  <text x="170" y="238" text-anchor="middle" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="11" fill="#545454">answers, proposes.</text>
+
+  <!-- Arrow -->
+  <line x1="290" y1="200" x2="410" y2="200" stroke="#2a1a0e" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="350" y="190" text-anchor="middle" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="11" font-style="italic" fill="#2a1a0e">human reviews plan</text>
+
+  <!-- Code Mode node -->
+  <rect x="420" y="140" width="220" height="120" fill="#F5EFE8" stroke="#D4D4D4" stroke-width="1"/>
+  <text x="530" y="166" text-anchor="middle" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="10" letter-spacing="0.08em" fill="#545454">CODE MODE</text>
+  <text x="530" y="194" text-anchor="middle" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="13" font-weight="bold" fill="#2a1a0e">Write, execute, iterate</text>
+  <text x="530" y="222" text-anchor="middle" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="11" fill="#545454">Codex writes files,</text>
+  <text x="530" y="238" text-anchor="middle" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="11" fill="#545454">runs commands.</text>
+
+  <!-- Bottom rule + caption -->
+  <line x1="32" y1="296" x2="668" y2="296" stroke="#D4D4D4" stroke-width="0.75" stroke-dasharray="4 3"/>
+  <text x="32" y="320" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="10" fill="#545454">The gate is the moment where the conductor listens before the orchestra plays. Chapter 5 makes the discipline concrete.</text>
+</svg>

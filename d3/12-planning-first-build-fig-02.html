@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Figure 12.2 — Annotated plan diff</title>
+<style>
+:root {
+  --color-white: #FFFFFF;
+  --color-fill: #F5EFE8;
+  --color-ink: #2a1a0e;
+  --color-mark: #6B3520;
+  --color-red: #C8102E;
+  --color-slate: #1A3A5C;
+  --color-ochre: #C8860E;
+  --color-secondary: #545454;
+  --color-border: #D4D4D4;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-white: #111111;
+    --color-fill: #1a1612;
+    --color-ink: #F0EBE3;
+    --color-mark: #C8865E;
+    --color-red: #E8243A;
+    --color-slate: #6B8FB8;
+    --color-ochre: #D49A30;
+    --color-secondary: #A0978C;
+    --color-border: #2E2E2E;
+  }
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: var(--color-white); color: var(--color-ink); font-family: 'EB Garamond', Georgia, serif; padding: 24px; }
+#chart { width: 100%; min-height: 560px; }
+.tooltip { position: absolute; pointer-events: none; opacity: 0; background: var(--color-slate); color: var(--color-white); padding: 8px 12px; font-size: 12px; font-family: 'EB Garamond', Georgia, serif; max-width: 280px; line-height: 1.4; transition: opacity 150ms; }
+text { font-family: 'EB Garamond', Georgia, serif; fill: var(--color-ink); }
+.caps { font-family: 'IBM Plex Mono', 'JetBrains Mono', monospace; letter-spacing: 0.08em; fill: var(--color-secondary); font-size: 10px; }
+.mono { font-family: 'IBM Plex Mono', 'JetBrains Mono', monospace; }
+.secondary { fill: var(--color-secondary); }
+.panel { fill: var(--color-white); stroke: var(--color-border); stroke-width: 1; cursor: pointer; transition: fill 120ms; }
+.panel-header { fill: var(--color-fill); stroke: var(--color-border); stroke-width: 1; pointer-events: none; }
+.panel.highlight { stroke: var(--color-red); }
+.panel-header.highlight { stroke: var(--color-red); }
+.panel:hover { fill: var(--color-fill); }
+@media (prefers-reduced-motion: reduce) { *, .tooltip { transition: none !important; animation: none !important; } }
+</style>
+</head>
+<body>
+<div id="chart" role="main"></div>
+<div class="tooltip" id="tt"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
+<script>
+function draw() {
+  d3.select('#chart').selectAll('*').remove();
+  const totalWidth = document.getElementById('chart').clientWidth || 700;
+  const totalHeight = 560;
+  const margin = { top: 56, right: 32, bottom: 56, left: 32 };
+  const chartWidth = totalWidth - margin.left - margin.right;
+
+  const svg = d3.select('#chart').append('svg')
+    .attr('viewBox', `0 0 ${totalWidth} ${totalHeight}`)
+    .attr('role', 'img').attr('aria-labelledby', 'chart-title chart-desc');
+  svg.append('title').attr('id', 'chart-title').text('Annotated plan diff — three corrections in Step 5');
+  svg.append('desc').attr('id', 'chart-desc').text('Two side-by-side panels. Left: Codex draft plan with three buried assumptions marked. Right: Seth\'s corrected plan with three inline annotations — scope cut, added requirement, deferred feature.');
+
+  const defs = svg.append('defs');
+  defs.append('marker').attr('id', 'arrow12-2').attr('markerWidth', 8).attr('markerHeight', 6)
+    .attr('refX', 7).attr('refY', 3).attr('orient', 'auto')
+    .append('polygon').attr('points', '0 0, 8 3, 0 6').attr('fill', 'var(--color-ink)');
+
+  const g = svg.append('g').attr('transform', `translate(${margin.left},${margin.top})`);
+  g.append('text').attr('class', 'caps').attr('y', -24).text('FIGURE 12.2 — ANNOTATED PLAN DIFF');
+  g.append('text').attr('y', 0).attr('font-weight', 'bold').attr('font-size', 13)
+    .text('Three corrections in Step 5 — each worth more than the review took');
+
+  const tt = d3.select('#tt');
+  const showTip = (html) => tt.html(html).style('opacity', 1);
+  const moveTip = (e) => tt.style('left', (e.pageX + 12) + 'px').style('top', (e.pageY - 8) + 'px');
+  const hideTip = () => tt.style('opacity', 0);
+
+  const yTop = 52;
+  const panelH = 368;
+  const headerH = 32;
+  const gap = 36;
+  const panelW = (chartWidth - gap) / 2;
+
+  // LEFT panel — Codex draft
+  const lx = 0;
+  g.append('rect').attr('class', 'panel').attr('x', lx).attr('y', yTop).attr('width', panelW).attr('height', panelH)
+    .on('mouseenter', () => showTip('<strong>BEFORE — Codex draft</strong><br/>The seven-step plan Codex proposed. Reads as reasonable. Contains three buried assumptions: single log format, hardcoded categorization rules, unspecified output format.'))
+    .on('mousemove', moveTip).on('mouseleave', hideTip);
+  g.append('rect').attr('class', 'panel-header').attr('x', lx).attr('y', yTop).attr('width', panelW).attr('height', headerH);
+  g.append('text').attr('class', 'caps').attr('x', lx + 12).attr('y', yTop + 20).text('BEFORE — CODEX DRAFT');
+
+  const leftLines = [
+    { y: 52, t: '1. SQLite schema; migration script.' },
+    { y: 76, t: '2. Export-log parser.', mark: true },
+    { y: 100, t: '3. Deduplication logic against' },
+    { y: 114, t: '   existing history.' },
+    { y: 138, t: '4. Categorization rule engine.', mark: true },
+    { y: 162, t: '5. Per-build summary generator', mark: true },
+    { y: 176, t: '   with deltas.' },
+    { y: 200, t: '6. Main script orchestration.' },
+    { y: 224, t: '7. Tests for each module.' }
+  ];
+  leftLines.forEach(l => {
+    g.append('text').attr('class', 'mono').attr('x', lx + 12).attr('y', yTop + l.y).attr('font-size', 10).attr('pointer-events', 'none').text(l.t);
+    if (l.mark) {
+      g.append('circle').attr('cx', lx + 6).attr('cy', yTop + l.y - 4).attr('r', 3).attr('fill', 'var(--color-red)').attr('pointer-events', 'none');
+    }
+  });
+  g.append('line').attr('x1', lx + 12).attr('y1', yTop + 260).attr('x2', lx + panelW - 12).attr('y2', yTop + 260)
+    .attr('stroke', 'var(--color-border)').attr('stroke-width', 0.75).attr('stroke-dasharray', '3 2');
+  g.append('text').attr('x', lx + 12).attr('y', yTop + 284).attr('font-weight', 'bold').attr('font-size', 11)
+    .attr('fill', 'var(--color-red)').attr('pointer-events', 'none').text('→ Three buried assumptions');
+  g.append('text').attr('x', lx + 12).attr('y', yTop + 306).attr('font-size', 10).attr('class', 'secondary').attr('pointer-events', 'none')
+    .text('Single log format. Hardcoded rules.');
+  g.append('text').attr('x', lx + 12).attr('y', yTop + 320).attr('font-size', 10).attr('class', 'secondary').attr('pointer-events', 'none')
+    .text('Output format unspecified.');
+  g.append('text').attr('x', lx + 12).attr('y', yTop + 344).attr('font-size', 10).attr('font-style', 'italic').attr('class', 'secondary').attr('pointer-events', 'none')
+    .text('If approved here, failures surface at hour two.');
+
+  // arrow between
+  const arrowY = yTop + panelH / 2;
+  const arrowX1 = panelW + 4;
+  const arrowX2 = panelW + gap - 4;
+  g.append('line').attr('x1', arrowX1).attr('y1', arrowY).attr('x2', arrowX2).attr('y2', arrowY)
+    .attr('stroke', 'var(--color-ink)').attr('stroke-width', 1.5).attr('marker-end', 'url(#arrow12-2)');
+  g.append('text').attr('class', 'caps').attr('x', (arrowX1 + arrowX2) / 2).attr('y', arrowY - 10).attr('text-anchor', 'middle').text('REVIEW');
+
+  // RIGHT panel — Seth's correction
+  const rx = panelW + gap;
+  g.append('rect').attr('class', 'panel highlight').attr('x', rx).attr('y', yTop).attr('width', panelW).attr('height', panelH)
+    .on('mouseenter', () => showTip('<strong>AFTER — Seth\'s correction</strong><br/>The plan in Seth\'s words. Three inline annotations: scope cut (single-format assumption removed), added requirement (config-file rules), output format made explicit. Plus a v2 deferral.'))
+    .on('mousemove', moveTip).on('mouseleave', hideTip);
+  g.append('rect').attr('class', 'panel-header highlight').attr('x', rx).attr('y', yTop).attr('width', panelW).attr('height', headerH);
+  g.append('text').attr('class', 'caps').attr('x', rx + 12).attr('y', yTop + 20).attr('fill', 'var(--color-red)').text("AFTER — SETH'S CORRECTION");
+
+  const rightLines = [
+    { y: 52, t: '1. SQLite schema; migration.', color: 'var(--color-ink)' },
+    { y: 76, t: '2. Parser — Win/Mac formats,', color: 'var(--color-ink)' },
+    { y: 90, t: '   header-row detection per file.', color: 'var(--color-red)' },
+    { y: 110, t: '   scope cut: single-format assumption', color: 'var(--color-red)', italic: true },
+    { y: 134, t: '3. Dedup against build history.', color: 'var(--color-ink)' },
+    { y: 158, t: '4. Categorization engine —', color: 'var(--color-ink)' },
+    { y: 172, t: '   rules loaded from config file.', color: 'var(--color-red)' },
+    { y: 192, t: '   added: config-file requirement', color: 'var(--color-red)', italic: true },
+    { y: 216, t: '5. Summary generator —', color: 'var(--color-ink)' },
+    { y: 230, t: '   <200 lines, four named sections.', color: 'var(--color-red)' },
+    { y: 250, t: '   added: output format made explicit', color: 'var(--color-red)', italic: true },
+    { y: 274, t: '6. Main script orchestration.', color: 'var(--color-secondary)' },
+    { y: 294, t: '7. Tests for each module.', color: 'var(--color-secondary)' },
+    { y: 314, t: '   deferred to v2: trend-chart view', color: 'var(--color-secondary)', italic: true }
+  ];
+  rightLines.forEach(l => {
+    const t = g.append('text').attr('x', rx + 12).attr('y', yTop + l.y).attr('font-size', 10).attr('fill', l.color).attr('pointer-events', 'none').text(l.t);
+    if (l.italic) t.attr('font-style', 'italic'); else t.attr('class', 'mono');
+  });
+  g.append('line').attr('x1', rx + 12).attr('y1', yTop + 330).attr('x2', rx + panelW - 12).attr('y2', yTop + 330)
+    .attr('stroke', 'var(--color-border)').attr('stroke-width', 0.75).attr('stroke-dasharray', '3 2');
+  g.append('text').attr('x', rx + 12).attr('y', yTop + 352).attr('font-weight', 'bold').attr('font-size', 10).attr('fill', 'var(--color-red)').attr('pointer-events', 'none').text('→ Five minutes of review');
+
+  // bottom rule
+  const footRule = yTop + panelH + 36;
+  g.append('line').attr('x1', 0).attr('y1', footRule).attr('x2', chartWidth).attr('y2', footRule)
+    .attr('stroke', 'var(--color-border)').attr('stroke-width', 0.75).attr('stroke-dasharray', '4 3');
+  g.append('text').attr('class', 'secondary').attr('y', footRule + 20).attr('font-size', 10)
+    .text('Red marks on the left are the assumptions Codex made silently. Italic notes on the right are the corrections Seth wrote into the plan.');
+}
+draw();
+const ro = new ResizeObserver(() => draw());
+ro.observe(document.getElementById('chart'));
+</script>
+</body>
+</html>

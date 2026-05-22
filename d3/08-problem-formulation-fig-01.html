@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Figure 8.1 — Cost of revision</title>
+<style>
+:root {
+  --color-white: #FFFFFF;
+  --color-fill: #F5EFE8;
+  --color-ink: #2a1a0e;
+  --color-mark: #6B3520;
+  --color-red: #C8102E;
+  --color-slate: #1A3A5C;
+  --color-ochre: #C8860E;
+  --color-secondary: #545454;
+  --color-border: #D4D4D4;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-white: #111111;
+    --color-fill: #1a1612;
+    --color-ink: #F0EBE3;
+    --color-mark: #C8865E;
+    --color-red: #E8243A;
+    --color-slate: #6B8FB8;
+    --color-ochre: #D49A30;
+    --color-secondary: #A0978C;
+    --color-border: #2E2E2E;
+  }
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: var(--color-white); color: var(--color-ink); font-family: 'EB Garamond', Georgia, serif; padding: 24px; }
+#chart { width: 100%; min-height: 500px; }
+.tooltip { position: absolute; pointer-events: none; opacity: 0; background: var(--color-slate); color: var(--color-white); padding: 8px 12px; font-size: 12px; font-family: 'EB Garamond', Georgia, serif; max-width: 260px; line-height: 1.4; }
+text { font-family: 'EB Garamond', Georgia, serif; fill: var(--color-ink); }
+.caps { font-family: 'IBM Plex Mono', 'JetBrains Mono', monospace; letter-spacing: 0.08em; fill: var(--color-secondary); font-size: 10px; }
+.secondary { fill: var(--color-secondary); }
+.point { cursor: pointer; transition: r 120ms; }
+.point:hover { r: 7; }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+</style>
+</head>
+<body>
+<div id="chart" role="main"></div>
+<div class="tooltip" id="tt"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
+<script>
+function draw() {
+  d3.select('#chart').selectAll('*').remove();
+  const totalWidth = document.getElementById('chart').clientWidth || 700;
+  const totalHeight = 480;
+
+  const svg = d3.select('#chart').append('svg').attr('viewBox',`0 0 ${totalWidth} ${totalHeight}`)
+    .attr('role','img').attr('aria-labelledby','chart-title chart-desc');
+  svg.append('title').attr('id','chart-title').text('Cost of revision');
+  svg.append('desc').attr('id','chart-desc').text('Line chart with phases on the x-axis and rising cost on the y-axis. The curve rises steeply between Code and Ship.');
+
+  svg.append('text').attr('class','caps').attr('x',32).attr('y',56).text('FIGURE 8.1 — COST OF REVISION');
+  svg.append('text').attr('x',32).attr('y',88).attr('font-weight','bold').attr('font-size',13).text('The cheap window is narrow. It closes fast.');
+
+  const tt = d3.select('#tt');
+  function showTip(html){ tt.html(html).style('opacity',1); }
+  function moveTip(e){ tt.style('left',(e.pageX+12)+'px').style('top',(e.pageY-8)+'px'); }
+  function hideTip(){ tt.style('opacity',0); }
+
+  const margin = { top: 130, right: 60, bottom: 100, left: 80 };
+  const w = totalWidth - margin.left - margin.right;
+  const h = 250;
+  const x0 = margin.left, y0 = margin.top + h;
+
+  // Axes
+  svg.append('line').attr('x1',x0).attr('y1',margin.top).attr('x2',x0).attr('y2',y0).attr('stroke','var(--color-ink)').attr('stroke-width',1);
+  svg.append('line').attr('x1',x0).attr('y1',y0).attr('x2',x0+w).attr('y2',y0).attr('stroke','var(--color-ink)').attr('stroke-width',1);
+
+  // Y label
+  svg.append('text').attr('class','caps').attr('x',40).attr('y',y0-h/2).attr('text-anchor','middle').attr('transform',`rotate(-90 40 ${y0-h/2})`).text('COST TO CHANGE');
+
+  // Y tick labels
+  svg.append('text').attr('class','caps').attr('x',x0-6).attr('y',y0-8).attr('text-anchor','end').text('~0');
+  svg.append('text').attr('class','caps').attr('x',x0-6).attr('y',y0-h/2).attr('text-anchor','end').text('MED');
+  svg.append('text').attr('class','caps').attr('x',x0-6).attr('y',margin.top+20).attr('text-anchor','end').text('HIGH');
+
+  // Gridlines
+  svg.append('line').attr('x1',x0).attr('y1',y0-h/2).attr('x2',x0+w).attr('y2',y0-h/2).attr('stroke','var(--color-border)').attr('stroke-width',0.5).attr('stroke-dasharray','2 3');
+  svg.append('line').attr('x1',x0).attr('y1',margin.top+50).attr('x2',x0+w).attr('y2',margin.top+50).attr('stroke','var(--color-border)').attr('stroke-width',0.5).attr('stroke-dasharray','2 3');
+
+  // Data
+  const data = [
+    { phase:'SPEC', x:0.10, y:0.04, ann:'change a sentence', annColor:'var(--color-secondary)',
+      tip:'Cost ~0. You revise a sentence in the spec. The whole upstream investment is exactly this discipline — paying the spec cost so you never pay the ship cost.' },
+    { phase:'PLAN', x:0.28, y:0.12, ann:'re-plan upstream', annColor:'var(--color-secondary)',
+      tip:'Cost low. The Ask Mode plan needs revision. Five extra minutes; no code has been generated yet.' },
+    { phase:'CODE', x:0.46, y:0.32, ann:'discard prompts; restart', annColor:'var(--color-secondary)',
+      tip:'Cost rising. Code Mode has produced output. You discard the misdirected prompts and start the implementation again from a corrected spec.' },
+    { phase:'VERIFY', x:0.64, y:0.64, ann:'debug + re-frame; tests stale', annColor:'var(--color-secondary)',
+      tip:'Cost high. Tests encoded the wrong framing. You debug, re-frame, rewrite the tests — and the implementation has to follow the new framing.' },
+    { phase:'SHIP', x:0.93, y:0.94, ann:'side effects ran — irreversible', annColor:'var(--color-red)', highlight:true,
+      tip:'Cost approaches irreversible. Files written, APIs called, state changed downstream. You are now debugging the wrong-problem build while also cleaning up its mess.' }
+  ];
+
+  function xPos(t){ return x0 + t*w; }
+  function yPos(v){ return y0 - v*h; }
+
+  // Curve
+  const line = d3.line().x(d=>xPos(d.x)).y(d=>yPos(d.y)).curve(d3.curveCatmullRom.alpha(0.5));
+  svg.append('path').datum(data).attr('d',line).attr('fill','none').attr('stroke','var(--color-red)').attr('stroke-width',1.75);
+
+  // Ticks + x-labels
+  data.forEach(d => {
+    svg.append('line').attr('x1',xPos(d.x)).attr('y1',y0-4).attr('x2',xPos(d.x)).attr('y2',y0+4).attr('stroke','var(--color-ink)').attr('stroke-width',0.75);
+    svg.append('text').attr('class','caps').attr('x',xPos(d.x)).attr('y',y0+22).attr('text-anchor','middle').attr('fill', d.highlight ? 'var(--color-red)' : 'var(--color-ink)').attr('font-weight', d.highlight ? 'bold' : 'normal').text(d.phase);
+  });
+
+  // Points + annotations
+  data.forEach(d => {
+    const px = xPos(d.x), py = yPos(d.y);
+    const g = svg.append('g')
+      .on('mouseenter',()=>showTip(`<strong>${d.phase}</strong><br/>${d.tip}`))
+      .on('mousemove',moveTip).on('mouseleave',hideTip);
+    g.append('circle').attr('class','point').attr('cx',px).attr('cy',py).attr('r', d.highlight ? 5 : 4).attr('fill','var(--color-red)');
+    g.append('text').attr('x', d.highlight ? px-110 : px+8).attr('y', py-10).attr('font-size',10).attr('font-style','italic').attr('fill', d.annColor).text(d.ann);
+  });
+
+  // Cheap window callout
+  svg.append('rect').attr('x',x0+20).attr('y',margin.top+10).attr('width',148).attr('height',50)
+    .attr('fill','var(--color-fill)').attr('stroke','var(--color-border)').attr('stroke-width',1);
+  svg.append('text').attr('class','caps').attr('x',x0+28).attr('y',margin.top+28).text('THE CHEAP WINDOW');
+  svg.append('text').attr('x',x0+28).attr('y',margin.top+44).attr('font-size',10).text('SPEC and PLAN — minutes,');
+  svg.append('text').attr('x',x0+28).attr('y',margin.top+56).attr('font-size',10).text('not hours');
+
+  svg.append('line').attr('x1',32).attr('y1',430).attr('x2',totalWidth-32).attr('y2',430).attr('stroke','var(--color-border)').attr('stroke-width',0.75).attr('stroke-dasharray','4 3');
+  svg.append('text').attr('x',32).attr('y',452).attr('class','secondary').attr('font-size',10).text('The curve rises steeply after the first Code Mode prompt. By Ship the cost approaches irreversible —');
+  svg.append('text').attr('x',32).attr('y',468).attr('class','secondary').attr('font-size',10).text('side effects have run, state has changed, the cleanup itself becomes its own debugging session.');
+}
+draw();
+const ro = new ResizeObserver(() => draw());
+ro.observe(document.getElementById('chart'));
+</script>
+</body>
+</html>

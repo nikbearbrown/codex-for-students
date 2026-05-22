@@ -20,7 +20,8 @@ A conductor does not play the instruments. A conductor reads the score, holds th
 
 The division of labor is clean. The orchestra is superhuman at technique. The conductor is irreplaceable for meaning. Neither can do the other's job.
 
-<!-- → [IMAGE: two-panel illustration — left panel: conductor at podium, baton raised, watching the orchestra; right panel: same conductor sitting in the violin section playing alongside musicians. Caption: "The failure mode is not incompetence. It is being in the wrong seat."] -->
+![Two-panel illustration. Left: conductor stands at the podium, baton raised, with the orchestra around the stage. Right: the same conductor sits in the violin section playing alongside the musicians; the podium is empty and dashed in red.](images/05-conducting-not-prompting-fig-01.png)
+*Figure 5.1 — Right seat, wrong seat: the failure mode is being in the wrong seat*
 
 Codex is the orchestra. You are the conductor. The session that went wrong was a session where I had stopped conducting and started playing alongside the orchestra — trying to write parts of the code myself while Codex was writing other parts, prompting in real time against problems that had not been thought through, producing a build that drifted because no one was holding the meaning.
 
@@ -46,7 +47,12 @@ Use Code Mode for one thing: executing the plan that Ask Mode produced and you r
 
 That is it. Every decision about *what to build* belongs in Ask Mode. Every act of *building the decided thing* belongs in Code Mode. The modes are not a suggestion about workflow. They are a separation of two categorically different kinds of work — understanding and execution — that produce different kinds of errors when mixed.
 
-<!-- → [TABLE: Ask Mode vs. Code Mode — columns: property, Ask Mode, Code Mode. Rows: what Codex does, what changes in the system, what the human's job is, what goes wrong when you skip it. No color. Student should be able to locate any given action in one column or the other.] -->
+| Property | Ask Mode | Code Mode |
+|---|---|---|
+| What Codex does | Reads project files, answers questions, proposes plans | Writes files, modifies files in place, runs commands, iterates against tests |
+| What changes in the system | Nothing | Files, state, side effects |
+| What the human's job is | Interrogate, formulate, review the plan, find the unstated assumptions | Execute the reviewed plan, check handoff conditions, verify output |
+| What goes wrong if you skip it | Code Mode begins on an unreviewed plan whose assumptions surface only as rollbacks | The plan never gets converted into a working artifact; understanding without execution |
 
 ---
 
@@ -88,7 +94,11 @@ Strong handoff conditions share three properties. They are **specific** — they
 
 "Looks good" is none of these. "Tests pass" is partial — tests check mechanical correctness, not scope or intent. The strong condition is a sentence: *The new function exists at `auth/login.py`, imports only from the standard library, passes the three test cases I wrote, and does not modify any file outside `auth/`.*
 
-<!-- → [TABLE: handoff condition quality — three columns: condition text, specific?, testable?, binary?. Rows: "looks good" (no/no/no), "tests pass" (partial/yes/yes), "function exists at auth/login.py, imports only stdlib, passes three named tests, no files modified outside auth/" (yes/yes/yes). Student should see why the third row is the only one that does the job.] -->
+| Condition | Specific? | Testable? | Binary? |
+|---|---|---|---|
+| "Looks good" | No | No | No |
+| "Tests pass" | Partial — which tests, against what scope? | Yes | Yes |
+| "Function exists at `auth/login.py`, imports only stdlib, passes three named tests, no files modified outside `auth/`" | Yes | Yes | Yes |
 
 The handoff condition is written *before* the step runs. This is important. Writing the condition after the step runs, when you can see the output, produces a condition that describes what happened rather than what was supposed to happen. The condition written before is a commitment; the condition written after is a rationalization.
 
@@ -98,18 +108,18 @@ Chapter 9 owns handoff conditions in full. For now: every significant Code Mode 
 
 ## The same build, two ways
 
-The task: add a small CLI that runs grading on a single submission file.
+The task: add a small CLI that runs the article-review tool on a single draft file.
 
 **Without the discipline.**
 
 ```
-Prompt: "Add a CLI to run grading on a single submission."
-Codex writes cli.py — argparse, imports the grading module, calls grade(),
+Prompt: "Add a CLI to run the review on a single article draft."
+Codex writes cli.py — argparse, imports the articles module, calls review(),
 prints the result.
 Run it. Import not found. Wrong directory.
 "Fix the import path."
 Codex fixes the import.
-Run it. grade() expects different arguments.
+Run it. review() expects different arguments.
 "Use the right argument shape."
 Codex fixes the call.
 Run it. Output correct.
@@ -119,14 +129,14 @@ Time: 25 minutes. Three corrections. Cluttered session context.
 **With the discipline.**
 
 ```
-[Ask Mode] "I want a CLI that runs grading on a single submission file.
-Read the existing grading module and propose a plan."
-Codex returns a plan. Four steps. Imports from src.grading. Calls
-grade_submission(submission_file).
+[Ask Mode] "I want a CLI that runs the article review on a single draft file.
+Read the existing articles module and propose a plan."
+Codex returns a plan. Four steps. Imports from src.articles. Calls
+review_article(draft_file).
 
-Review: the function name is wrong — it is grade(submission_path,
-rubric_path), not grade_submission(file). The import path is wrong —
-the project uses absolute imports from src. The rubric argument
+Review: the function name is wrong — it is review(draft_path,
+target_path), not review_article(file). The import path is wrong —
+the project uses absolute imports from src. The target argument
 needs a default.
 
 Correct the plan in Ask Mode. Codex confirms.
@@ -140,7 +150,8 @@ Same task. Same Codex. Thirteen minutes faster. No rollbacks.
 
 The thirteen minutes is not the interesting number. The interesting number is zero — the number of rollbacks in Code Mode when the assumptions were caught in Ask Mode. The gate moved the cheap work (correcting the plan) upstream of the expensive work (rolling back the implementation). The math is favorable whenever catching one assumption saves one rollback, which is almost always.
 
-<!-- → [DIAGRAM: The Ask Mode / Code Mode gate. Human in Ask Mode: interrogate, plan, formulate. Gate: plan reviewed and approved. Human in Code Mode: execute against plan, verify output. Editorial style. No color.] -->
+![Three-stage flow. Left card: Ask Mode (Human — interrogate, plan, formulate). Center card: The Gate (plan reviewed and approved), bordered in red. Right card: Code Mode (Human — execute, check handoff, verify output). Arrows connect the three stages.](images/05-conducting-not-prompting-fig-02.png)
+*Figure 5.2 — The Ask Mode / Code Mode gate*
 
 ---
 
@@ -238,3 +249,27 @@ You have the gate. The next chapter names the five things the human must never d
 
 [^1]: OpenAI engineers, "How OpenAI Engineers use Codex to Tackle Big Projects with Rigor" (forum.openai.com, December 4, 2025).
 [^2]: Simon, H. A. *The Sciences of the Artificial*. MIT Press, 3rd ed., 1996.
+
+---
+
+## Prompts
+
+Use these prompts with Claude to generate interactive D3 v7 versions of the figures in this chapter. Each produces a standalone HTML file you can open in a browser and modify freely.
+
+**Prerequisites:** Load `brutalist/CLAUDE.md` and `brutalist/DESIGN.md` into your Claude project context before using these prompts. They define the stack, naming conventions, color system, and typography the figures use.
+
+---
+
+### Figure 5.1 — Right seat, wrong seat
+
+Build a two-panel illustration in D3 v7. Two equally-sized `--color-fill` panels side by side, each with a monospace ALL CAPS header (`PANEL A — AT THE PODIUM`, `PANEL B — IN THE SECTION`). In Panel A, draw a simple stage line, a rectangular podium centered on it in `--color-white` with `--color-ink` outline, a stick-figure conductor on the podium with one arm raised holding a baton, and six small circles to either side representing the orchestra. In Panel B, draw the same stage line and an empty podium dashed in `--color-red` with an italic label `empty`. A stick-figure conductor (in `--color-red`) sits in the violin row holding a small rectangular violin; flanked by two other violinists in `--color-secondary`; additional orchestra dots on the far side. One-line caption under each panel. Hovering either panel shows a tooltip explaining what the seat does and does not do.
+
+> Reference implementation: `d3/05-conducting-not-prompting-fig-01.html`
+
+---
+
+### Figure 5.2 — The Ask Mode / Code Mode gate
+
+Build a three-stage horizontal flow in D3 v7. Three cards from left to right. Left card (`--color-fill`): `ASK MODE · Human`, with three short arrow-bulleted lines (`→ interrogate`, `→ plan`, `→ formulate`) and an italic `--color-secondary` line `no files change.`. Center card (`--color-white` with `--color-red` border): `THE GATE`, with bold red title `plan reviewed and approved` and two italic `--color-secondary` lines `find one assumption.` / `confirm or correct.`. Right card (`--color-fill`): `CODE MODE · Human`, with three arrow-bulleted lines (`→ execute`, `→ check handoff`, `→ verify output`) and an italic line `files, state, effects.`. Connect the three cards with `marker-end` arrows. Hovering any stage shows a tooltip explaining what that stage does and what goes wrong if it is skipped. Dashed footer rule plus two caption lines: the gate is a specific review with a specific purpose; correction in Ask Mode costs a sentence, in Code Mode costs a rollback.
+
+> Reference implementation: `d3/05-conducting-not-prompting-fig-02.html`

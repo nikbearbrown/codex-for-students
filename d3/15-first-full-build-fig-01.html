@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Figure 15.1 — The fourteen-step sequence</title>
+<style>
+:root {
+  --color-white: #FFFFFF;
+  --color-fill: #F5EFE8;
+  --color-ink: #2a1a0e;
+  --color-mark: #6B3520;
+  --color-red: #C8102E;
+  --color-slate: #1A3A5C;
+  --color-ochre: #C8860E;
+  --color-secondary: #545454;
+  --color-border: #D4D4D4;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-white: #111111;
+    --color-fill: #1a1612;
+    --color-ink: #F0EBE3;
+    --color-mark: #C8865E;
+    --color-red: #E8243A;
+    --color-slate: #6B8FB8;
+    --color-ochre: #D49A30;
+    --color-secondary: #A0978C;
+    --color-border: #2E2E2E;
+  }
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: var(--color-white); color: var(--color-ink); font-family: 'EB Garamond', Georgia, serif; padding: 24px; }
+#chart { width: 100%; min-height: 740px; }
+.tooltip { position: absolute; pointer-events: none; opacity: 0; background: var(--color-slate); color: var(--color-white); padding: 8px 12px; font-size: 12px; font-family: 'EB Garamond', Georgia, serif; max-width: 280px; line-height: 1.4; transition: opacity 150ms; }
+text { font-family: 'EB Garamond', Georgia, serif; fill: var(--color-ink); }
+.caps { font-family: 'IBM Plex Mono', 'JetBrains Mono', monospace; letter-spacing: 0.08em; fill: var(--color-secondary); font-size: 10px; }
+.secondary { fill: var(--color-secondary); }
+.step-body { fill: var(--color-white); stroke: var(--color-border); stroke-width: 1; cursor: pointer; transition: fill 120ms; }
+.step-badge { fill: var(--color-fill); stroke: var(--color-border); stroke-width: 1; pointer-events: none; }
+.step-body.highlight { stroke: var(--color-red); }
+.step-badge.highlight { stroke: var(--color-red); }
+.step-body:hover { fill: var(--color-fill); }
+@media (prefers-reduced-motion: reduce) { *, .tooltip { transition: none !important; animation: none !important; } }
+</style>
+</head>
+<body>
+<div id="chart" role="main"></div>
+<div class="tooltip" id="tt"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
+<script>
+function draw() {
+  d3.select('#chart').selectAll('*').remove();
+  const totalWidth = document.getElementById('chart').clientWidth || 700;
+  const totalHeight = 740;
+
+  const svg = d3.select('#chart').append('svg')
+    .attr('viewBox', `0 0 ${totalWidth} ${totalHeight}`)
+    .attr('role', 'img').attr('aria-labelledby', 'chart-title chart-desc');
+  svg.append('title').attr('id', 'chart-title').text('The fourteen-step sequence');
+  svg.append('desc').attr('id', 'chart-desc').text('Numbered vertical flow of fourteen steps in three phases: Upstream (1-7), Per-step loop (8-12, highlighted, with a repeat-per-step loop-back arrow), Closing (13-14).');
+
+  const defs = svg.append('defs');
+  defs.append('marker').attr('id', 'arrow15-1').attr('markerWidth', 8).attr('markerHeight', 6)
+    .attr('refX', 7).attr('refY', 3).attr('orient', 'auto')
+    .append('polygon').attr('points', '0 0, 8 3, 0 6').attr('fill', 'var(--color-ink)');
+  defs.append('marker').attr('id', 'arrowred15-1').attr('markerWidth', 8).attr('markerHeight', 6)
+    .attr('refX', 7).attr('refY', 3).attr('orient', 'auto')
+    .append('polygon').attr('points', '0 0, 8 3, 0 6').attr('fill', 'var(--color-red)');
+
+  svg.append('text').attr('class', 'caps').attr('x', 32).attr('y', 40).text('FIGURE 15.1 — THE FOURTEEN-STEP SEQUENCE');
+  svg.append('text').attr('x', 32).attr('y', 64).attr('font-weight', 'bold').attr('font-size', 13).text('From spec to ship — once upstream, looped through, once closing');
+
+  const tt = d3.select('#tt');
+  const showTip = (html) => tt.html(html).style('opacity', 1);
+  const moveTip = (e) => tt.style('left', (e.pageX + 12) + 'px').style('top', (e.pageY - 8) + 'px');
+  const hideTip = () => tt.style('opacity', 0);
+
+  const steps = [
+    { n: 1, t: 'Ask Mode interrogation', sub: 'Ch 7 — what considerations matter', phase: 'upstream', tip: 'Step 1 — investigate before committing to a frame. Surface considerations you hadn\'t thought of.' },
+    { n: 2, t: 'One-sentence formulation', sub: 'Ch 7 — three sentences: does, touches, never touches', phase: 'upstream', tip: 'Step 2 — if you can\'t write each in one sentence, scope isn\'t small enough.' },
+    { n: 3, t: 'Minimum viable spec', sub: 'Ch 7 — half-page contract; five sections', phase: 'upstream', tip: 'Step 3 — problem, architecture, user flows, user needs, out of scope. Half a page.' },
+    { n: 4, t: 'AGENTS.md', sub: 'Ch 6 — persistent record; revised twice during build', phase: 'upstream', tip: 'Step 4 — write it before; revise it during. The build will surface what you didn\'t know to write down.' },
+    { n: 5, t: 'DESIGN.md and PROJECT.md', sub: 'Ch 10 — when creative or aesthetic dimensions matter', phase: 'upstream', tip: 'Step 5 — if output has voice, format, or visual identity, those decisions belong here.' },
+    { n: 6, t: 'Ask Mode plan', sub: 'Ch 12 — Codex drafts; you edit', phase: 'upstream', tip: 'Step 6 — Codex proposes an implementation plan against the spec.' },
+    { n: 7, t: 'Plan review', sub: 'Ch 12 — find at least one wrong assumption', phase: 'upstream', tip: 'Step 7 — a plan approved without correction is a plan you have not read.' },
+    { n: 8, t: 'First Code Mode prompt', sub: 'Ch 9 — five-element specification', phase: 'loop', tip: 'Step 8 — task, invariants, context, output format, negative constraint. The specification carries the project into the prompt.' },
+    { n: 9, t: 'Read output; predict first', sub: 'Ch 6 — the prediction is the target', phase: 'loop', tip: 'Step 9 — predict before reading. The gap between prediction and result is information.' },
+    { n: 10, t: 'Handoff condition check', sub: 'Ch 13 — mechanical verification', phase: 'loop', tip: 'Step 10 — the condition was specified in the prompt. Did the output meet it? Not judgment, just checking.' },
+    { n: 11, t: 'Plausibility audit', sub: 'Ch 6 — investigate before accepting', phase: 'loop', tip: 'Step 11 — does the result feel right in context? If PA fires, investigate before accepting.' },
+    { n: 12, t: 'Update AGENTS.md', sub: 'Ch 6 — lesson learned this step', phase: 'loop', tip: 'Step 12 — even one entry per step accumulates into project memory the next build benefits from.' },
+    { n: 13, t: 'Three-pass verification', sub: 'Ch 14 — functional, edge case, spec needs', phase: 'closing', tip: 'Step 13 — once, at the end. Does it run, does it handle edges, does it meet User needs.' },
+    { n: 14, t: 'Post-build learning document', sub: 'Ch 14 — five sections, one page, written now', phase: 'closing', tip: 'Step 14 — the document is the primary artifact. The build is verification that the discipline produced something.' }
+  ];
+
+  const cardX = 140, cardW = 380, cardH = 32, cardGap = 8, yStart = 92;
+  steps.forEach((s, i) => {
+    const y = yStart + i * (cardH + cardGap);
+    const isLoop = s.phase === 'loop';
+    s._y = y;
+    svg.append('rect').attr('class', 'step-body' + (isLoop ? ' highlight' : ''))
+      .attr('x', cardX).attr('y', y).attr('width', cardW).attr('height', cardH)
+      .on('mouseenter', () => showTip(`<strong>Step ${s.n} — ${s.t}</strong><br/>${s.tip}`))
+      .on('mousemove', moveTip).on('mouseleave', hideTip);
+    svg.append('rect').attr('class', 'step-badge' + (isLoop ? ' highlight' : ''))
+      .attr('x', cardX).attr('y', y).attr('width', 36).attr('height', cardH);
+    svg.append('text').attr('class', 'caps').attr('x', cardX + 18).attr('y', y + 21).attr('text-anchor', 'middle').attr('font-size', 11)
+      .attr('fill', isLoop ? 'var(--color-red)' : 'var(--color-ink)').text(s.n);
+    svg.append('text').attr('x', cardX + 48).attr('y', y + 16).attr('font-weight', 'bold').attr('font-size', 11)
+      .attr('fill', isLoop ? 'var(--color-red)' : 'var(--color-ink)').attr('pointer-events', 'none').text(s.t);
+    svg.append('text').attr('x', cardX + 48).attr('y', y + 28).attr('font-size', 9).attr('class', 'secondary').attr('pointer-events', 'none').text(s.sub);
+  });
+
+  // brackets
+  const u0 = steps[0]._y, u1 = steps[6]._y + cardH;
+  const l0 = steps[7]._y, l1 = steps[11]._y + cardH;
+  const c0 = steps[12]._y, c1 = steps[13]._y + cardH;
+
+  function bracket(yA, yB, color, label, italic) {
+    svg.append('line').attr('x1', 118).attr('y1', yA).attr('x2', 118).attr('y2', yB).attr('stroke', color).attr('stroke-width', 0.75);
+    svg.append('line').attr('x1', 118).attr('y1', yA).attr('x2', 124).attr('y2', yA).attr('stroke', color).attr('stroke-width', 0.75);
+    svg.append('line').attr('x1', 118).attr('y1', yB).attr('x2', 124).attr('y2', yB).attr('stroke', color).attr('stroke-width', 0.75);
+    svg.append('text').attr('class', 'caps').attr('x', 32).attr('y', yA + 12).attr('fill', color).text(label);
+    italic.forEach((line, i) => {
+      svg.append('text').attr('x', 32).attr('y', yA + 26 + i * 14).attr('font-size', 10).attr('font-style', 'italic').attr('fill', color).text(line);
+    });
+  }
+  bracket(u0, u1, 'var(--color-secondary)', 'UPSTREAM', ['once, before', 'Code Mode']);
+  bracket(l0, l1, 'var(--color-red)', 'PER-STEP LOOP', ['repeats for', 'every step']);
+  bracket(c0, c1, 'var(--color-secondary)', 'CLOSING', ['once, at end']);
+
+  // arrows between phases
+  svg.append('line').attr('x1', cardX + cardW / 2).attr('y1', u1 + 2).attr('x2', cardX + cardW / 2).attr('y2', l0 - 4).attr('stroke', 'var(--color-ink)').attr('stroke-width', 1.5).attr('marker-end', 'url(#arrow15-1)');
+  svg.append('line').attr('x1', cardX + cardW / 2).attr('y1', l1 + 2).attr('x2', cardX + cardW / 2).attr('y2', c0 - 4).attr('stroke', 'var(--color-ink)').attr('stroke-width', 1.5).attr('marker-end', 'url(#arrow15-1)');
+
+  // loop-back arrow on right side of per-step loop: from step 12 back up to step 8
+  const lbX = cardX + cardW + 30;
+  svg.append('path').attr('d', `M ${cardX + cardW} ${steps[11]._y + cardH / 2} L ${lbX} ${steps[11]._y + cardH / 2} L ${lbX} ${steps[7]._y + cardH / 2} L ${cardX + cardW + 2} ${steps[7]._y + cardH / 2}`)
+    .attr('fill', 'none').attr('stroke', 'var(--color-red)').attr('stroke-width', 1.5).attr('stroke-dasharray', '4 3').attr('marker-end', 'url(#arrowred15-1)');
+  svg.append('text').attr('x', lbX + 6).attr('y', (steps[7]._y + steps[11]._y) / 2 + cardH / 2 - 4).attr('font-size', 10).attr('font-style', 'italic').attr('fill', 'var(--color-red)').text('repeat');
+  svg.append('text').attr('x', lbX + 6).attr('y', (steps[7]._y + steps[11]._y) / 2 + cardH / 2 + 10).attr('font-size', 10).attr('font-style', 'italic').attr('fill', 'var(--color-red)').text('per step');
+
+  // bottom rule + caption
+  svg.append('line').attr('x1', 32).attr('y1', 700).attr('x2', totalWidth - 32).attr('y2', 700).attr('stroke', 'var(--color-border)').attr('stroke-width', 0.75).attr('stroke-dasharray', '4 3');
+  svg.append('text').attr('class', 'secondary').attr('x', 32).attr('y', 720).attr('font-size', 10)
+    .text('The highlighted phase repeats for every step in the build. Upstream and Closing each happen once.');
+}
+draw();
+const ro = new ResizeObserver(() => draw());
+ro.observe(document.getElementById('chart'));
+</script>
+</body>
+</html>

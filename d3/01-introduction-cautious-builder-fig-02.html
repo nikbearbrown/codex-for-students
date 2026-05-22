@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Figure 1.2 — Bastani et al. line chart</title>
+<style>
+:root {
+  --color-white: #FFFFFF;
+  --color-fill: #F5EFE8;
+  --color-ink: #2a1a0e;
+  --color-mark: #6B3520;
+  --color-red: #C8102E;
+  --color-slate: #1A3A5C;
+  --color-ochre: #C8860E;
+  --color-secondary: #545454;
+  --color-border: #D4D4D4;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-white: #111111;
+    --color-fill: #1a1612;
+    --color-ink: #F0EBE3;
+    --color-mark: #C8865E;
+    --color-red: #E8243A;
+    --color-slate: #6B8FB8;
+    --color-ochre: #D49A30;
+    --color-secondary: #A0978C;
+    --color-border: #2E2E2E;
+  }
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: var(--color-white); color: var(--color-ink); font-family: 'EB Garamond', Georgia, serif; padding: 24px; }
+#chart { width: 100%; min-height: 500px; }
+.tooltip { position: absolute; pointer-events: none; opacity: 0; background: var(--color-slate); color: var(--color-white); padding: 8px 12px; font-size: 12px; font-family: 'EB Garamond', Georgia, serif; max-width: 260px; line-height: 1.4; }
+text { font-family: 'EB Garamond', Georgia, serif; fill: var(--color-ink); }
+.caps { font-family: 'IBM Plex Mono', 'JetBrains Mono', monospace; letter-spacing: 0.08em; fill: var(--color-secondary); font-size: 10px; }
+.secondary { fill: var(--color-secondary); }
+.dot { cursor: pointer; transition: r 120ms; }
+.dot:hover { r: 8; }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+</style>
+</head>
+<body>
+<div id="chart" role="main"></div>
+<div class="tooltip" id="tt"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
+<script>
+function draw() {
+  d3.select('#chart').selectAll('*').remove();
+  const totalWidth = document.getElementById('chart').clientWidth || 700;
+  const totalHeight = 500;
+  const margin = { top: 56, right: 180, bottom: 100, left: 80 };
+  const chartWidth = totalWidth - margin.left - margin.right;
+  const chartHeight = totalHeight - margin.top - margin.bottom;
+
+  const svg = d3.select('#chart').append('svg')
+    .attr('width', totalWidth).attr('height', totalHeight)
+    .attr('role','img').attr('aria-labelledby','chart-title chart-desc');
+  svg.append('title').attr('id','chart-title').text('Bastani et al. — practice score vs. unassisted exam');
+  svg.append('desc').attr('id','chart-desc').text('Line chart of three groups across two measurement points. AI without guardrails: +48 practice, -17 exam.');
+
+  const g = svg.append('g').attr('transform', `translate(${margin.left},${margin.top})`);
+  g.append('text').attr('class','caps').attr('y',-24).text('FIGURE 1.2 — BASTANI ET AL.');
+  g.append('text').attr('y',0).attr('font-weight','bold').attr('font-size',13).text('The 17-point drop appears only when the AI is removed');
+
+  const tt = d3.select('#tt');
+  function showTip(html){ tt.html(html).style('opacity',1); }
+  function moveTip(e){ tt.style('left',(e.pageX+12)+'px').style('top',(e.pageY-8)+'px'); }
+  function hideTip(){ tt.style('opacity',0); }
+
+  // Scales
+  const x = d3.scalePoint().domain(['Practice score','Unassisted exam']).range([40, chartWidth-40]).padding(0.1);
+  const y = d3.scaleLinear().domain([-30, 55]).range([chartHeight, 0]);
+
+  // Plot bg
+  g.append('rect').attr('x',0).attr('y',0).attr('width',chartWidth).attr('height',chartHeight)
+    .attr('fill','var(--color-fill)').attr('stroke','var(--color-border)').attr('stroke-width',1);
+
+  // y ticks
+  [-25, 0, 25, 50].forEach(v => {
+    g.append('text').attr('x',-8).attr('y',y(v)+4).attr('text-anchor','end').attr('font-size',10).attr('class','secondary').text((v>0?'+':'')+v);
+    g.append('line').attr('x1',-4).attr('x2',0).attr('y1',y(v)).attr('y2',y(v)).attr('stroke','var(--color-secondary)');
+  });
+  // zero line
+  g.append('line').attr('x1',0).attr('x2',chartWidth).attr('y1',y(0)).attr('y2',y(0))
+    .attr('stroke','var(--color-secondary)').attr('stroke-dasharray','4 3').attr('stroke-width',0.75);
+
+  // x labels
+  ['Practice score','Unassisted exam'].forEach(lbl => {
+    g.append('text').attr('x',x(lbl)).attr('y',chartHeight+24).attr('text-anchor','middle').attr('font-size',11).text(lbl);
+  });
+
+  // y axis title
+  g.append('text').attr('class','caps').attr('transform',`translate(-52,${chartHeight/2}) rotate(-90)`).attr('text-anchor','middle').text('POINTS VS. BASELINE');
+
+  // Data
+  const series = [
+    { name: 'No AI (baseline)', color: 'var(--color-slate)', practice: 0, exam: 0,
+      tip: 'Control group — no AI used during practice. Sets the baseline against which both AI conditions are compared.' },
+    { name: 'AI + guardrails', color: 'var(--color-mark)', practice: 5, exam: 0,
+      tip: 'AI used with structured engagement — follow-up questions, explanation pairing, hand-implementation on concepts. Practice slightly above baseline; exam at baseline. The discipline closes the gap.' },
+    { name: 'AI, no guardrails', color: 'var(--color-red)', practice: 48, exam: -17, highlight: true,
+      tip: '+48 points on practice, -17 on the unassisted exam. The 65-point divergence between practice and exam is the homework/quiz gap, measured.' }
+  ];
+
+  series.forEach(s => {
+    g.append('line').attr('x1',x('Practice score')).attr('y1',y(s.practice))
+      .attr('x2',x('Unassisted exam')).attr('y2',y(s.exam))
+      .attr('stroke',s.color).attr('stroke-width', s.highlight ? 2.5 : 2);
+
+    [['Practice score', s.practice], ['Unassisted exam', s.exam]].forEach(([xv, yv]) => {
+      g.append('circle').attr('class','dot').attr('cx',x(xv)).attr('cy',y(yv)).attr('r', s.highlight ? 6 : 5).attr('fill',s.color)
+        .on('mouseenter',()=>showTip(`<strong>${s.name}</strong><br/>${xv}: ${(yv>0?'+':'')+yv}<br/>${s.tip}`))
+        .on('mousemove',moveTip).on('mouseleave',hideTip);
+    });
+
+    g.append('text').attr('x',x('Unassisted exam')+12).attr('y',y(s.exam)+4).attr('font-size',11)
+      .attr('fill',s.color).attr('font-weight', s.highlight?'bold':'normal').text(s.name);
+  });
+
+  // Annotations
+  g.append('text').attr('x',x('Practice score')).attr('y',y(48)-12).attr('text-anchor','middle').attr('font-size',10).attr('fill','var(--color-red)').text('+48');
+  g.append('text').attr('x',x('Unassisted exam')).attr('y',y(-17)+18).attr('text-anchor','middle').attr('font-size',10).attr('font-weight','bold').attr('fill','var(--color-red)').text('−17');
+
+  g.append('text').attr('x',chartWidth/2).attr('y',y(20)).attr('text-anchor','middle').attr('font-size',11).attr('font-style','italic').attr('fill','var(--color-red)').text('65-point divergence');
+  g.append('text').attr('x',chartWidth/2).attr('y',y(20)+14).attr('text-anchor','middle').attr('font-size',10).attr('class','secondary').text('between conditions');
+
+  // bottom rule + caption
+  g.append('line').attr('x1',0).attr('y1',chartHeight+52).attr('x2',chartWidth+150).attr('y2',chartHeight+52)
+    .attr('stroke','var(--color-border)').attr('stroke-width',0.75).attr('stroke-dasharray','4 3');
+  g.append('text').attr('class','secondary').attr('y',chartHeight+72).attr('font-size',10).text("Source: Bastani et al., RCT, middle-school algebra. Cohen's d = 0.738. p = 0.01.");
+  g.append('text').attr('class','secondary').attr('y',chartHeight+86).attr('font-size',10).text('Hover any point for the group reading.');
+}
+draw();
+const ro = new ResizeObserver(() => draw());
+ro.observe(document.getElementById('chart'));
+</script>
+</body>
+</html>

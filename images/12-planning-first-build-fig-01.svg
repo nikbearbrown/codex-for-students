@@ -1,0 +1,104 @@
+<svg viewBox="0 0 700 420" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">The planning sequence</title>
+  <desc id="desc">Horizontal flow of five planning phases — Question, Constraints, Plan, Approval, Build — connected by arrows. Everything before the Build is thinking work; Build is the first Code Mode prompt.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#2a1a0e"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="700" height="420" fill="#FFFFFF"/>
+
+  <text x="32" y="48" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="10" letter-spacing="0.08em" fill="#545454">FIGURE 12.1 — THE PLANNING SEQUENCE</text>
+  <text x="32" y="76" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="13" font-weight="bold" fill="#2a1a0e">Five phases — thinking first, building last</text>
+
+  <!-- Five phase cards in a horizontal flow -->
+  <!-- card 1: Question -->
+  <g>
+    <rect x="32" y="120" width="116" height="140" fill="#FFFFFF" stroke="#D4D4D4" stroke-width="1"/>
+    <rect x="32" y="120" width="116" height="32" fill="#F5EFE8" stroke="#D4D4D4" stroke-width="1"/>
+    <text x="90" y="140" text-anchor="middle" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="10" letter-spacing="0.08em" fill="#2a1a0e">QUESTION</text>
+    <text x="90" y="178" text-anchor="middle" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="11" font-weight="bold" fill="#2a1a0e">Ask Mode</text>
+    <text x="90" y="192" text-anchor="middle" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="11" font-weight="bold" fill="#2a1a0e">interrogation</text>
+    <text x="42" y="218" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="10" fill="#545454">What considerations</text>
+    <text x="42" y="232" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="10" fill="#545454">had I not</text>
+    <text x="42" y="246" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="10" fill="#545454">thought of?</text>
+  </g>
+
+  <!-- arrow 1 -->
+  <line x1="152" y1="190" x2="168" y2="190" stroke="#2a1a0e" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <!-- card 2: Constraints -->
+  <g>
+    <rect x="172" y="120" width="116" height="140" fill="#FFFFFF" stroke="#D4D4D4" stroke-width="1"/>
+    <rect x="172" y="120" width="116" height="32" fill="#F5EFE8" stroke="#D4D4D4" stroke-width="1"/>
+    <text x="230" y="140" text-anchor="middle" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="10" letter-spacing="0.08em" fill="#2a1a0e">CONSTRAINTS</text>
+    <text x="230" y="178" text-anchor="middle" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="11" font-weight="bold" fill="#2a1a0e">Formulation</text>
+    <text x="230" y="192" text-anchor="middle" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="11" font-weight="bold" fill="#2a1a0e">+ spec</text>
+    <text x="182" y="218" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="10" fill="#545454">One-sentence</text>
+    <text x="182" y="232" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="10" fill="#545454">test; half-page</text>
+    <text x="182" y="246" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="10" fill="#545454">contract.</text>
+  </g>
+
+  <!-- arrow 2 -->
+  <line x1="292" y1="190" x2="308" y2="190" stroke="#2a1a0e" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <!-- card 3: Plan -->
+  <g>
+    <rect x="312" y="120" width="116" height="140" fill="#FFFFFF" stroke="#D4D4D4" stroke-width="1"/>
+    <rect x="312" y="120" width="116" height="32" fill="#F5EFE8" stroke="#D4D4D4" stroke-width="1"/>
+    <text x="370" y="140" text-anchor="middle" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="10" letter-spacing="0.08em" fill="#2a1a0e">PLAN</text>
+    <text x="370" y="178" text-anchor="middle" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="11" font-weight="bold" fill="#2a1a0e">Ask Mode</text>
+    <text x="370" y="192" text-anchor="middle" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="11" font-weight="bold" fill="#2a1a0e">draft</text>
+    <text x="322" y="218" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="10" fill="#545454">Codex proposes</text>
+    <text x="322" y="232" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="10" fill="#545454">a sequence with</text>
+    <text x="322" y="246" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="10" fill="#545454">dependencies.</text>
+  </g>
+
+  <!-- arrow 3 -->
+  <line x1="432" y1="190" x2="448" y2="190" stroke="#2a1a0e" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <!-- card 4: Approval — highlighted (the gate) -->
+  <g>
+    <rect x="452" y="120" width="116" height="140" fill="#FFFFFF" stroke="#C8102E" stroke-width="1"/>
+    <rect x="452" y="120" width="116" height="32" fill="#F5EFE8" stroke="#C8102E" stroke-width="1"/>
+    <text x="510" y="140" text-anchor="middle" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="10" letter-spacing="0.08em" fill="#C8102E">APPROVAL</text>
+    <text x="510" y="178" text-anchor="middle" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="11" font-weight="bold" fill="#C8102E">Plan review</text>
+    <text x="510" y="192" text-anchor="middle" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="11" font-weight="bold" fill="#C8102E">— the gate</text>
+    <text x="462" y="218" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="10" fill="#545454">Find at least one</text>
+    <text x="462" y="232" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="10" fill="#545454">wrong assumption.</text>
+    <text x="462" y="246" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="10" fill="#545454">Correct it.</text>
+  </g>
+
+  <!-- arrow 4 -->
+  <line x1="572" y1="190" x2="588" y2="190" stroke="#2a1a0e" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <!-- card 5: Build -->
+  <g>
+    <rect x="592" y="120" width="76" height="140" fill="#FFFFFF" stroke="#D4D4D4" stroke-width="1"/>
+    <rect x="592" y="120" width="76" height="32" fill="#F5EFE8" stroke="#D4D4D4" stroke-width="1"/>
+    <text x="630" y="140" text-anchor="middle" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="10" letter-spacing="0.08em" fill="#2a1a0e">BUILD</text>
+    <text x="630" y="178" text-anchor="middle" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="11" font-weight="bold" fill="#2a1a0e">Code Mode</text>
+    <text x="630" y="192" text-anchor="middle" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="11" font-weight="bold" fill="#2a1a0e">begins</text>
+    <text x="602" y="218" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="10" fill="#545454">Prompt →</text>
+    <text x="602" y="232" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="10" fill="#545454">plan → spec →</text>
+    <text x="602" y="246" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="10" fill="#545454">AGENTS.md.</text>
+  </g>
+
+  <!-- Bracket showing "thinking work" vs "building" -->
+  <line x1="32" y1="290" x2="568" y2="290" stroke="#545454" stroke-width="0.75"/>
+  <line x1="32" y1="286" x2="32" y2="294" stroke="#545454" stroke-width="0.75"/>
+  <line x1="568" y1="286" x2="568" y2="294" stroke="#545454" stroke-width="0.75"/>
+  <text x="300" y="308" text-anchor="middle" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="10" font-style="italic" fill="#545454">Thinking work — about forty minutes</text>
+
+  <line x1="592" y1="290" x2="668" y2="290" stroke="#545454" stroke-width="0.75"/>
+  <line x1="592" y1="286" x2="592" y2="294" stroke="#545454" stroke-width="0.75"/>
+  <line x1="668" y1="286" x2="668" y2="294" stroke="#545454" stroke-width="0.75"/>
+  <text x="630" y="308" text-anchor="middle" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="10" font-style="italic" fill="#545454">Build — ninety</text>
+
+  <!-- Bottom rule + caption -->
+  <line x1="32" y1="350" x2="668" y2="350" stroke="#D4D4D4" stroke-width="0.75" stroke-dasharray="4 3"/>
+  <text x="32" y="372" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="10" fill="#545454">The build does not begin at the first prompt. It begins when the plan is approved. The highlighted phase — plan review — is the </text>
+  <text x="616" y="372" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="10" font-style="italic" fill="#545454">gate.</text>
+  <text x="32" y="388" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="10" fill="#545454">A plan approved without correction is a plan you have not read.</text>
+</svg>

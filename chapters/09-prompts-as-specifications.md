@@ -34,7 +34,13 @@ Same task, two approaches:
 
 Same Codex. The five elements are the difference.
 
-<!-- → [TABLE: Prompt vs. specification — two columns, five rows. Each row: one element. Left: weak prompt version. Right: specification version. Applied to the same task.] -->
+| Element | Weak prompt version | Specification version |
+|---|---|---|
+| Specific task | "Add user authentication." | Implement `authenticate(username, password) → Optional[User]` in `auth/auth.py`. |
+| Invariants | (implicit — anything may be touched) | Do not modify the `User` class. Do not modify the database schema. Do not change `auth/hashing.py`. |
+| Context | (none stated) | Use the existing `bcrypt` pattern from `auth/hashing.py`. Match against the `users` table. |
+| Output format | (whatever Codex returns) | Return the `User` on match, `None` otherwise. Add `tests/auth/test_auth.py` covering success, missing user, and wrong password. |
+| Negative constraint | (none) | Do not add a new dependency. Do not change interfaces touched by other modules. |
 
 ---
 
@@ -48,43 +54,65 @@ Each element is not bureaucracy. Each element protects against a specific, predi
 
 **The context** is the link between this prompt and the accumulated project knowledge in AGENTS.md. You do not need to repeat everything in AGENTS.md — Codex has it loaded. You do need to indicate which sections govern this step. *Reference the Voice section. Reference the never-generate-grade rule.* Without this link, Codex may produce output that is correct for a generic project and wrong for yours, even with AGENTS.md present. The context element closes the gap between "loaded" and "applied."
 
-**The output format** is your handoff condition written in prose. It names where the new code lives, what shape the change takes, what tests must exist. Writing the output format in advance forces you to decide what done means before Codex runs — and it makes it harder for Codex to declare something done that isn't. The most common form of this: *"A complete `grading/feedback.py`. A unit test in `tests/grading/test_feedback.py` covering at least: success, failure, empty input."* Codex cannot submit output that lacks the test file and call it complete.
+**The output format** is your handoff condition written in prose. It names where the new code lives, what shape the change takes, what tests must exist. Writing the output format in advance forces you to decide what done means before Codex runs — and it makes it harder for Codex to declare something done that isn't. The most common form of this: *"A complete `articles/feedback.py`. A unit test in `tests/articles/test_feedback.py` covering at least: success, failure, empty input."* Codex cannot submit output that lacks the test file and call it complete.
 
-**The negative constraint** is the most under-used element and the one that catches the dangerous middle most reliably. The dangerous middle is tasks that look like pattern work but require situational judgment — tasks where Codex produces fluent, plausible output that is wrong for your situation in a way that is invisible until later. Negative constraints are the operational form of the "never" rules in AGENTS.md, instantiated for this specific prompt. *Do not generate a final grade in any form.* That is one negative constraint. *Do not introduce a new dependency.* That is another. They feel like paranoia; they are not. They are the lessons from previous builds, written in the prompt instead of discovered in the diff.
+**The negative constraint** is the most under-used element and the one that catches the dangerous middle most reliably. The dangerous middle is tasks that look like pattern work but require situational judgment — tasks where Codex produces fluent, plausible output that is wrong for your situation in a way that is invisible until later. Negative constraints are the operational form of the "never" rules in AGENTS.md, instantiated for this specific prompt. *Do not rewrite the article's prose.* That is one negative constraint. *Do not introduce a new dependency.* That is another. They feel like paranoia; they are not. They are the lessons from previous builds, written in the prompt instead of discovered in the diff.
 
-<!-- → [TABLE: Five elements with failure class — three columns: element name / what failure it prevents / cost of omitting it. Rows: specific task, invariants, context, output format, negative constraint. Reference card for writing specifications.] -->
+| Element | Failure it prevents | Cost of omitting it |
+|---|---|---|
+| Specific task | Codex picks the wrong verb — "redesign auth" instead of "implement `authenticate()`" | A working artifact pointed at the wrong problem |
+| Invariants | Codex "improves" code you didn't ask it to touch | A diff that touches files you didn't expect — sometimes irreversibly |
+| Context | Output that's correct for the generic case and wrong for your project | The dangerous middle: fluent code that silently violates your AGENTS.md rules |
+| Output format | Codex declares done before the tests, files, or shape are in place | "Complete" output you have to chase back through several prompts to actually finish |
+| Negative constraint | Codex re-introduces a thing a previous build taught you not to do | Re-discovering an old lesson in the diff instead of asserting it in the prompt |
 
 ---
 
 ## Worked Example
 
-The task: add a feedback-generation step to the grading tool. Here is what the specification looks like in full.
+The task: add a structural-feedback step to the article-review tool. Here is what the specification looks like in full.
 
 **Prompt (don't do this):**
 
-> "Add a feedback generator to the grading tool."
+> "Add a feedback generator to the article tool."
 
 **Specification:**
 
-> **Operation:** Implement `generate_feedback(submission, rubric) → str` in `grading/feedback.py`.
+> **Operation:** Implement `generate_feedback(article, target) → str` in `articles/feedback.py`.
 >
-> **Invariants:** The `grading/rubric.py` module is unchanged. The `Submission` and `Rubric` classes are unchanged. The grading tool's CLI entry point in `grading/__main__.py` is unchanged.
+> **Invariants:** The `articles/target.py` module is unchanged. The `Article` and `Target` classes are unchanged. The tool's CLI entry point in `articles/__main__.py` is unchanged.
 >
-> **Context:** AGENTS.md sections on the "never" rules (specifically: NEVER generate a final grade; the feedback is a first-draft only). Reference `grading/scorer.py` for the existing pattern of producing per-criterion output. The Voice section of AGENTS.md applies — feedback is matter-of-fact, second-person, no encouragement boilerplate.
+> **Context:** AGENTS.md sections on the "never" rules (specifically: NEVER rewrite the article's prose; the feedback is structural notes only). Reference `articles/scorer.py` for the existing pattern of producing per-section output. The Voice section of AGENTS.md applies — feedback is matter-of-fact, second-person, no encouragement boilerplate.
 >
-> **Output format:** A complete `grading/feedback.py` with the function defined. A unit test in `tests/grading/test_feedback.py` covering at least: a submission that passes all rubric criteria; a submission that fails two criteria; an empty submission. The function returns a string under 500 characters.
+> **Output format:** A complete `articles/feedback.py` with the function defined. A unit test in `tests/articles/test_feedback.py` covering at least: an article that hits all target criteria; an article that misses two criteria (length, missing section); an empty article. The function returns a string under 500 characters.
 >
-> **Negative constraint:** Do not generate a final grade in any form (no numbers, no letters, no percentages). Do not modify `grading/scorer.py` or `grading/rubric.py`. Do not add a new dependency. Do not produce feedback the teacher would not say to the student (no generic "great effort!" or "keep practicing!").
+> **Negative constraint:** Do not rewrite the article's prose in any form (no suggested sentences, no edited paragraphs, no replacement headlines). Do not modify `articles/scorer.py` or `articles/target.py`. Do not add a new dependency. Do not produce feedback that reads like a writing coach's pep talk (no generic "great voice!" or "keep going!").
 
-That specification is roughly 150 words. The resulting Code Mode output is targeted: a function in the right file, following the project's voice rules, respecting the never-generate-grade rule, with tests covering the specified cases.
+That specification is roughly 150 words. The resulting Code Mode output is targeted: a function in the right file, following the project's voice rules, respecting the never-rewrite-prose rule, with tests covering the specified cases.
 
-The weaker prompt — "add a feedback generator" — would have produced a function that might generate a grade (because that is the most probable thing a feedback generator does, averaged across the training corpus), might modify scorer.py (because scorer.py is the most probable place to look for related code), and might produce generically encouraging feedback (because that is the most probable voice the model learned). Each failure is invisible until later. By then, the build has drifted.
+The weaker prompt — "add a feedback generator" — would have produced a function that might rewrite paragraphs (because that is the most probable thing a writing-feedback generator does, averaged across the training corpus), might modify scorer.py (because scorer.py is the most probable place to look for related code), and might produce generically encouraging feedback (because that is the most probable voice the model learned). Each failure is invisible until later. By then, the build has drifted.
 
 The 150 words of specification are the protection against all three.
 
-<!-- → [TABLE: Weak prompt vs. specification for the feedback-generator task — two columns, five rows, one per element. Shows exactly what each element adds.] -->
+| Element | Weak prompt | Specification |
+|---|---|---|
+| Specific task | "Add a feedback generator to the article tool." | Implement `generate_feedback(article, target) → str` in `articles/feedback.py`. |
+| Invariants | (none stated; `scorer.py` and `target.py` are fair game) | `articles/scorer.py`, `articles/target.py`, the `Article` and `Target` classes, and the CLI entry point in `articles/__main__.py` are unchanged. |
+| Context | (none stated; default voice and conventions apply) | AGENTS.md NEVER-rewrite-prose rule applies. Reference `articles/scorer.py` for the per-section output pattern. Voice section: matter-of-fact, second-person, no encouragement boilerplate. |
+| Output format | (whatever Codex returns) | Complete `articles/feedback.py`; `tests/articles/test_feedback.py` covering all-criteria-hit, two-criteria-miss (length + missing section), and empty article; return string under 500 characters. |
+| Negative constraint | (none) | Do not rewrite the article's prose. Do not produce coach-style "great voice!" feedback. Do not modify `scorer.py` or `target.py`. Do not add a new dependency. |
 
 <!-- → [IMAGE: Annotated diff view — left side shows the output from the weak prompt (grade generated, scorer.py modified, generic voice), right side shows output from the specification (no grade, scorer.py untouched, matter-of-fact voice). Callout annotations point to the three specific differences. Caption: "Same Codex. The specification is the entire difference."] -->
+
+---
+
+## What This Looks Like At Full Scale
+
+The five elements do not stop applying when the build is bigger. They become more important.
+
+Seth has written an Operation Detonation Game Design Document — a twelve-section production specification for a hypothetical cooperative shooter built around physics-driven environmental destruction. The document is roughly 6,000 words. It is structurally the same five elements as a 150-word Codex prompt, scaled up across an entire production. The Operation appears as a Vision Summary stating the one experience the game delivers. The Invariants appear as four Design Pillars, each with an explicit *VIOLATES* clause naming what the pillar refuses, plus a documented Pillar Collision Test that resolves the tension between two pillars in advance (*"Earned Spectacle versus Controlled Danger — Controlled Danger is primary in conflict"*). The Context appears as a cross-reference network: each Core Mechanic block names which pillars it serves and which loop positions it occupies, and any mechanic that fails to map to a Player Experience Goal gets flagged before it is documented further. The Output Format appears as a priority-tagged feature list (CORE / IMPORTANT / NICE-TO-HAVE / EXPERIMENTAL) with a hard rule — if CORE exceeds 40%, attempt re-prioritization; if it still won't fit, surface a cut-or-extend choice — and an MVP Specification naming exactly what the player experiences with CORE features only. The Negative Constraints appear as an Out-of-Scope section, each excluded item carrying a *REASON FOR EXCLUSION*, a *DECISION DATE AND OWNER*, and a *REOPEN CONDITION*.
+
+The pattern does not change with scale. A studio that operates without a GDD-level specification is the production equivalent of a programmer who types *"add user authentication"* and accepts whatever comes back. The five elements are what protect the build from drift, whether the build is fifteen lines of `auth.py` or a thirty-six-month $200-million production.
 
 ---
 
@@ -120,7 +148,7 @@ There is a deeper principle underneath the five-element format, and it is worth 
 
 Codex fills missing information with the most probable answer from its training data. This is not a flaw; it is how the system works. The most probable answer is often correct. The average programmer adding authentication does want OAuth. The average feedback generator does produce final grades. The average voice for student feedback is encouraging.
 
-You are not the average. Your project has specific constraints. Your AGENTS.md has specific never-rules. Your grading tool has a specific reason to never produce a final grade that has nothing to do with what most grading tools do.
+You are not the average. Your project has specific constraints. Your AGENTS.md has specific never-rules. Your article-review tool has a specific reason to never rewrite prose that has nothing to do with what most writing-feedback tools do.
 
 The five elements are the mechanism for replacing Codex's defaults with your actuals. Each element takes one dimension of the task where Codex would otherwise fill in an average and replaces it with a specific. The specific task replaces the average interpretation of your intent. The invariants replace the average assumption about what is safe to modify. The context replaces the average project's conventions with yours. The output format replaces the average definition of done with yours. The negative constraint replaces the average behavior with the explicit boundary your project requires.
 

@@ -45,7 +45,13 @@ Here is the shape of the difference:
 
 The strong conditions are not heroic. They are concrete. Each one takes thirty seconds to write and thirty seconds to verify.
 
-<!-- → [TABLE: Strong vs. weak handoff conditions — two columns. Five examples. Left: weak. Right: strong. No color.] -->
+| Weak | Strong |
+|---|---|
+| "Tests pass" | "Function exists at `articles/feedback.py`; signature matches the spec; success / error / edge-case tests all pass; no mutable default arguments; no files modified outside the spec's invariants" |
+| "Code still works" | "All existing tests still pass; public interface is unchanged (no renamed methods, no reshuffled argument order); no new dependencies; diff is under 200 lines" |
+| "Endpoint responds" | "`/api/foo` returns 200 on valid input and 400 on invalid input; uses the existing auth middleware untouched; integration test covers both cases" |
+| "Refactor looks clean" | "Public API surface in `articles/__init__.py` is byte-identical to pre-refactor; internal callers updated; `pytest -q` is green; no `pandas` introduced where stdlib was used before" |
+| "AGENTS.md updated" | "AGENTS.md has a new dated entry under Lessons learned naming the convention; the rule appears in Architecture as a one-line invariant; the file still parses as valid markdown" |
 
 ---
 
@@ -87,13 +93,13 @@ The rule of thumb: two corrections is the limit. After the second failed correct
 
 There is a protection against the dangerous middle that fires *during* Code Mode rather than at the end of a step. Include explicit stop conditions in your specification — conditions under which Codex must pause and ask before continuing.
 
-For a grading-tool feature build:
+For an article-review-tool feature build:
 
-> *"STOP and confirm before: (a) modifying any file outside `grading/`, (b) introducing any new dependency, (c) generating any output that contains a numeric or letter grade, (d) modifying the rubric format."*
+> *"STOP and confirm before: (a) modifying any file outside `articles/`, (b) introducing any new dependency, (c) generating any output that rewrites the article's prose, (d) modifying the target/length-rule format."*
 
 The STOP block is the handoff condition for scope creep. It catches the case where Codex starts to do something the negative constraint should have prevented — a case that happens not because Codex ignores the constraint, but because the constraint was specified at the task level and the execution path went through a sub-step that the constraint did not explicitly name.
 
-Codex respects STOP blocks reliably when they are explicit and concrete. The block should name specific files, specific operations, specific output contents. Not "stop if you're about to do something big" — Codex cannot evaluate that. Specific: "stop before modifying any file outside `grading/`."
+Codex respects STOP blocks reliably when they are explicit and concrete. The block should name specific files, specific operations, specific output contents. Not "stop if you're about to do something big" — Codex cannot evaluate that. Specific: "stop before modifying any file outside `articles/`."
 
 The STOP block is the protection for steps with high consequence horizons — steps where a wrong turn is expensive to reverse, where the dangerous middle produces downstream failures that take days to trace, where the cost of a false start significantly exceeds the cost of a brief pause to confirm. In the planning phase of a real build (Chapter 11), identifying which steps need STOP blocks is part of the plan.
 
@@ -161,7 +167,7 @@ You have the full conducting discipline for code builds. Chapter 11 applies the 
 
 **Warm-up**
 
-1. *(Targets: three properties of a handoff condition)* Take the following three conditions and classify each as specific/testable/binary or not, and explain what is missing from the ones that fail: (a) "The code looks good." (b) "All pytest tests pass and the diff touches only `grading/rubric.py`." (c) "The refactor mostly worked but there's one edge case I'll fix later."
+1. *(Targets: three properties of a handoff condition)* Take the following three conditions and classify each as specific/testable/binary or not, and explain what is missing from the ones that fail: (a) "The code looks good." (b) "All pytest tests pass and the diff touches only `articles/target.py`." (c) "The refactor mostly worked but there's one edge case I'll fix later."
 
 2. *(Targets: weak vs. strong conditions)* Rewrite this weak condition as a strong one: "The new user-authentication endpoint works." Your rewrite should be specific, testable, and binary. Name the file path, the HTTP status codes, the middleware being used, and at least one thing the endpoint must *not* do.
 

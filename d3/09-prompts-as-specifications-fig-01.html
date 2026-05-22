@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Figure 9.1 — Weak prompt vs. specification</title>
+<style>
+:root {
+  --color-white: #FFFFFF;
+  --color-fill: #F5EFE8;
+  --color-ink: #2a1a0e;
+  --color-mark: #6B3520;
+  --color-red: #C8102E;
+  --color-slate: #1A3A5C;
+  --color-ochre: #C8860E;
+  --color-secondary: #545454;
+  --color-border: #D4D4D4;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-white: #111111;
+    --color-fill: #1a1612;
+    --color-ink: #F0EBE3;
+    --color-mark: #C8865E;
+    --color-red: #E8243A;
+    --color-slate: #6B8FB8;
+    --color-ochre: #D49A30;
+    --color-secondary: #A0978C;
+    --color-border: #2E2E2E;
+  }
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: var(--color-white); color: var(--color-ink); font-family: 'EB Garamond', Georgia, serif; padding: 24px; }
+#chart { width: 100%; min-height: 560px; }
+.tooltip { position: absolute; pointer-events: none; opacity: 0; background: var(--color-slate); color: var(--color-white); padding: 8px 12px; font-size: 12px; font-family: 'EB Garamond', Georgia, serif; max-width: 280px; line-height: 1.4; }
+text { font-family: 'EB Garamond', Georgia, serif; fill: var(--color-ink); }
+.caps { font-family: 'IBM Plex Mono', 'JetBrains Mono', monospace; letter-spacing: 0.08em; fill: var(--color-secondary); font-size: 9px; }
+.mono { font-family: 'IBM Plex Mono', 'JetBrains Mono', monospace; fill: var(--color-ink); }
+.secondary { fill: var(--color-secondary); }
+.annot { cursor: pointer; }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+</style>
+</head>
+<body>
+<div id="chart" role="main"></div>
+<div class="tooltip" id="tt"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
+<script>
+function draw() {
+  d3.select('#chart').selectAll('*').remove();
+  const totalWidth = document.getElementById('chart').clientWidth || 700;
+  const totalHeight = 540;
+
+  const svg = d3.select('#chart').append('svg').attr('viewBox',`0 0 ${totalWidth} ${totalHeight}`)
+    .attr('role','img').attr('aria-labelledby','chart-title chart-desc');
+  svg.append('defs').append('marker').attr('id','arrow').attr('markerWidth',8).attr('markerHeight',6).attr('refX',7).attr('refY',3).attr('orient','auto')
+    .append('polygon').attr('points','0 0, 8 3, 0 6').attr('fill','var(--color-red)');
+  svg.append('title').attr('id','chart-title').text('Weak prompt vs. specification');
+  svg.append('desc').attr('id','chart-desc').text('Two stacked panels of the same prompt, with three red annotation callouts identifying removed ambiguity, added constraints, and named output format.');
+
+  svg.append('text').attr('class','caps').attr('font-size',10).attr('x',32).attr('y',56).text('FIGURE 9.1 — WEAK PROMPT VS. SPECIFICATION');
+  svg.append('text').attr('x',32).attr('y',88).attr('font-weight','bold').attr('font-size',13).text('Same task. Three callouts mark the difference.');
+
+  const tt = d3.select('#tt');
+  function showTip(html){ tt.html(html).style('opacity',1); }
+  function moveTip(e){ tt.style('left',(e.pageX+12)+'px').style('top',(e.pageY-8)+'px'); }
+  function hideTip(){ tt.style('opacity',0); }
+
+  const panelW = Math.min(466, totalWidth - 220);
+
+  // Weak panel
+  svg.append('rect').attr('x',32).attr('y',112).attr('width',panelW).attr('height',74).attr('fill','var(--color-white)').attr('stroke','var(--color-border)').attr('stroke-width',1);
+  svg.append('rect').attr('x',32).attr('y',112).attr('width',panelW).attr('height',26).attr('fill','var(--color-fill)').attr('stroke','var(--color-border)').attr('stroke-width',1);
+  svg.append('text').attr('class','caps').attr('x',42).attr('y',129).attr('font-weight','bold').text('PROMPT — WEAK');
+  svg.append('text').attr('class','mono').attr('x',42).attr('y',156).attr('font-size',11).text('"Add user authentication."');
+  svg.append('text').attr('x',42).attr('y',178).attr('font-size',10).attr('font-style','italic').attr('class','secondary').text('five words. Codex fills the rest from the average.');
+
+  // Spec panel
+  svg.append('rect').attr('x',32).attr('y',206).attr('width',panelW).attr('height',270).attr('fill','var(--color-white)').attr('stroke','var(--color-red)').attr('stroke-width',1);
+  svg.append('rect').attr('x',32).attr('y',206).attr('width',panelW).attr('height',26).attr('fill','var(--color-fill)').attr('stroke','var(--color-red)').attr('stroke-width',1);
+  svg.append('text').attr('class','caps').attr('x',42).attr('y',223).attr('font-weight','bold').attr('fill','var(--color-red)').text('PROMPT — SPECIFICATION');
+
+  const lines = [
+    { y:252, text:'Implement authenticate(username, password)' },
+    { y:266, text:'→ Optional[User] in auth/auth.py.' },
+    { y:290, text:'Use the existing bcrypt pattern from' },
+    { y:304, text:'auth/hashing.py.' },
+    { y:328, text:'Return the User on match;' },
+    { y:342, text:'return None otherwise.' },
+    { y:366, text:'Do not modify the User class.' },
+    { y:380, text:'Do not change the database schema.' },
+    { y:394, text:'Do not add a new dependency.' },
+    { y:418, text:'Add tests/auth/test_auth.py covering' },
+    { y:432, text:'success, missing user, wrong password.' }
+  ];
+  lines.forEach(l => svg.append('text').attr('class','mono').attr('x',42).attr('y',l.y).attr('font-size',10).text(l.text));
+
+  // Annotations
+  const annots = [
+    { y:258, label1:'REMOVED', label2:'AMBIGUITY', s1:'one verb, one file,', s2:'one signature', boxY:246, boxH:64,
+      tip:'The weak prompt left the verb open — "add" could mean implement, redesign, patch, or augment. The spec replaces the verb with one function name, one file path, one return type.' },
+    { y:380, label1:'ADDED', label2:'CONSTRAINTS', s1:'invariants + negative', s2:'constraints', boxY:354, boxH:58,
+      tip:'Invariants name what must not change. Negative constraints name what Codex must not do. Each line is the operational form of a previous lesson stated in advance instead of discovered in the diff.' },
+    { y:425, label1:'NAMED OUTPUT', label2:'FORMAT', s1:'tests + cases', s2:null, boxY:430, boxH:46,
+      tip:'The output format names where the new code lives, what the tests must cover, and what shape the answer takes. "Done" is defined before Codex runs, not after.' }
+  ];
+
+  const rightStart = 32 + panelW + 2;
+  annots.forEach(a => {
+    const g = svg.append('g').attr('class','annot')
+      .on('mouseenter',()=>showTip(`<strong>${a.label1} ${a.label2}</strong><br/>${a.tip}`))
+      .on('mousemove',moveTip).on('mouseleave',hideTip);
+
+    // L-line
+    g.append('line').attr('x1',32+panelW).attr('y1',a.y).attr('x2',rightStart+18).attr('y2',a.y).attr('stroke','var(--color-red)').attr('stroke-width',1);
+    g.append('line').attr('x1',rightStart+18).attr('y1',a.y).attr('x2',rightStart+18).attr('y2',a.boxY+20).attr('stroke','var(--color-red)').attr('stroke-width',1);
+    g.append('line').attr('x1',rightStart+18).attr('y1',a.boxY+20).attr('x2',rightStart+38).attr('y2',a.boxY+20).attr('stroke','var(--color-red)').attr('stroke-width',1).attr('marker-end','url(#arrow)');
+
+    g.append('rect').attr('x',rightStart+38).attr('y',a.boxY).attr('width',116).attr('height',a.boxH).attr('fill','var(--color-fill)').attr('stroke','var(--color-red)').attr('stroke-width',1);
+    g.append('text').attr('class','caps').attr('x',rightStart+44).attr('y',a.boxY+16).attr('fill','var(--color-red)').attr('font-weight','bold').text(a.label1);
+    g.append('text').attr('class','caps').attr('x',rightStart+44).attr('y',a.boxY+28).attr('fill','var(--color-red)').attr('font-weight','bold').text(a.label2);
+    g.append('text').attr('x',rightStart+44).attr('y',a.boxY+44).attr('font-size',10).text(a.s1);
+    if (a.s2) g.append('text').attr('x',rightStart+44).attr('y',a.boxY+56).attr('font-size',10).text(a.s2);
+  });
+
+  svg.append('line').attr('x1',32).attr('y1',500).attr('x2',totalWidth-32).attr('y2',500).attr('stroke','var(--color-border)').attr('stroke-width',0.75).attr('stroke-dasharray','4 3');
+  svg.append('text').attr('x',32).attr('y',520).attr('class','secondary').attr('font-size',10).text('The spec is roughly 150 words. Same Codex. The five elements are the difference between a build that lands and a build that drifts.');
+}
+draw();
+const ro = new ResizeObserver(() => draw());
+ro.observe(document.getElementById('chart'));
+</script>
+</body>
+</html>

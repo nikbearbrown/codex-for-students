@@ -6,15 +6,15 @@
 
 The per-step handoffs had all passed.
 
-Seth's personal-finance script had finished its last step. It processed his February CSV exports. The summary markdown rendered: net worth, cash flow by category, four uncategorized transactions flagged for manual review. Codex's status report said the build was complete. Every handoff condition had returned a pass.
+Seth's Haunt & Harvest asset-budget script had finished its last step. It processed his v0.4 build export log. The summary markdown rendered: total budget, asset count by folder, audio file counts, four uncategorized assets flagged for manual review. Codex's status report said the build was complete. Every handoff condition had returned a pass.
 
 He was about to declare it done. Then he ran the verification pass — the one he almost skipped.
 
-He opened the markdown file on his phone. It rendered. The cash-flow-by-category section used a Markdown table with seven columns. On a phone screen in portrait mode, the table did not fit. The categories at the right edge were cut off. You could scroll horizontally to see them. No one would.
+He opened the markdown file on his phone. It rendered. The asset-count-by-folder section used a Markdown table with seven columns — folder, file count, total size MB, delta count, delta size, largest file, largest size. On a phone screen in portrait mode, the table did not fit. The delta columns at the right edge were cut off. You could scroll horizontally to see them. He wouldn't, on the couch, between scenes.
 
 The build had passed every mechanical check. The User need from the spec — *output is readable on phone* — was technically met in the sense that the markdown file could be opened on a phone. It was not met in the sense that mattered. The table format was wrong for the device.
 
-Seth fixed it. The table became a list. Categories and cash-flow amounts, each on its own line. The output fit. The build was now genuinely done.
+Seth fixed it. The table became a list. Folder name as a heading, the seven fields as a bullet list beneath each. The output fit. The build was now genuinely done.
 
 This is the distinction the chapter is about. The per-step handoffs are necessary. They are not sufficient. There is a verification pass at the level of the *whole build* — against the spec's User needs, not against the individual steps' conditions — and it catches what nothing else catches.
 
@@ -32,7 +32,11 @@ The phone-readability failure is not a handoff failure. Every step that produced
 
 This is not a criticism of the handoff discipline. The handoffs protect against the wrong thing being built at each step. The verification pass protects against the right things being built at each step that combine into the wrong whole. Both are necessary. They catch different failures.
 
-<!-- → [TABLE: what each layer catches — three rows (per-step handoff condition, Pass 1–2 verification, Pass 3 spec-needs verification), three columns: what it checks, example failure it catches, example failure it misses. Student should see that no single layer is sufficient and that the layers are complementary, not redundant.] -->
+| Layer | What it checks | Example failure it catches | Example failure it misses |
+|---|---|---|---|
+| Per-step handoff condition | Did *this step* produce the artifact and behavior the spec required? | Categorization rules hardcoded instead of loaded from a config file — caught at Step 4 | The auto-incremented schema key — technically correct, makes a later step harder |
+| Pass 1–2 (functional + edge-case) verification | Does the whole script run, do tests pass, do edge cases — empty log, single-asset log, special characters in paths — behave sanely? | Categorization rule that crashes on a path with an ampersand or unicode character | A markdown summary table that's technically valid and unreadable on a phone |
+| Pass 3 (spec-needs) verification | Does the final build meet the User needs as written — *not* what the script does, but what it *delivers* to the user? | "Readable on phone" — seven-column markdown table cut off in portrait mode | A failure mode the spec never names — if the User need wasn't written down, Pass 3 can't check it |
 
 ---
 
@@ -44,9 +48,9 @@ The verification step has three layers, run in order.
 
 **Pass 2: edge-case verification.** Does the script handle the cases the spec defined as within scope but unusual? Empty inputs. Invalid inputs. Large inputs. The specific boundary conditions named during planning.
 
-For Seth's build: an empty CSV (does the script handle a month with no transactions?); a CSV with one transaction; a duplicate transaction within a single CSV (does dedup catch it?); a transaction with special characters in the description (does it parse?). All passed.
+For Seth's build: an empty export log (does the script handle a build with no new assets?); a log with one asset; a duplicate asset within a single log (does dedup catch it?); an asset path with special characters from a Windows export (does it parse?). All passed.
 
-Pass 2 catches failures that Pass 1 misses because the average case works and the edge case does not. A categorization rule that handles every normal description and fails on a merchant name with an ampersand passes every test written for normal descriptions. Pass 2 catches it — if you thought to test the ampersand.
+Pass 2 catches failures that Pass 1 misses because the average case works and the edge case does not. A categorization rule that handles every normal folder path and fails on a path with an ampersand or unicode character passes every test written for normal paths. Pass 2 catches it — if you thought to test it.
 
 **Pass 3: spec-needs verification.** Does the final state of the build meet the User needs from the spec? Not what the spec said the script should *do* at the technical level — that is Pass 1. Not what edge cases it handles — that is Pass 2. What the spec said the script should *deliver* at the user-need level.
 
@@ -54,7 +58,9 @@ This is where the phone-readability failure lived. "Output is readable on phone"
 
 Pass 3 verification is manual, specific, and tied to the spec's written User needs. You go down the list. You check each one against the actual system state. You mark pass or fail. You fix the fails.
 
-<!-- → [DIAGRAM: The verification sequence — three passes. Pass 1: functional verification. Pass 2: edge case verification. Pass 3: SDD/spec needs verification. Each pass has a binary result and a path to resolution.] -->
+![Three stacked pass cards connected by downward arrows. Pass 1 — Functional: does it run? Pass 2 — Edge case: does it do what was asked? Pass 3 — Spec needs (highlighted in red): does it survive real use? Each card has side annotations listing what the pass catches and what it cannot see.](images/14-verification-fig-01.png)
+
+*Figure 14.1 — The verification sequence. Three passes — execution, specification, intent. Pass 3 is highlighted because it is the only pass that checks against the spec's User needs.*
 
 ---
 
@@ -62,7 +68,7 @@ Pass 3 verification is manual, specific, and tied to the spec's written User nee
 
 Most builds stop at Pass 1. The tests pass; the build is declared done. This is not negligence. It is the natural stopping point when the tests were written to verify technical correctness and the User needs were never translated into verification steps.
 
-The translation is the work. "Readable on phone" needs to become "open the output on an iPhone-preset Chrome devtools viewport, portrait mode, default font size, and verify no horizontal scroll is required to read the cash-flow table." Once the translation is done, Pass 3 is fast — you are following a checklist, not making judgment calls.
+The translation is the work. "Readable on phone" needs to become "open the output on an iPhone-preset Chrome devtools viewport, portrait mode, default font size, and verify no horizontal scroll is required to read the asset-count-by-folder section." Once the translation is done, Pass 3 is fast — you are following a checklist, not making judgment calls.
 
 The problem is that the translation is never done as a deliberate step. It is supposed to happen naturally, as part of writing the spec well. Seth's spec said "readable on phone." The translation into "no horizontal scroll in portrait mode" did not happen. The verification pass surfaced the gap.
 
@@ -84,7 +90,9 @@ The sequence is: Pass 1, then Pass 2, then Pass 3. If any pass fails, fix and re
 
 The phone-readability fix — changing the table to a list — required Seth to re-run Pass 1 (does the list render correctly in markdown?) and Pass 2 (does the list handle the edge cases the table did: categories with long names, categories with zero transactions?) before running Pass 3 again (does the list fit on the phone screen without horizontal scroll?). Fixing a Pass 3 failure introduced potential Pass 1 and Pass 2 regressions. He checked both. Both were fine. Pass 3 re-ran. The build was done.
 
-<!-- → [CHART: verification loop flow diagram — linear sequence (Pass 1 → Pass 2 → Pass 3 → Done) with regression arrows: a Pass 2 failure loops back to fix → Pass 1 recheck → Pass 2; a Pass 3 failure loops back to fix → Pass 1 recheck → Pass 2 recheck → Pass 3. Student should see that later-pass failures require re-verifying earlier passes, not just re-running the failing pass.] -->
+![A descending step chart. X-axis is verification iteration with stops labeled start, P1, P2, P3, done; y-axis is defects remaining. The red step line drops sharply at each pass — largest drop at Pass 1 (mechanical), smaller at Pass 2 (edge cases), smallest at Pass 3 (spec needs, highlighted). A small dashed re-run-on-fix arc connects the Pass-3 region back into earlier passes; a residual marker shows what no pass catches.](images/14-verification-fig-02.png)
+
+*Figure 14.2 — Verification loop flow. Each pass drops the defect count by what only that pass can catch. Fixing a later-pass failure requires re-running earlier passes — the loop, not the line, is the structure.*
 
 ---
 
@@ -112,13 +120,13 @@ Write it now. Memory degrades fast. The specific details that make the "What I w
 
 ## What Seth's post-build document said
 
-Here is Seth's document for the personal-finance build, reproduced in full:
+Here is Seth's document for the asset-budget build, reproduced in full:
 
-> **What I built.** A Python script that processes bank CSV exports into a monthly net-worth and cash-flow summary, written to a markdown file. The script is local-only, idempotent, and produces output I can read on my phone.
+> **What I built.** A Python script that processes Godot export logs from Haunt & Harvest into a per-build asset-budget summary with deltas against the previous build, written to a markdown file. The script is local-only, idempotent, and produces output I can read on my phone between play sessions.
 >
-> **What I delegated to Codex and why.** The SQLite schema migration, the CSV parsing logic, the dedup logic, the categorization rule engine, the markdown rendering. These are pattern-completion tasks where Codex is faster than I am and where my verification — run the script, check the output — is straightforward.
+> **What I delegated to Codex and why.** The SQLite schema migration, the export-log parsing logic, the dedup logic, the categorization rule engine, the markdown rendering. These are pattern-completion tasks where Codex is faster than I am and where my verification — run the script, check the output — is straightforward.
 >
-> **What I kept for myself and why.** The Intent Layer of the spec — what this script is for, and what it does not do (it does not categorize ambiguous transactions automatically; it flags them for me). The schema design choice: content-hash key versus auto-incremented integer. The choice mattered for idempotency, which was a User need. The categorization rules in the config file — these encode my classification of my transactions and are irreducibly mine. The phone-readable formatting decision, caught only in Pass 3.
+> **What I kept for myself and why.** The Intent Layer of the spec — what this script is for, and what it does not do (it does not collapse same-path same-size audio assets automatically; it flags them for me). The schema design choice: content-hash key versus auto-incremented integer. The choice mattered for idempotency, which was a User need. The categorization rules in the config file — these encode my judgment about which folders count as "AI," "inventory," "audio," etc., and are irreducibly mine. The phone-readable formatting decision, caught only in Pass 3.
 >
 > **What I learned that I didn't know before.** Codex's default schema design biases toward auto-incremented integer keys. When idempotency is a requirement, content-hash keys are usually right, and Codex will not propose them unless you ask. Pass 3 verification catches things Pass 1 and Pass 2 cannot — specifically, the phone-readability issue that no per-step handoff would have caught. AGENTS.md got an entry: "for any output that will be read on phone, verify column count and line width before declaring done."
 >
@@ -211,3 +219,27 @@ You have the discipline. The next chapter hands you the build.
 ---
 
 [^1]: Liskov, B. and Wing, J. M. "A Behavioral Notion of Subtyping." *ACM Transactions on Programming Languages and Systems* 16, no. 6 (1994): 1811–1841.
+
+---
+
+## Prompts
+
+Use these prompts with Claude to generate interactive D3 v7 versions of the figures in this chapter. Each produces a standalone HTML file you can open in a browser and modify freely.
+
+**Prerequisites:** Load `brutalist/CLAUDE.md` and `brutalist/DESIGN.md` into your Claude project context before using these prompts. They define the stack, naming conventions, color system, and typography the figures use.
+
+---
+
+### Figure 14.1 — The verification sequence
+
+Build a vertical three-pass column in D3 v7. Each pass is a rectangular card with a `--color-fill` header strip containing a monospace ALL CAPS code (`PASS 1 — FUNCTIONAL`, `PASS 2 — EDGE CASE`, `PASS 3 — SPEC NEEDS`), a bold serif question title (`Does it run?`, `Does it do what was asked?`, `Does it survive real use?`), and a one-line `--color-secondary` body sentence. To the right of each card, stack a two-block side annotation: a monospace ALL CAPS `CATCHES` label with two `--color-ink` lines, then a monospace ALL CAPS `CANNOT SEE` label with one italic `--color-secondary` line. Connect the three cards top-to-bottom with single-headed downward arrows sharing one `<defs>` arrowhead marker. The third pass (`PASS 3 — SPEC NEEDS`) is highlighted in `--color-red` — header text, code label, the title, the `CATCHES` label, and the `CATCHES` lines all switch to red; card stroke also red. Hovering any card shows a tooltip with the longer description of what that pass does. Dashed footer rule plus a two-line caption noting that the passes are cumulative and that the highlighted pass is the only one that checks against User needs.
+
+> Reference implementation: `d3/14-verification-fig-01.html`
+
+---
+
+### Figure 14.2 — Verification loop flow
+
+Build a descending step chart in D3 v7. X axis: monospace ALL CAPS `ITERATION →`, five labeled stops at `start`, `P1`, `P2`, `P3`, `done`. Y axis: rotated monospace ALL CAPS `DEFECTS REMAINING →`, with `high` and `0` hint labels at top and bottom. Plot area filled with `--color-fill`. Render a step path in `--color-red` (stroke-width 2.5, no fill) with values 130 → 70 → 30 → 10 → 10 across the five stops. Place red dots at the three pass landings; next to each, a two-line annotation with the monospace ALL CAPS pass code on top and a serif descriptor below (`mechanical`, `edge cases`, `spec needs`). The Pass 3 dot and labels are in `--color-red`. From the Pass 3 region, draw a small dashed red arc back toward earlier passes labeled `re-run on fix` in red italic — the regression loop. At `done`, drop a dashed `--color-secondary` vertical from the curve to the y=0 line, labeled `residual` in italic. Hovering any dot shows a tooltip explaining what failures that pass catches. Dashed footer rule plus a two-line caption naming the residual (downstream, dependency, formulation failures).
+
+> Reference implementation: `d3/14-verification-fig-02.html`

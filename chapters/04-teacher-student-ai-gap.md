@@ -23,7 +23,8 @@ There are two things you might mean when you say you are good at using Codex, an
 
 The danger zone is the combination of both at once. Without fluency, you would hesitate. You would look things up. You would ask for help. The hesitation is a kind of protection. Without depth *and with fluency*, you run the tool confidently on domains where you cannot catch its mistakes. The fluency removes the hesitation that would have protected you. The lack of depth means there is nothing else to catch what the hesitation would have.
 
-<!-- → [DIAGRAM: two-axis chart — fluency on x-axis, domain depth on y-axis. Four quadrants labeled: low fluency/low depth (beginner, protected by hesitation), high fluency/low depth (danger zone), low fluency/high depth (expert learner), high fluency/high depth (target state). Arrow from danger zone to target state labeled "the conducting discipline".] -->
+![Two-axis chart with technical fluency on the x-axis and domain depth on the y-axis. Four quadrants labeled — Expert Learner (low/high), Target (high/high, slate-bordered), Beginner Protected (low/low), Danger Zone (high/low, red-bordered). An arrow runs from the Danger Zone up to the Target, labeled "the conducting discipline".](images/04-teacher-student-ai-gap-fig-01.png)
+*Figure 4.1 — Technical fluency × domain depth: the danger zone and the conducting discipline*
 
 This is the configuration that AP CS A currently produces. The curriculum builds technical facility — object orientation, algorithm analysis, data structures — without formal instruction in supervising AI-generated code. The vocabulary for the supervisory capacities is absent. The Ask Mode → Code Mode gate is not mentioned. The student arrives with fluency in IDE-based Java and none of the structures that make Codex use safe. The gap is not the teacher's fault. It is structural.
 
@@ -45,7 +46,13 @@ Writing specifications that prevent misinterpretation. Chapter 8 covers this in 
 
 Supervising a tool that plans multi-step work and executes it without asking for confirmation. Chapter 5 covers this in detail. The curriculum does not.
 
-<!-- → [TABLE: curriculum coverage map — rows: each supervisory capacity (critical reading, situation-correctness auditing, problem interrogation, specification writing, agentic supervision); columns: taught in AP CS A (yes/no), taught in this book (chapter number). Student should see the gap at a glance.] -->
+| Capacity | Taught in AP CS A | Taught in this book |
+|---|---|---|
+| Critical reading of code you didn't write | No — curriculum has you write more than you read | Ch 6, Ch 14 |
+| Situation-correctness auditing (output vs. *your* use case) | No — tests run against fixed cases | Ch 3, Ch 6 |
+| Problem interrogation before solving | No | Ch 8 |
+| Specification writing that prevents misinterpretation | No | Ch 9 |
+| Agentic supervision (multi-step work without confirmation) | No | Ch 5, Ch 10 |
 
 None of this is in AP CS A. None of it is in most introductory CS courses anywhere. The curriculum is being updated; the updates are slow. You have a class this week.
 
@@ -81,7 +88,11 @@ This is the teacher-student gap in a single failure. The fluency to ask the ques
 
 After the quiz, Seth formalized a rule: *if I am studying for an unassisted assessment, every Codex explanation gets at least one follow-up question and one independent source for verification.* The rule is specific. The cost is small. The catch is what would have prevented the miss.
 
-<!-- → [TABLE: Seth's pre-discipline vs. post-discipline study behavior — columns: study task, what Seth did before, what Seth did after the quiz miss, what each approach catches and misses.] -->
+| Study task | Before the miss | After the miss | What each catches / misses |
+|---|---|---|---|
+| Understanding recursion | Asked Codex once, read the explanation, moved on | Asked the question, then a follow-up about what happens when locals are modified *after* the call returns | Before: catches the headline mechanism, misses the subtlety that quiz questions live on. After: catches the omission |
+| Studying for an unassisted quiz | Treated Codex's explanation as the source | Required at least one follow-up and one independent source (textbook, class notes) | Before: trusts a single source whose gaps are invisible. After: triangulation surfaces incompleteness |
+| Detecting a wrong-but-fluent answer | None — confidence in the explanation was the signal | Predict what the answer should sound like before reading Codex's reply | Before: no friction, so no prediction error fires. After: the discipline restores the prediction step |
 
 ---
 
@@ -121,7 +132,15 @@ A practical rule that fits any schedule: **for at least one assignment per unit,
 
 Which assignment? That is your judgment — informed by which topics you most expect to see on unassisted assessments, which topics build foundational models the later units will assume, which topics you most notice yourself accepting without understanding. The judgment is part of the discipline.
 
-<!-- → [TABLE: engagement patterns from Anthropic 2026 study — columns: pattern name, what the student does, what cognitive work is preserved, expected effect on domain depth. Rows: follow-up questioning, explanation pairing, hand-implementation with AI support for concepts.] -->
+| Pattern | What the student does | Cognitive work preserved | Effect on domain depth |
+|---|---|---|---|
+| Follow-up questioning | Asks "why this data structure? what if input is empty? why not the obvious approach?" before using the code | Prediction and comparison against the generated answer | Domain model is exercised on every prompt rather than bypassed |
+| Explanation pairing | Asks Codex *why* a design decision was made, then verifies the explanation against what they already know | Verification — and the prediction error that fires when verification fails | Misunderstandings surface where they can be repaired, not where they get tested |
+| Hand-implementation with AI on concepts | Uses Codex for "what does this API do?" while writing the implementation by hand | Algorithmic reasoning, debugging, syntax-in-context | Extraneous load drops; the load that builds depth is preserved |
+
+Beyond the code itself, the same discipline runs in any domain. Seth's published criticism of game design literature on Zebonastic is deliberate practice in a domain, and the practice is visible in the writing. His review of Roger Pedersen's *Game Design Foundations* opens by naming a structural contradiction in the source: Chapter 1 describes the designer as "free from any limitations," while Chapter 3's case studies are about designers crushed by exactly the limitations they were supposed to be free from. The review traces the contradiction across 350 pages, decides it is the source's own rather than a reviewer's projection, and refuses to resolve what the source itself does not resolve.
+
+That move — name the contradiction, trace it through the text, hold it open — is the analytical work AI tools cannot do for you. Codex can summarize Pedersen. Codex can quote his contradictions when they are explicit. Codex cannot tell you whether the contradiction is the source's central failing or its honest accomplishment. That judgment is what deliberate practice in the domain builds. The discipline protects the practice that builds it.
 
 ---
 
@@ -182,3 +201,19 @@ You understand the problem completely. Chapter 5 introduces the solution: conduc
 ---
 
 [^1]: Illich, I. *Tools for Conviviality*. Harper & Row, 1973. See also *Deschooling Society* (Harper & Row, 1971).
+
+---
+
+## Prompts
+
+Use these prompts with Claude to generate interactive D3 v7 versions of the figures in this chapter. Each produces a standalone HTML file you can open in a browser and modify freely.
+
+**Prerequisites:** Load `brutalist/CLAUDE.md` and `brutalist/DESIGN.md` into your Claude project context before using these prompts. They define the stack, naming conventions, color system, and typography the figures use.
+
+---
+
+### Figure 4.1 — Technical fluency × domain depth
+
+Build a four-quadrant chart in D3 v7. The chart area is a `--color-fill` rectangle divided into quadrants by dashed `--color-border` cross-lines at the midpoints. Label each quadrant with a monospace ALL CAPS heading and a bold one-line sub-title. Top-left `EXPERT LEARNER · low fluency · high depth`; top-right `TARGET · high fluency · high depth` (drawn as an inset card with `--color-slate` border); bottom-left `BEGINNER · PROTECTED · low fluency · low depth`; bottom-right `DANGER ZONE · high fluency · low depth` (drawn as an inset card with `--color-red` border). Add a vertical arrow with marker-end running from the Danger inset up into the Target inset, with an italic right-side label `the conducting discipline`. X-axis title `TECHNICAL FLUENCY →` and Y-axis title `DOMAIN DEPTH →` in monospace ALL CAPS. Hovering any quadrant shows a tooltip with the longer description.
+
+> Reference implementation: `d3/04-teacher-student-ai-gap-fig-01.html`

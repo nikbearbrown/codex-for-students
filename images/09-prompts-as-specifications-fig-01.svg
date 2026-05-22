@@ -1,0 +1,75 @@
+<svg viewBox="0 0 700 540" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">Weak prompt versus specification — annotated diff</title>
+  <desc id="desc">Two stacked panels showing the same prompt as a weak request and then as a five-element specification. Annotation lines connect added phrases on the right panel to labels naming "added constraint", "removed ambiguity", and "named output format".</desc>
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#2a1a0e"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="700" height="540" fill="#FFFFFF"/>
+
+  <text x="32" y="56" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="10" letter-spacing="0.08em" fill="#545454">FIGURE 9.1 — WEAK PROMPT VS. SPECIFICATION</text>
+  <text x="32" y="88" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="13" font-weight="bold" fill="#2a1a0e">Same task. Three callouts mark the difference.</text>
+
+  <!-- Weak prompt panel -->
+  <rect x="32" y="112" width="466" height="74" fill="#FFFFFF" stroke="#D4D4D4" stroke-width="1"/>
+  <rect x="32" y="112" width="466" height="26" fill="#F5EFE8" stroke="#D4D4D4" stroke-width="1"/>
+  <text x="42" y="129" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="9" letter-spacing="0.08em" fill="#545454" font-weight="bold">PROMPT — WEAK</text>
+  <text x="42" y="156" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="11" fill="#2a1a0e">"Add user authentication."</text>
+  <text x="42" y="178" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="10" font-style="italic" fill="#545454">five words. Codex fills the rest from the average.</text>
+
+  <!-- Specification panel -->
+  <rect x="32" y="206" width="466" height="270" fill="#FFFFFF" stroke="#C8102E" stroke-width="1"/>
+  <rect x="32" y="206" width="466" height="26" fill="#F5EFE8" stroke="#C8102E" stroke-width="1"/>
+  <text x="42" y="223" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="9" letter-spacing="0.08em" fill="#C8102E" font-weight="bold">PROMPT — SPECIFICATION</text>
+
+  <!-- Spec body, with annotated lines -->
+  <text x="42" y="252" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="10" fill="#2a1a0e">Implement authenticate(username, password)</text>
+  <text x="42" y="266" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="10" fill="#2a1a0e">→ Optional[User] in auth/auth.py.</text>
+
+  <text x="42" y="290" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="10" fill="#2a1a0e">Use the existing bcrypt pattern from</text>
+  <text x="42" y="304" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="10" fill="#2a1a0e">auth/hashing.py.</text>
+
+  <text x="42" y="328" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="10" fill="#2a1a0e">Return the User on match;</text>
+  <text x="42" y="342" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="10" fill="#2a1a0e">return None otherwise.</text>
+
+  <text x="42" y="366" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="10" fill="#2a1a0e">Do not modify the User class.</text>
+  <text x="42" y="380" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="10" fill="#2a1a0e">Do not change the database schema.</text>
+  <text x="42" y="394" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="10" fill="#2a1a0e">Do not add a new dependency.</text>
+
+  <text x="42" y="418" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="10" fill="#2a1a0e">Add tests/auth/test_auth.py covering</text>
+  <text x="42" y="432" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="10" fill="#2a1a0e">success, missing user, wrong password.</text>
+
+  <!-- Annotation lines + labels (right side) -->
+  <!-- Line A — removed ambiguity (specific task) -->
+  <line x1="498" y1="258" x2="528" y2="258" stroke="#C8102E" stroke-width="1"/>
+  <line x1="528" y1="258" x2="528" y2="278" stroke="#C8102E" stroke-width="1"/>
+  <line x1="528" y1="278" x2="552" y2="278" stroke="#C8102E" stroke-width="1" marker-end="url(#arrow)"/>
+  <rect x="552" y="246" width="116" height="64" fill="#F5EFE8" stroke="#C8102E" stroke-width="1"/>
+  <text x="558" y="262" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="9" letter-spacing="0.08em" fill="#C8102E" font-weight="bold">REMOVED</text>
+  <text x="558" y="274" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="9" letter-spacing="0.08em" fill="#C8102E" font-weight="bold">AMBIGUITY</text>
+  <text x="558" y="290" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="10" fill="#2a1a0e">one verb, one file,</text>
+  <text x="558" y="302" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="10" fill="#2a1a0e">one signature</text>
+
+  <!-- Line B — added constraint (invariants) -->
+  <line x1="498" y1="380" x2="552" y2="380" stroke="#C8102E" stroke-width="1" marker-end="url(#arrow)"/>
+  <rect x="552" y="354" width="116" height="58" fill="#F5EFE8" stroke="#C8102E" stroke-width="1"/>
+  <text x="558" y="370" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="9" letter-spacing="0.08em" fill="#C8102E" font-weight="bold">ADDED</text>
+  <text x="558" y="382" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="9" letter-spacing="0.08em" fill="#C8102E" font-weight="bold">CONSTRAINTS</text>
+  <text x="558" y="398" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="10" fill="#2a1a0e">invariants + negative</text>
+  <text x="558" y="408" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="10" fill="#2a1a0e">constraints</text>
+
+  <!-- Line C — named output format -->
+  <line x1="498" y1="425" x2="528" y2="425" stroke="#C8102E" stroke-width="1"/>
+  <line x1="528" y1="425" x2="528" y2="445" stroke="#C8102E" stroke-width="1"/>
+  <line x1="528" y1="445" x2="552" y2="445" stroke="#C8102E" stroke-width="1" marker-end="url(#arrow)"/>
+  <rect x="552" y="430" width="116" height="46" fill="#F5EFE8" stroke="#C8102E" stroke-width="1"/>
+  <text x="558" y="446" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="9" letter-spacing="0.08em" fill="#C8102E" font-weight="bold">NAMED OUTPUT</text>
+  <text x="558" y="458" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="9" letter-spacing="0.08em" fill="#C8102E" font-weight="bold">FORMAT</text>
+  <text x="558" y="472" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="10" fill="#2a1a0e">tests + cases</text>
+
+  <!-- Bottom rule + caption -->
+  <line x1="32" y1="500" x2="668" y2="500" stroke="#D4D4D4" stroke-width="0.75" stroke-dasharray="4 3"/>
+  <text x="32" y="520" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="10" fill="#545454">The spec is roughly 150 words. Same Codex. The five elements are the difference between a build that lands and a build that drifts.</text>
+</svg>

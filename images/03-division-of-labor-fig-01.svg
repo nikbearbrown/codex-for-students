@@ -1,0 +1,63 @@
+<svg viewBox="0 0 700 360" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">Four pattern-completion strengths</title>
+  <desc id="desc">A horizontal strip of four labeled zones — Syntax, Idiom, Recall, Translation — each with a single-line description of what Codex's pattern completion is genuinely strong at.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#2a1a0e"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="700" height="360" fill="#FFFFFF"/>
+
+  <text x="32" y="48" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="10" letter-spacing="0.08em" fill="#545454">FIGURE 3.1 — WHERE PATTERN COMPLETION EXCELS</text>
+  <text x="32" y="76" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="13" font-weight="bold" fill="#2a1a0e">The four things Codex is genuinely good at</text>
+
+  <!-- Four card columns. width 150 each, gap 12 -->
+  <!-- x: 32, 194, 356, 518 -->
+  <!-- Card 1: SYNTAX -->
+  <rect x="32" y="120" width="150" height="160" fill="#FFFFFF" stroke="#D4D4D4" stroke-width="1"/>
+  <rect x="32" y="120" width="150" height="40" fill="#F5EFE8" stroke="#D4D4D4" stroke-width="1"/>
+  <text x="107" y="146" text-anchor="middle" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="11" letter-spacing="0.08em" fill="#2a1a0e">SYNTAX</text>
+  <text x="42" y="184" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="11" font-weight="bold" fill="#2a1a0e">Exact API call,</text>
+  <text x="42" y="200" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="11" font-weight="bold" fill="#2a1a0e">argument order,</text>
+  <text x="42" y="216" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="11" font-weight="bold" fill="#2a1a0e">exception shape.</text>
+  <text x="42" y="244" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="10" font-style="italic" fill="#545454">The mechanical</text>
+  <text x="42" y="258" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="10" font-style="italic" fill="#545454">precision of</text>
+  <text x="42" y="272" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="10" font-style="italic" fill="#545454">getting the call right.</text>
+
+  <!-- Card 2: IDIOM -->
+  <rect x="194" y="120" width="150" height="160" fill="#FFFFFF" stroke="#D4D4D4" stroke-width="1"/>
+  <rect x="194" y="120" width="150" height="40" fill="#F5EFE8" stroke="#D4D4D4" stroke-width="1"/>
+  <text x="269" y="146" text-anchor="middle" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="11" letter-spacing="0.08em" fill="#2a1a0e">IDIOM</text>
+  <text x="204" y="184" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="11" font-weight="bold" fill="#2a1a0e">Conventional</text>
+  <text x="204" y="200" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="11" font-weight="bold" fill="#2a1a0e">structure for this</text>
+  <text x="204" y="216" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="11" font-weight="bold" fill="#2a1a0e">kind of code.</text>
+  <text x="204" y="244" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="10" font-style="italic" fill="#545454">The expected</text>
+  <text x="204" y="258" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="10" font-style="italic" fill="#545454">loop pattern,</text>
+  <text x="204" y="272" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="10" font-style="italic" fill="#545454">the idiomatic move.</text>
+
+  <!-- Card 3: RECALL -->
+  <rect x="356" y="120" width="150" height="160" fill="#FFFFFF" stroke="#D4D4D4" stroke-width="1"/>
+  <rect x="356" y="120" width="150" height="40" fill="#F5EFE8" stroke="#D4D4D4" stroke-width="1"/>
+  <text x="431" y="146" text-anchor="middle" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="11" letter-spacing="0.08em" fill="#2a1a0e">RECALL</text>
+  <text x="366" y="184" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="11" font-weight="bold" fill="#2a1a0e">Library flags,</text>
+  <text x="366" y="200" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="11" font-weight="bold" fill="#2a1a0e">functions, options</text>
+  <text x="366" y="216" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="11" font-weight="bold" fill="#2a1a0e">you'd look up.</text>
+  <text x="366" y="244" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="10" font-style="italic" fill="#545454">Effectively</text>
+  <text x="366" y="258" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="10" font-style="italic" fill="#545454">memorized</text>
+  <text x="366" y="272" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="10" font-style="italic" fill="#545454">documentation.</text>
+
+  <!-- Card 4: TRANSLATION -->
+  <rect x="518" y="120" width="150" height="160" fill="#FFFFFF" stroke="#D4D4D4" stroke-width="1"/>
+  <rect x="518" y="120" width="150" height="40" fill="#F5EFE8" stroke="#D4D4D4" stroke-width="1"/>
+  <text x="593" y="146" text-anchor="middle" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="11" letter-spacing="0.08em" fill="#2a1a0e">TRANSLATION</text>
+  <text x="528" y="184" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="11" font-weight="bold" fill="#2a1a0e">Natural language</text>
+  <text x="528" y="200" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="11" font-weight="bold" fill="#2a1a0e">into code.</text>
+  <text x="528" y="244" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="10" font-style="italic" fill="#545454">Would have seemed</text>
+  <text x="528" y="258" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="10" font-style="italic" fill="#545454">implausible</text>
+  <text x="528" y="272" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="10" font-style="italic" fill="#545454">five years ago.</text>
+
+  <!-- Bottom rule + caption -->
+  <line x1="32" y1="312" x2="668" y2="312" stroke="#D4D4D4" stroke-width="0.75" stroke-dasharray="4 3"/>
+  <text x="32" y="334" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="10" fill="#545454">On these four, fighting Codex is a waste of your time. The next figure names what is yours instead.</text>
+</svg>

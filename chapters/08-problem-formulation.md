@@ -6,13 +6,13 @@
 
 Here is a script that worked.
 
-It read a class calendar. It produced notifications about upcoming assignments. It ran without errors. Every function did what it was asked to do. By any mechanical measure, the build was a success.
+It read playtest logs from his Haunt & Harvest beta testers. It produced notifications when new feedback came in. It ran without errors. Every function did what it was asked to do. By any mechanical measure, the build was a success.
 
 Seth used it for a week and then stopped using it.
 
-The notifications arrived during the school day, when he could not check them. They covered assignments two weeks out — too far to act on — and missed the day-of reminders — too late to be useful. Each notification was about a single assignment in isolation, when what he actually needed was a morning summary: *here is what is due in the next 48 hours, prioritized.* The script was technically correct. It solved the wrong problem.
+The notifications arrived in real time, one per tester comment, scattered across the day. Each was a single line of context-free feedback in isolation, when what he actually needed was a per-build summary: *here is what the testers said about the v0.4 build, grouped by system — AI, inventory, networking — with the recurring complaints surfaced.* The script was technically correct. It solved the wrong problem.
 
-The hour Seth spent with Codex was not wasted because Codex failed. It was wasted because Seth had not asked himself, before typing the first prompt, what problem he was actually trying to solve. He had been thinking of the task as "build a homework reminder" when the real task was "build a daily 7am summary of imminent assignments." Those are different problems. Codex built the first one faithfully.
+The hour Seth spent with Codex was not wasted because Codex failed. It was wasted because Seth had not asked himself, before typing the first prompt, what problem he was actually trying to solve. He had been thinking of the task as "build a playtest feedback notifier" when the real task was "build a per-build markdown summary grouping feedback by system." Those are different problems. Codex built the first one faithfully.
 
 Five minutes upstream would have caught it.
 
@@ -28,13 +28,17 @@ The formulation makes the sketch explicit. Explicit means written down, in enoug
 
 The discipline is a one-sentence test on three questions:
 
-**What does this build do?** Not "build a homework reminder" — that is the sketch. "A script that reads my Google Calendar for events tagged 'homework,' filters to the next 48 hours, produces a prioritized summary, and delivers it to my notification system at 7am on school days" — that is the formulation.
+**What does this build do?** Not "build a playtest feedback notifier" — that is the sketch. "A script that reads the JSON feedback exports from my Haunt & Harvest beta testers, filters to the current build version, groups comments by game system (AI, inventory, networking, audio), and produces a single markdown summary written to `playtests/v{build}.md`" — that is the formulation.
 
-**What does it touch?** The calendar (read-only). The notification system (write). Local config (read). These are the system boundaries. Knowing them in advance prevents the build from quietly acquiring dependencies you did not intend.
+**What does it touch?** The feedback export folder (read-only). The `playtests/` folder (write). The build-version config (read). These are the system boundaries. Knowing them in advance prevents the build from quietly acquiring dependencies you did not intend.
 
-**What does it never touch?** The calendar's source. The grades file. The notification system's general settings. Everything out of scope should be named explicitly, because if you do not name it, Codex may reasonably include it.
+**What does it never touch?** The tester records (PII stays out of scope). The game project itself. The publishing pipeline. Everything out of scope should be named explicitly, because if you do not name it, Codex may reasonably include it.
 
-<!-- → [TABLE: one-sentence test — three rows, two columns. Column 1: question ("What does it do?", "What does it touch?", "What does it never touch?"). Column 2: Seth's sketch answer vs. Seth's formulation answer for each. Student should see exactly where the sketch breaks down and what the formulation adds.] -->
+| Question | Sketch answer | Formulation answer |
+|---|---|---|
+| What does it do? | "Build a playtest feedback notifier." | Reads JSON feedback exports from Haunt & Harvest beta testers, filters to the current build version, groups comments by system (AI, inventory, networking, audio), and writes one markdown summary to `playtests/v{build}.md`. |
+| What does it touch? | (Unspecified — Codex chooses.) | Read-only: the feedback export folder and the build-version config. Write: the `playtests/` folder. |
+| What does it never touch? | (Unspecified — Codex may reasonably include it.) | Tester PII records, the game project itself, the publishing pipeline. |
 
 If you can answer each in one sentence — short enough to fit on a notecard — you have formulated the problem. If you cannot, the formulation is not done. The chapter's central rule:
 
@@ -46,7 +50,7 @@ If you can answer each in one sentence — short enough to fit on a notecard —
 
 The Seth story is not unusual. It is the typical failure mode. And the reason it is typical is that the sketch genuinely feels like a formulation from inside. The feeling of clarity is not evidence of clarity. It is the fluency trap in yet another register.
 
-When you have been thinking about a problem for a while, you have accumulated a private context — the timing constraints, the use case, the specific morning workflow that would make the tool useful. That context is in your head. It is not in the prompt. Codex, reading the prompt, fills in the missing context with the most-probable interpretation. The most-probable interpretation of "homework reminder" is something that reminds you about homework. It is not wrong. It is not what you needed.
+When you have been thinking about a problem for a while, you have accumulated a private context — the per-build workflow, the use case, the specific need to see recurring complaints across testers rather than one-off lines. That context is in your head. It is not in the prompt. Codex, reading the prompt, fills in the missing context with the most-probable interpretation. The most-probable interpretation of "playtest feedback notifier" is something that notifies you about playtest feedback. It is not wrong. It is not what you needed.
 
 The gap between the most-probable interpretation and your interpretation is usually small and invisible until the build runs. Then it is expensive: you have a working script that does the wrong thing, a session context that has accumulated around the wrong frame, and the cost of revision is no longer the cost of a sentence — it is the cost of discarding ten Code Mode responses and starting again.
 
@@ -60,15 +64,15 @@ The fastest path to a formulation is not staring at a blank page. It is asking C
 
 Five questions that work:
 
-*"What should I think about before building X?"* Surfaces considerations you have not had. For Seth's reminder, this would have surfaced timing, aggregation, and the school-hours problem before the first Code Mode prompt.
+*"What should I think about before building X?"* Surfaces considerations you have not had. For Seth's aggregator, this would have surfaced grouping, deduplication of recurring complaints, and per-build framing before the first Code Mode prompt.
 
-*"What are common failure modes in this kind of build?"* Flags the traps practitioners have already fallen into. "Homework reminders that send too many notifications become noise within a week" is the kind of thing Codex can surface from the practitioner literature. Seth did not know this. He found it out by living it.
+*"What are common failure modes in this kind of build?"* Flags the traps practitioners have already fallen into. "Feedback notifiers that fire on every comment become noise within a week" is the kind of thing Codex can surface from the practitioner literature. Seth did not know this. He found it out by living it.
 
-*"What edge cases should I plan for?"* Reveals where the spec needs to be more precise. "What happens on a day with no assignments?" is not a question Seth would have asked himself. It is the question that determines whether the morning notification says "nothing due" or simply does not arrive.
+*"What edge cases should I plan for?"* Reveals where the spec needs to be more precise. "What happens on a build with no new feedback?" is not a question Seth would have asked himself. It is the question that determines whether the summary writes an empty file or simply does not write.
 
-*"What's the typical shape of this kind of project?"* Gives you the average so you can decide where to deviate. Most homework-reminder implementations are per-assignment, not summary-based. Knowing the average makes the choice to deviate explicit rather than accidental.
+*"What's the typical shape of this kind of project?"* Gives you the average so you can decide where to deviate. Most playtest-feedback tools are per-comment, not per-build-summary. Knowing the average makes the choice to deviate explicit rather than accidental.
 
-*"What's the minimal version of this that would be useful?"* Cuts scope ruthlessly before Code Mode begins. Seth's full spec turned out to have a useful minimal version: one Python script, one cron job, one Pushover notification. Everything else was out of scope.
+*"What's the minimal version of this that would be useful?"* Cuts scope ruthlessly before Code Mode begins. Seth's full spec turned out to have a useful minimal version: one Python script, one cron job, one markdown file written per build. Everything else was out of scope.
 
 The interrogation typically takes 5–15 minutes. It does not replace the formulation — it feeds it. You read the Ask Mode responses, you find the two considerations you had not thought of, you revise the sketch into a formulation. Then you write it down.
 
@@ -107,7 +111,14 @@ The User needs section is where most specs fail. Feature descriptions ("it shoul
 
 The difference matters because the Code Mode prompts can reference the User needs section directly: *"Per the User needs section: ensure the summary is under 200 characters."* The spec is the persistent context the build executes against. Without it, the persistent context is the accumulated Code Mode session — which drifts.
 
-<!-- → [TABLE: feature descriptions vs. testable outcomes — two columns, six rows. Left column: vague feature descriptions ("it should be fast," "easy to use," "readable," "complete," "reliable," "simple"). Right column: testable reformulations of each. Student should be able to convert any feature description from column one into a testable outcome using column two as a model.] -->
+| Vague feature description | Testable outcome |
+|---|---|
+| "It should be fast." | "Summary is delivered within 30 seconds of the 7:00 AM trigger, every weekday." |
+| "It should be easy to use." | "First-time setup completes in under 10 minutes for someone who has never opened the repo." |
+| "It should be readable." | "Each summary fits on a single mobile screen — under 200 characters, one notification, not one per item." |
+| "It should be complete." | "Every assignment due within the next 48 hours appears; no assignment due later than 48 hours appears." |
+| "It should be reliable." | "Cron job runs for fourteen consecutive days without a missed trigger or duplicate write." |
+| "It should be simple." | "One Python script, one cron job, one markdown file written per build — no other files created." |
 
 ---
 
@@ -125,41 +136,45 @@ After ten Code Mode prompts, the cost is ten discarded responses plus a session 
 
 After side effects have run — files written, APIs called, state changed — revision may not be fully possible. You are debugging a build that was solving the wrong problem while also dealing with the mess the build left behind.
 
-<!-- → [CHART: cost-of-revision curve — x-axis: stage of build (formulation, first prompt, tenth prompt, after side effects). y-axis: cost of catching a framing mistake. Curve rises steeply after "first prompt" and approaches "very high / irreversible" at "after side effects." Student should see that the cheap window is narrow and closes fast.] -->
+![Line chart with five phases on the x-axis — Spec, Plan, Code, Verify, Ship — and the cost of catching a framing mistake on the y-axis. The red curve rises gently across Spec and Plan, climbs steeply through Code, and approaches the top of the chart at Ship. Each point is annotated. A callout labels the cheap window at Spec and Plan as "minutes, not hours."](images/08-problem-formulation-fig-01.png)
 
-The formulation work is front-loaded discipline that produces back-loaded savings. Seth's lost hour would have been a ten-minute Ask Mode interrogation and a five-minute spec, followed by a 45-minute build that produced a script he actually used. The ratio is not subtle. **Problem formulation is the most efficient discipline in the book.**
+*Figure 8.1 — Cost of revision. The cheap window is narrow and closes fast.*
+
+The formulation work is front-loaded discipline that produces back-loaded savings. Seth's lost hour would have been a ten-minute Ask Mode interrogation and a five-minute spec, followed by a 45-minute build that produced a tool he actually used. The ratio is not subtle. **Problem formulation is the most efficient discipline in the book.**
 
 The reason it is skipped is not that it is hard. It is that it feels like delay when you have a clear idea. The impulse to start building is strong. The impulse is wrong whenever the build will take more than an hour, because the formulation work will always cost less than the cost of scrapping a misdirected build.
 
 ---
 
-## The homework reminder, done right
+## The playtest aggregator, done right
 
 Same task. Formulated properly.
 
 **Ask Mode interrogation.**
 
-Seth asks Codex what to think about before building a homework reminder system. The response surfaces four things: timing matters more than granularity (students do not act on mid-day notifications during school hours); aggregation reduces fatigue (one morning summary beats ten individual notifications); prioritization by urgency is more useful than chronological order; 48 hours is the useful window, further out becomes noise.
+Seth asks Codex what to think about before building a playtest-feedback aggregator. The response surfaces four things: grouping matters more than chronology (recurring complaints about the same system are the signal); per-build framing reduces noise (one summary per build version beats a rolling stream); structured fields beat free text (tag the system the feedback applies to: AI / inventory / networking / audio); markdown beats notifications because Seth reads it once per build, not on the move.
 
 Two of those four Seth had not thought of. He shifts his framing.
 
 **One-sentence test.**
 
-*What does it do?* A daily 7am summary script for school-day mornings, covering the next 48 hours, prioritized by urgency, delivered as a single notification.
+*What does it do?* A script that runs after each beta build, reads the JSON feedback exports tagged with the current build version, groups comments by game system, and writes a markdown summary to `playtests/v{build}.md`.
 
-*What does it touch?* Calendar (read), notification system (write).
+*What does it touch?* Feedback export folder (read), `playtests/` folder (write).
 
-*What does it never touch?* Calendar source, non-homework events, weekends by default.
+*What does it never touch?* Tester PII, the game project itself, the publishing pipeline.
 
 The test passes. He writes the spec. He commits it to the project.
 
 **Code Mode build.**
 
-Each prompt references the spec. The handoff conditions test against the User needs section. The build takes 45 minutes. The script lands at 7am the next morning. Seth checks it on the way to school. He knows what is due. The script serves the need.
+Each prompt references the spec. The handoff conditions test against the User needs section. The build takes 45 minutes. After the next beta build, Seth runs the script. The markdown file lands. He reads it once, top to bottom — AI complaints, inventory complaints, networking complaints — and knows which system to look at next. The script serves the need.
 
 The formulation produced a build that worked the first time it was used. The difference between Path A (one hour, unused script) and Path B (ten minutes upstream, 45-minute build, useful tool) is not Codex's behavior — Codex performed identically in both. The difference is the framing it was given.
 
-<!-- → [INFOGRAPHIC: side-by-side timeline — Path A and Path B. Path A: 60-minute Code Mode build → unused script → wasted hour. Path B: 10-minute Ask Mode interrogation + 5-minute spec → 45-minute Code Mode build → working tool used daily. Annotate the formulation window in Path B to show where the investment is made.] -->
+![Two horizontal flow timelines. Path A — Specify First: four boxes in sequence — Ask Mode (10 min), Spec (5 min), Code Mode (45 min), Working (used daily, total 60 min). Path B — Code First, Fix Later: four boxes — Code Mode (25 min), Rework 1 (15 min), Rework 2 (20 min), Unused (wrong framing, total 60 min). Two red dashed loop arrows on Path B show re-prompting against the same vague frame and context pollution accumulating across reworks.](images/08-problem-formulation-fig-02.png)
+
+*Figure 8.2 — Path A vs. Path B. Same hour, same Codex, same task; the 15 minutes spent upstream is the difference between a daily tool and an abandoned script.*
 
 ---
 
@@ -231,7 +246,7 @@ You have a formulation. The next chapter teaches you to write the Codex prompts 
 
 **Synthesis**
 
-7. *(Tests: formulation + gate + handoff conditions together)* The chapter distinguishes three layers of discipline: formulation (Chapter 8), the Ask Mode → Code Mode gate (Chapter 5), and handoff conditions (Chapter 9). For Seth's homework reminder build, identify which errors each layer would have caught — and which errors fall through all three layers. What is the residual risk after all three disciplines are applied?
+7. *(Tests: formulation + gate + handoff conditions together)* The chapter distinguishes three layers of discipline: formulation (Chapter 8), the Ask Mode → Code Mode gate (Chapter 5), and handoff conditions (Chapter 9). For Seth's playtest aggregator build, identify which errors each layer would have caught — and which errors fall through all three layers. What is the residual risk after all three disciplines are applied?
 
 8. *(Tests: sketch vs. formulation in the wild)* You are given a project brief written by another student. Identify the parts of the brief that are sketch and the parts that are formulation. For each sketch element, write the Ask Mode question you would use to convert it to a formulation. Explain why the formulation version is more useful to Codex than the sketch version.
 
@@ -242,3 +257,27 @@ You have a formulation. The next chapter teaches you to write the Codex prompts 
 ---
 
 [^1]: Brooks, F. P. *The Mythical Man-Month*. Addison-Wesley, 1975. See also "No Silver Bullet: Essence and Accidents of Software Engineering." *IEEE Computer* 20, no. 4 (1987): 10–19.
+
+---
+
+## Prompts
+
+Use these prompts with Claude to generate interactive D3 v7 versions of the figures in this chapter. Each produces a standalone HTML file you can open in a browser and modify freely.
+
+**Prerequisites:** Load `brutalist/CLAUDE.md` and `brutalist/DESIGN.md` into your Claude project context before using these prompts. They define the stack, naming conventions, color system, and typography the figures use.
+
+---
+
+### Figure 8.1 — Cost of revision
+
+Build a line chart in D3 v7. X axis: five phases ordered `SPEC`, `PLAN`, `CODE`, `VERIFY`, `SHIP` — all monospace ALL CAPS, the `SHIP` label in `--color-red` and bold. Y axis: cost to change, labeled `COST TO CHANGE` vertically in monospace ALL CAPS, with three tick labels `~0`, `MED`, `HIGH`. Two dashed gridlines across the plot. Curve: a Catmull-Rom path in `--color-red` rising from near-zero at SPEC to near-top at SHIP, with the shape exponential — flat through SPEC and PLAN, then climbing steeply through CODE, VERIFY, and SHIP. A filled circle at each phase, the SHIP circle slightly larger. Italic annotations beside each point: "change a sentence", "re-plan upstream", "discard prompts; restart", "debug + re-frame; tests stale", "side effects ran — irreversible" (the last in `--color-red`). A `--color-fill` callout box in the upper-left labeled `THE CHEAP WINDOW` with two lines noting SPEC and PLAN cost minutes, not hours. Hovering any point shows a longer tip. Dashed footer rule plus a two-line caption naming why the curve steepens.
+
+> Reference implementation: `d3/08-problem-formulation-fig-01.html`
+
+---
+
+### Figure 8.2 — Path A vs. Path B
+
+Build a two-row horizontal flow diagram in D3 v7. Row 1: `PATH A — SPECIFY FIRST` in `--color-red` ALL CAPS, italic subtitle "10 min upstream → 45 min build → working tool", then four step boxes left to right — `ASK MODE` (interrogate, 10 min), `SPEC` (write, 5 min), `CODE MODE` (implement to spec, 45 min), `WORKING` (used daily, total: 60 min) with the last box in `--color-red` border. Hairline `--color-ink` arrows connect adjacent boxes. Each box has a `--color-fill` body, a monospace ALL CAPS cap label, a bold title line, and an italic time line in secondary. Row 2: `PATH B — CODE FIRST, FIX LATER` in secondary ALL CAPS, italic subtitle "60 min build → unused script → wasted hour", then four step boxes — `CODE MODE` (vague prompt, 25 min), `REWORK 1` (discard, retry, 15 min), `REWORK 2` (patch forward, 20 min), `UNUSED` (wrong framing, total: 60 min). Two `--color-red` dashed loop arrows above Path B: one from REWORK 1 back to CODE MODE labeled "re-prompt; same vague frame", one from REWORK 2 spanning back to REWORK 1 labeled "accumulate context pollution". Hover any step for the longer narrative. Dashed footer rule plus a two-line caption noting both flows cost 60 minutes and the upstream investment is the difference.
+
+> Reference implementation: `d3/08-problem-formulation-fig-02.html`

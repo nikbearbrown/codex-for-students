@@ -1,0 +1,63 @@
+<svg viewBox="0 0 700 540" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">The five supervisory capacities as a pentagon</title>
+  <desc id="desc">A pentagon with the five supervisory capacities at each vertex — PA, PF, TO, IJ, EI. Each vertex carries a two-letter code, a plain-language name, and a one-sentence definition. The pentagon hairlines connect the five into a single supervisory whole.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#2a1a0e"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="700" height="540" fill="#FFFFFF"/>
+
+  <text x="32" y="56" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="10" letter-spacing="0.08em" fill="#545454">FIGURE 6.1 — THE FIVE SUPERVISORY CAPACITIES</text>
+  <text x="32" y="88" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="13" font-weight="bold" fill="#2a1a0e">The five things you do that Codex cannot — one at each vertex</text>
+
+  <!-- Pentagon centered around (350, 300), radius 130 -->
+  <!-- Vertices at angles: -90 (top), -18, 54, 126, 198 (measured clockwise from up) -->
+  <!-- top: (350, 170); upper-right: (473.6, 259.8); lower-right: (426.4, 405.3); lower-left: (273.6, 405.3); upper-left: (226.4, 259.8) -->
+
+  <polygon points="350,170 473.6,259.8 426.4,405.3 273.6,405.3 226.4,259.8" fill="#F5EFE8" stroke="#D4D4D4" stroke-width="1"/>
+
+  <!-- Center label -->
+  <text x="350" y="298" text-anchor="middle" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="9" letter-spacing="0.08em" fill="#545454">SUPERVISORY</text>
+  <text x="350" y="314" text-anchor="middle" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="9" letter-spacing="0.08em" fill="#545454">INTELLIGENCE</text>
+  <text x="350" y="334" text-anchor="middle" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="10" font-style="italic" fill="#545454">all five required</text>
+
+  <!-- Vertex 1: PA — top (350, 170) -->
+  <circle cx="350" cy="170" r="6" fill="#C8102E"/>
+  <text x="350" y="138" text-anchor="middle" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="12" letter-spacing="0.08em" fill="#C8102E" font-weight="bold">PA</text>
+  <text x="350" y="120" text-anchor="middle" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="11" font-weight="bold" fill="#C8102E">Plausibility Auditing</text>
+  <text x="350" y="104" text-anchor="middle" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="10" font-style="italic" fill="#545454">hearing the wrong note before tests do</text>
+
+  <!-- Vertex 2: PF — upper-right (473.6, 259.8) -->
+  <circle cx="473.6" cy="259.8" r="6" fill="#2a1a0e"/>
+  <text x="494" y="232" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="12" letter-spacing="0.08em" fill="#2a1a0e" font-weight="bold">PF</text>
+  <text x="494" y="251" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="11" font-weight="bold" fill="#2a1a0e">Problem Formulation</text>
+  <text x="494" y="266" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="10" font-style="italic" fill="#545454">deciding what the build is</text>
+  <text x="494" y="280" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="10" font-style="italic" fill="#545454">before Codex sees it</text>
+
+  <!-- Vertex 3: TO — lower-right (426.4, 405.3) -->
+  <circle cx="426.4" cy="405.3" r="6" fill="#2a1a0e"/>
+  <text x="446" y="426" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="12" letter-spacing="0.08em" fill="#2a1a0e" font-weight="bold">TO</text>
+  <text x="446" y="445" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="11" font-weight="bold" fill="#2a1a0e">Tool Orchestration</text>
+  <text x="446" y="460" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="10" font-style="italic" fill="#545454">which mode, what order,</text>
+  <text x="446" y="474" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="10" font-style="italic" fill="#545454">what trust level</text>
+
+  <!-- Vertex 4: IJ — lower-left (273.6, 405.3) -->
+  <circle cx="273.6" cy="405.3" r="6" fill="#2a1a0e"/>
+  <text x="254" y="426" text-anchor="end" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="12" letter-spacing="0.08em" fill="#2a1a0e" font-weight="bold">IJ</text>
+  <text x="254" y="445" text-anchor="end" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="11" font-weight="bold" fill="#2a1a0e">Interpretive Judgment</text>
+  <text x="254" y="460" text-anchor="end" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="10" font-style="italic" fill="#545454">supplying meaning the</text>
+  <text x="254" y="474" text-anchor="end" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="10" font-style="italic" fill="#545454">output cannot carry</text>
+
+  <!-- Vertex 5: EI — upper-left (226.4, 259.8) -->
+  <circle cx="226.4" cy="259.8" r="6" fill="#2a1a0e"/>
+  <text x="206" y="232" text-anchor="end" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="12" letter-spacing="0.08em" fill="#2a1a0e" font-weight="bold">EI</text>
+  <text x="206" y="251" text-anchor="end" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="11" font-weight="bold" fill="#2a1a0e">Executive Integration</text>
+  <text x="206" y="266" text-anchor="end" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="10" font-style="italic" fill="#545454">holding the whole build</text>
+  <text x="206" y="280" text-anchor="end" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="10" font-style="italic" fill="#545454">toward a single goal</text>
+
+  <!-- Bottom rule + caption -->
+  <line x1="32" y1="500" x2="668" y2="500" stroke="#D4D4D4" stroke-width="0.75" stroke-dasharray="4 3"/>
+  <text x="32" y="520" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="10" fill="#545454">PA is highlighted because it was the capacity Seth exercised in the chapter opening — the one that fires before articulation.</text>
+</svg>

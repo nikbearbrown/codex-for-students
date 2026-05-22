@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Figure 4.1 — Technical fluency × domain depth</title>
+<style>
+:root {
+  --color-white: #FFFFFF;
+  --color-fill: #F5EFE8;
+  --color-ink: #2a1a0e;
+  --color-mark: #6B3520;
+  --color-red: #C8102E;
+  --color-slate: #1A3A5C;
+  --color-ochre: #C8860E;
+  --color-secondary: #545454;
+  --color-border: #D4D4D4;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-white: #111111;
+    --color-fill: #1a1612;
+    --color-ink: #F0EBE3;
+    --color-mark: #C8865E;
+    --color-red: #E8243A;
+    --color-slate: #6B8FB8;
+    --color-ochre: #D49A30;
+    --color-secondary: #A0978C;
+    --color-border: #2E2E2E;
+  }
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: var(--color-white); color: var(--color-ink); font-family: 'EB Garamond', Georgia, serif; padding: 24px; }
+#chart { width: 100%; min-height: 500px; }
+.tooltip { position: absolute; pointer-events: none; opacity: 0; background: var(--color-slate); color: var(--color-white); padding: 8px 12px; font-size: 12px; font-family: 'EB Garamond', Georgia, serif; max-width: 280px; line-height: 1.4; }
+text { font-family: 'EB Garamond', Georgia, serif; fill: var(--color-ink); }
+.caps { font-family: 'IBM Plex Mono', 'JetBrains Mono', monospace; letter-spacing: 0.08em; fill: var(--color-secondary); font-size: 10px; }
+.secondary { fill: var(--color-secondary); }
+.quadrant { cursor: pointer; transition: fill 120ms; }
+.quadrant:hover { fill: rgba(0,0,0,0.04); }
+@media (prefers-color-scheme: dark) {
+  .quadrant:hover { fill: rgba(255,255,255,0.05); }
+}
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+</style>
+</head>
+<body>
+<div id="chart" role="main"></div>
+<div class="tooltip" id="tt"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
+<script>
+function draw() {
+  d3.select('#chart').selectAll('*').remove();
+  const totalWidth = document.getElementById('chart').clientWidth || 700;
+  const totalHeight = 500;
+  const margin = { top: 64, right: 80, bottom: 80, left: 80 };
+  const chartWidth = totalWidth - margin.left - margin.right;
+  const chartHeight = totalHeight - margin.top - margin.bottom;
+
+  const svg = d3.select('#chart').append('svg')
+    .attr('width', totalWidth).attr('height', totalHeight)
+    .attr('role','img').attr('aria-labelledby','chart-title chart-desc');
+  svg.append('title').attr('id','chart-title').text('Technical fluency × domain depth');
+  svg.append('desc').attr('id','chart-desc').text('Four-quadrant chart. Danger zone is high fluency, low depth. Arrow shows the conducting discipline as the move from danger to target.');
+
+  svg.append('defs').append('marker').attr('id','arrow-d3').attr('markerWidth',10).attr('markerHeight',7)
+    .attr('refX',9).attr('refY',3.5).attr('orient','auto').append('polygon').attr('points','0 0, 10 3.5, 0 7').attr('fill','var(--color-ink)');
+
+  const g = svg.append('g').attr('transform', `translate(${margin.left},${margin.top})`);
+  g.append('text').attr('class','caps').attr('y',-32).text('FIGURE 4.1 — THE DANGER ZONE');
+  g.append('text').attr('y',-8).attr('font-weight','bold').attr('font-size',13).text('Technical fluency without domain depth is the dangerous configuration');
+
+  const tt = d3.select('#tt');
+  function showTip(html){ tt.html(html).style('opacity',1); }
+  function moveTip(e){ tt.style('left',(e.pageX+12)+'px').style('top',(e.pageY-8)+'px'); }
+  function hideTip(){ tt.style('opacity',0); }
+
+  // Plot bg
+  g.append('rect').attr('x',0).attr('y',0).attr('width',chartWidth).attr('height',chartHeight)
+    .attr('fill','var(--color-fill)').attr('stroke','var(--color-border)').attr('stroke-width',1);
+
+  // Mid divider lines
+  g.append('line').attr('x1',chartWidth/2).attr('x2',chartWidth/2).attr('y1',0).attr('y2',chartHeight)
+    .attr('stroke','var(--color-border)').attr('stroke-dasharray','4 3').attr('stroke-width',1);
+  g.append('line').attr('x1',0).attr('x2',chartWidth).attr('y1',chartHeight/2).attr('y2',chartHeight/2)
+    .attr('stroke','var(--color-border)').attr('stroke-dasharray','4 3').attr('stroke-width',1);
+
+  const quadrants = [
+    { x:0, y:0, w:chartWidth/2, h:chartHeight/2, label:'EXPERT LEARNER', title:'low fluency · high depth',
+      l1:'Sees mistakes but is', l2:'slow with the tool.',
+      tip:'Expert learner — strong domain knowledge, weak with the tool. Catches errors but works slowly. The traditional learning trajectory before agentic tools existed.' },
+    { x:chartWidth/2, y:0, w:chartWidth/2, h:chartHeight/2, label:'TARGET', title:'high fluency · high depth', highlight:'slate',
+      l1:'Conducts the tool and', l2:'catches its mistakes.',
+      tip:'Target state. The conducting discipline preserves depth-building practice while accumulating fluency. The destination this book aims at.' },
+    { x:0, y:chartHeight/2, w:chartWidth/2, h:chartHeight/2, label:'BEGINNER · PROTECTED', title:'low fluency · low depth',
+      l1:'Hesitation protects.', l2:'Asks for help.',
+      tip:'Beginner. Lacks both depth and fluency. Hesitation is genuine protection — they pause, look things up, ask for help. The slowness is a feature.' },
+    { x:chartWidth/2, y:chartHeight/2, w:chartWidth/2, h:chartHeight/2, label:'DANGER ZONE', title:'high fluency · low depth', highlight:'red',
+      l1:'Runs the tool fast,', l2:"can't catch errors.",
+      tip:'The dangerous configuration. Fluency removes the hesitation that would have protected. Lack of depth means there is nothing else to catch what hesitation would have. Most current high-school students sit here.' }
+  ];
+
+  quadrants.forEach(q => {
+    const stroke = q.highlight === 'red' ? 'var(--color-red)' : (q.highlight === 'slate' ? 'var(--color-slate)' : 'transparent');
+    if (q.highlight) {
+      g.append('rect').attr('x',q.x+20).attr('y',q.y+20).attr('width',q.w-40).attr('height',q.h-40)
+        .attr('fill','var(--color-white)').attr('stroke',stroke).attr('stroke-width',1.5)
+        .attr('class','quadrant')
+        .on('mouseenter',()=>showTip(`<strong>${q.label} — ${q.title}</strong><br/>${q.tip}`))
+        .on('mousemove',moveTip).on('mouseleave',hideTip);
+    } else {
+      g.append('rect').attr('x',q.x).attr('y',q.y).attr('width',q.w).attr('height',q.h)
+        .attr('fill','transparent').attr('class','quadrant')
+        .on('mouseenter',()=>showTip(`<strong>${q.label} — ${q.title}</strong><br/>${q.tip}`))
+        .on('mousemove',moveTip).on('mouseleave',hideTip);
+    }
+
+    const titleColor = q.highlight==='red' ? 'var(--color-red)' : (q.highlight==='slate' ? 'var(--color-slate)' : 'var(--color-secondary)');
+    g.append('text').attr('class','caps').attr('x',q.x+q.w/2).attr('y',q.y+44).attr('text-anchor','middle').attr('fill',titleColor).text(q.label);
+    g.append('text').attr('x',q.x+q.w/2).attr('y',q.y+70).attr('text-anchor','middle').attr('font-weight','bold').attr('font-size',12).attr('fill',titleColor).text(q.title);
+    g.append('text').attr('x',q.x+q.w/2).attr('y',q.y+94).attr('text-anchor','middle').attr('font-size',11).attr('fill',q.highlight ? titleColor : 'var(--color-secondary)').text(q.l1);
+    g.append('text').attr('x',q.x+q.w/2).attr('y',q.y+108).attr('text-anchor','middle').attr('font-size',11).attr('fill',q.highlight ? titleColor : 'var(--color-secondary)').text(q.l2);
+  });
+
+  // Arrow from danger to target
+  const arrowX = chartWidth/2 + chartWidth/4;
+  g.append('line').attr('x1',arrowX).attr('y1',chartHeight/2+20).attr('x2',arrowX).attr('y2',chartHeight/2-20)
+    .attr('stroke','var(--color-ink)').attr('stroke-width',1.5).attr('marker-end','url(#arrow-d3)');
+  g.append('text').attr('x',arrowX+90).attr('y',chartHeight/2+4).attr('font-size',11).attr('font-style','italic').text('the conducting discipline');
+
+  // axis labels
+  g.append('text').attr('class','caps').attr('x',chartWidth/2).attr('y',chartHeight+30).attr('text-anchor','middle').text('TECHNICAL FLUENCY  →');
+  g.append('text').attr('class','caps').attr('transform',`translate(-52,${chartHeight/2}) rotate(-90)`).attr('text-anchor','middle').text('DOMAIN DEPTH  →');
+
+  // bottom caption
+  g.append('line').attr('x1',0).attr('y1',chartHeight+44).attr('x2',chartWidth+60).attr('y2',chartHeight+44)
+    .attr('stroke','var(--color-border)').attr('stroke-width',0.75).attr('stroke-dasharray','4 3');
+  g.append('text').attr('class','secondary').attr('y',chartHeight+64).attr('font-size',10).text('Most current students sit in the lower-right quadrant. Hover any quadrant for the longer description.');
+}
+draw();
+const ro = new ResizeObserver(() => draw());
+ro.observe(document.getElementById('chart'));
+</script>
+</body>
+</html>

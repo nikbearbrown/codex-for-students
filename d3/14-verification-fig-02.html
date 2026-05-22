@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Figure 14.2 — Verification loop flow</title>
+<style>
+:root {
+  --color-white: #FFFFFF;
+  --color-fill: #F5EFE8;
+  --color-ink: #2a1a0e;
+  --color-mark: #6B3520;
+  --color-red: #C8102E;
+  --color-slate: #1A3A5C;
+  --color-ochre: #C8860E;
+  --color-secondary: #545454;
+  --color-border: #D4D4D4;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-white: #111111;
+    --color-fill: #1a1612;
+    --color-ink: #F0EBE3;
+    --color-mark: #C8865E;
+    --color-red: #E8243A;
+    --color-slate: #6B8FB8;
+    --color-ochre: #D49A30;
+    --color-secondary: #A0978C;
+    --color-border: #2E2E2E;
+  }
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: var(--color-white); color: var(--color-ink); font-family: 'EB Garamond', Georgia, serif; padding: 24px; }
+#chart { width: 100%; min-height: 500px; }
+.tooltip { position: absolute; pointer-events: none; opacity: 0; background: var(--color-slate); color: var(--color-white); padding: 8px 12px; font-size: 12px; font-family: 'EB Garamond', Georgia, serif; max-width: 280px; line-height: 1.4; transition: opacity 150ms; }
+text { font-family: 'EB Garamond', Georgia, serif; fill: var(--color-ink); }
+.caps { font-family: 'IBM Plex Mono', 'JetBrains Mono', monospace; letter-spacing: 0.08em; fill: var(--color-secondary); font-size: 10px; }
+.secondary { fill: var(--color-secondary); }
+.plot { fill: var(--color-fill); stroke: var(--color-border); stroke-width: 1; }
+.step-line { stroke: var(--color-red); stroke-width: 2.5; fill: none; }
+.dot { fill: var(--color-red); cursor: pointer; }
+@media (prefers-reduced-motion: reduce) { *, .tooltip { transition: none !important; animation: none !important; } }
+</style>
+</head>
+<body>
+<div id="chart" role="main"></div>
+<div class="tooltip" id="tt"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
+<script>
+function draw() {
+  d3.select('#chart').selectAll('*').remove();
+  const totalWidth = document.getElementById('chart').clientWidth || 700;
+  const totalHeight = 500;
+  const margin = { top: 88, right: 32, bottom: 100, left: 64 };
+  const chartW = totalWidth - margin.left - margin.right;
+  const chartH = totalHeight - margin.top - margin.bottom;
+
+  const svg = d3.select('#chart').append('svg')
+    .attr('viewBox', `0 0 ${totalWidth} ${totalHeight}`)
+    .attr('role', 'img').attr('aria-labelledby', 'chart-title chart-desc');
+  svg.append('title').attr('id', 'chart-title').text('Verification loop — defects remaining across passes');
+  svg.append('desc').attr('id', 'chart-desc').text('Step chart with x-axis as verification iteration and y-axis as defects remaining. The curve drops sharply at each of three passes; a residual annotation marks what no pass catches.');
+
+  svg.append('text').attr('class', 'caps').attr('x', margin.left).attr('y', 48).text('FIGURE 14.2 — VERIFICATION LOOP FLOW');
+  svg.append('text').attr('x', margin.left).attr('y', 76).attr('font-weight', 'bold').attr('font-size', 13)
+    .text('Defects remaining drops across passes — and never quite reaches zero');
+
+  const g = svg.append('g').attr('transform', `translate(${margin.left},${margin.top})`);
+  g.append('rect').attr('class', 'plot').attr('width', chartW).attr('height', chartH);
+
+  const tt = d3.select('#tt');
+  const showTip = (html) => tt.html(html).style('opacity', 1);
+  const moveTip = (e) => tt.style('left', (e.pageX + 12) + 'px').style('top', (e.pageY - 8) + 'px');
+  const hideTip = () => tt.style('opacity', 0);
+
+  // 5 stops along x: start, P1, P2, P3, done
+  const stops = ['start', 'P1', 'P2', 'P3', 'done'];
+  const xStep = chartW / 5;
+  const xAt = i => xStep * (i + 0.5);
+
+  const y = d3.scaleLinear().domain([0, 140]).range([chartH, 0]);
+  const values = [130, 70, 30, 10, 10];
+
+  // step path
+  let pathD = `M ${xAt(0)} ${y(values[0])}`;
+  for (let i = 1; i < values.length; i++) {
+    pathD += ` H ${xAt(i)} V ${y(values[i])}`;
+  }
+  g.append('path').attr('class', 'step-line').attr('d', pathD);
+
+  // pass dots & labels
+  const passInfo = [
+    { i: 1, code: 'PASS 1', sub: 'mechanical', tip: 'Pass 1 fires — mechanical failures fall out. Tests pass, no crashes, obvious failure modes handled. The drop here is the largest because mechanical defects are the easiest to detect.' },
+    { i: 2, code: 'PASS 2', sub: 'edge cases', tip: 'Pass 2 fires — edge-case failures fall out. Empty input, oversized input, unicode, ampersands, boundary conditions. Catches what Pass 1 missed because the average case worked.' },
+    { i: 3, code: 'PASS 3', sub: 'spec needs', highlight: true, tip: 'Pass 3 fires — the User-needs failures fall out. The phone-readable table that\'s wrong on the device. The only pass that catches what no per-step handoff was written against.' }
+  ];
+  passInfo.forEach(p => {
+    g.append('circle').attr('class', 'dot').attr('cx', xAt(p.i)).attr('cy', y(values[p.i])).attr('r', 5)
+      .on('mouseenter', () => showTip(`<strong>${p.code} — ${p.sub}</strong><br/>${p.tip}`))
+      .on('mousemove', moveTip).on('mouseleave', hideTip);
+    g.append('text').attr('class', 'caps').attr('x', xAt(p.i) + 20).attr('y', y(values[p.i - 1]) + (y(values[p.i]) - y(values[p.i - 1])) / 2 - 8).attr('text-anchor', 'middle')
+      .attr('fill', p.highlight ? 'var(--color-red)' : 'var(--color-ink)').text(p.code);
+    g.append('text').attr('x', xAt(p.i) + 20).attr('y', y(values[p.i - 1]) + (y(values[p.i]) - y(values[p.i - 1])) / 2 + 6).attr('text-anchor', 'middle').attr('font-size', 10)
+      .attr('fill', p.highlight ? 'var(--color-red)' : 'var(--color-secondary)').text(p.sub);
+  });
+
+  // residual annotation
+  g.append('line').attr('x1', xAt(4)).attr('y1', y(10)).attr('x2', xAt(4)).attr('y2', y(0)).attr('stroke', 'var(--color-secondary)').attr('stroke-width', 0.75).attr('stroke-dasharray', '3 2');
+  g.append('text').attr('x', xAt(4) + 4).attr('y', y(0) - 4).attr('font-size', 10).attr('font-style', 'italic').attr('class', 'secondary').text('residual');
+
+  // re-run on fix indicator
+  g.append('path').attr('d', `M ${xAt(3) + 20} ${y(10) + 4} q 30 -10 50 0`).attr('fill', 'none').attr('stroke', 'var(--color-red)').attr('stroke-width', 1).attr('stroke-dasharray', '3 2');
+  g.append('text').attr('x', xAt(3) + 45).attr('y', y(10) + 22).attr('text-anchor', 'middle').attr('font-size', 9).attr('font-style', 'italic').attr('fill', 'var(--color-red)').text('re-run on fix');
+
+  // x-axis ticks
+  stops.forEach((s, i) => {
+    g.append('line').attr('x1', xAt(i)).attr('y1', chartH).attr('x2', xAt(i)).attr('y2', chartH + 4).attr('stroke', 'var(--color-secondary)').attr('stroke-width', 0.75);
+    g.append('text').attr('class', 'caps').attr('x', xAt(i)).attr('y', chartH + 18).attr('text-anchor', 'middle').text(s);
+  });
+  g.append('text').attr('class', 'caps').attr('x', chartW / 2).attr('y', chartH + 36).attr('text-anchor', 'middle').text('ITERATION →');
+
+  // y axis hints
+  g.append('text').attr('class', 'caps').attr('x', -8).attr('y', y(130) + 3).attr('text-anchor', 'end').text('high');
+  g.append('text').attr('class', 'caps').attr('x', -8).attr('y', y(0) + 3).attr('text-anchor', 'end').text('0');
+  g.append('text').attr('class', 'caps').attr('transform', `translate(-44, ${chartH / 2}) rotate(-90)`).attr('text-anchor', 'middle').text('DEFECTS REMAINING →');
+
+  // bottom rule + caption
+  const footY = chartH + 56;
+  g.append('line').attr('x1', -margin.left + 32).attr('y1', footY).attr('x2', chartW + margin.right - 32).attr('y2', footY).attr('stroke', 'var(--color-border)').attr('stroke-width', 0.75).attr('stroke-dasharray', '4 3');
+  g.append('text').attr('class', 'secondary').attr('y', footY + 20).attr('font-size', 10).text('Each pass drops the defect count by what only that pass can catch.');
+  g.append('text').attr('class', 'secondary').attr('y', footY + 36).attr('font-size', 10).attr('font-style', 'italic').text('Residual: downstream, dependency, and formulation failures no pass promises to find.');
+}
+draw();
+const ro = new ResizeObserver(() => draw());
+ro.observe(document.getElementById('chart'));
+</script>
+</body>
+</html>

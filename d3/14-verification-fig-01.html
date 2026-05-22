@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Figure 14.1 — The verification sequence</title>
+<style>
+:root {
+  --color-white: #FFFFFF;
+  --color-fill: #F5EFE8;
+  --color-ink: #2a1a0e;
+  --color-mark: #6B3520;
+  --color-red: #C8102E;
+  --color-slate: #1A3A5C;
+  --color-ochre: #C8860E;
+  --color-secondary: #545454;
+  --color-border: #D4D4D4;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-white: #111111;
+    --color-fill: #1a1612;
+    --color-ink: #F0EBE3;
+    --color-mark: #C8865E;
+    --color-red: #E8243A;
+    --color-slate: #6B8FB8;
+    --color-ochre: #D49A30;
+    --color-secondary: #A0978C;
+    --color-border: #2E2E2E;
+  }
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: var(--color-white); color: var(--color-ink); font-family: 'EB Garamond', Georgia, serif; padding: 24px; }
+#chart { width: 100%; min-height: 560px; }
+.tooltip { position: absolute; pointer-events: none; opacity: 0; background: var(--color-slate); color: var(--color-white); padding: 8px 12px; font-size: 12px; font-family: 'EB Garamond', Georgia, serif; max-width: 280px; line-height: 1.4; transition: opacity 150ms; }
+text { font-family: 'EB Garamond', Georgia, serif; fill: var(--color-ink); }
+.caps { font-family: 'IBM Plex Mono', 'JetBrains Mono', monospace; letter-spacing: 0.08em; fill: var(--color-secondary); font-size: 10px; }
+.secondary { fill: var(--color-secondary); }
+.pass-body { fill: var(--color-white); stroke: var(--color-border); stroke-width: 1; cursor: pointer; transition: fill 120ms; }
+.pass-header { fill: var(--color-fill); stroke: var(--color-border); stroke-width: 1; pointer-events: none; }
+.pass-body.highlight { stroke: var(--color-red); }
+.pass-header.highlight { stroke: var(--color-red); }
+.pass-body:hover { fill: var(--color-fill); }
+@media (prefers-reduced-motion: reduce) { *, .tooltip { transition: none !important; animation: none !important; } }
+</style>
+</head>
+<body>
+<div id="chart" role="main"></div>
+<div class="tooltip" id="tt"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
+<script>
+function draw() {
+  d3.select('#chart').selectAll('*').remove();
+  const totalWidth = document.getElementById('chart').clientWidth || 700;
+  const totalHeight = 560;
+  const margin = { top: 88, right: 32, bottom: 56, left: 32 };
+  const chartW = totalWidth - margin.left - margin.right;
+
+  const svg = d3.select('#chart').append('svg')
+    .attr('viewBox', `0 0 ${totalWidth} ${totalHeight}`)
+    .attr('role', 'img').attr('aria-labelledby', 'chart-title chart-desc');
+  svg.append('title').attr('id', 'chart-title').text('The verification sequence — three passes');
+  svg.append('desc').attr('id', 'chart-desc').text('A vertical three-pass sequence. Pass 1 functional, Pass 2 edge case, Pass 3 spec-needs. Pass 3 is highlighted as the only pass that catches user-need failures.');
+
+  const defs = svg.append('defs');
+  defs.append('marker').attr('id', 'arrow14-1').attr('markerWidth', 8).attr('markerHeight', 6)
+    .attr('refX', 7).attr('refY', 3).attr('orient', 'auto')
+    .append('polygon').attr('points', '0 0, 8 3, 0 6').attr('fill', 'var(--color-ink)');
+
+  svg.append('text').attr('class', 'caps').attr('x', margin.left).attr('y', 48).text('FIGURE 14.1 — THE VERIFICATION SEQUENCE');
+  svg.append('text').attr('x', margin.left).attr('y', 76).attr('font-weight', 'bold').attr('font-size', 13)
+    .text('Three passes — execution, specification, intent');
+
+  const tt = d3.select('#tt');
+  const showTip = (html) => tt.html(html).style('opacity', 1);
+  const moveTip = (e) => tt.style('left', (e.pageX + 12) + 'px').style('top', (e.pageY - 8) + 'px');
+  const hideTip = () => tt.style('opacity', 0);
+
+  const g = svg.append('g').attr('transform', `translate(${margin.left},${margin.top})`);
+
+  const passW = Math.min(360, chartW * 0.56);
+  const passH = 100;
+  const passGap = 36;
+
+  const passes = [
+    { code: 'PASS 1 — FUNCTIONAL', title: 'Does it run?',
+      body: 'Tests pass, no crashes, obvious failure modes handled.',
+      catches: ['syntax errors, crashes,', 'red unit tests.'],
+      misses: 'the unspecified case',
+      tip: 'Pass 1 — functional verification. The pass most people stop at. Necessary and not sufficient: a build that passes every test and violates its own spec at the user-need level passes Pass 1 completely.' },
+    { code: 'PASS 2 — EDGE CASE', title: 'Does it do what was asked?',
+      body: 'Empty, oversized, special-character, boundary inputs.',
+      catches: ['silent parse fails on', 'unicode, ampersands, etc.'],
+      misses: 'the unmet user need',
+      tip: 'Pass 2 — edge-case verification. Empty inputs, oversized inputs, special characters, the specific boundary conditions named during planning. Catches the categorization rule that handles every normal folder path and fails on a unicode one.' },
+    { code: 'PASS 3 — SPEC NEEDS', title: 'Does it survive real use?',
+      body: 'User needs from the spec checked against the actual output.',
+      catches: ['the phone-readable table', "that's wrong on the device."],
+      misses: 'what the spec never named',
+      highlight: true,
+      tip: 'Pass 3 — spec-needs verification. The only pass that catches failures whose conditions were not encoded as per-step checks. The phone-readability table failure lives here.' }
+  ];
+
+  passes.forEach((p, i) => {
+    const y = i * (passH + passGap);
+    const isH = p.highlight;
+    g.append('rect').attr('class', 'pass-body' + (isH ? ' highlight' : ''))
+      .attr('x', 0).attr('y', y).attr('width', passW).attr('height', passH)
+      .on('mouseenter', () => showTip(`<strong>${p.code}</strong><br/>${p.tip}`))
+      .on('mousemove', moveTip).on('mouseleave', hideTip);
+    g.append('rect').attr('class', 'pass-header' + (isH ? ' highlight' : ''))
+      .attr('x', 0).attr('y', y).attr('width', passW).attr('height', 32);
+    g.append('text').attr('class', 'caps').attr('x', 12).attr('y', y + 21)
+      .attr('fill', isH ? 'var(--color-red)' : 'var(--color-ink)').text(p.code);
+    g.append('text').attr('x', 12).attr('y', y + 56).attr('font-weight', 'bold').attr('font-size', 13)
+      .attr('fill', isH ? 'var(--color-red)' : 'var(--color-ink)').attr('pointer-events', 'none').text(p.title);
+    g.append('text').attr('x', 12).attr('y', y + 80).attr('font-size', 11).attr('class', 'secondary').attr('pointer-events', 'none').text(p.body);
+
+    // side annotations
+    const ax = passW + 24;
+    g.append('text').attr('class', 'caps').attr('x', ax).attr('y', y + 30)
+      .attr('fill', isH ? 'var(--color-red)' : 'var(--color-secondary)').text('CATCHES');
+    p.catches.forEach((line, j) => {
+      g.append('text').attr('x', ax).attr('y', y + 48 + j * 14).attr('font-size', 11)
+        .attr('fill', isH ? 'var(--color-red)' : 'var(--color-ink)').text(line);
+    });
+    g.append('text').attr('class', 'caps').attr('x', ax).attr('y', y + 84).text('CANNOT SEE');
+    g.append('text').attr('x', ax).attr('y', y + 102).attr('font-size', 11).attr('font-style', 'italic').attr('class', 'secondary').text(p.misses);
+
+    // arrow to next
+    if (i < passes.length - 1) {
+      g.append('line').attr('x1', passW / 2).attr('y1', y + passH + 4).attr('x2', passW / 2).attr('y2', y + passH + passGap - 6)
+        .attr('stroke', 'var(--color-ink)').attr('stroke-width', 1.5).attr('marker-end', 'url(#arrow14-1)');
+    }
+  });
+
+  // bottom rule + caption
+  const footY = passes.length * (passH + passGap) + 8;
+  g.append('line').attr('x1', 0).attr('y1', footY).attr('x2', chartW).attr('y2', footY).attr('stroke', 'var(--color-border)').attr('stroke-width', 0.75).attr('stroke-dasharray', '4 3');
+  g.append('text').attr('class', 'secondary').attr('y', footY + 20).attr('font-size', 10)
+    .text('The three passes are cumulative. A failure at any pass means the build is not done.');
+  g.append('text').attr('class', 'secondary').attr('y', footY + 36).attr('font-size', 10).attr('font-style', 'italic')
+    .text('Highlighted: the only pass that checks against the spec\'s User needs.');
+}
+draw();
+const ro = new ResizeObserver(() => draw());
+ro.observe(document.getElementById('chart'));
+</script>
+</body>
+</html>

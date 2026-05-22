@@ -1,0 +1,57 @@
+<svg viewBox="0 0 700 480" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">AGENTS.md at the center of every session</title>
+  <desc id="desc">A central node labeled AGENTS.md with hairline arrows fanning out to three session boxes — Codex session 1, 2, and 3. Each session receives the same persistent project knowledge before its first prompt.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#2a1a0e"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="700" height="480" fill="#FFFFFF"/>
+
+  <text x="32" y="56" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="10" letter-spacing="0.08em" fill="#545454">FIGURE 7.1 — AGENTS.MD AS PERSISTENT SESSION CONTEXT</text>
+  <text x="32" y="88" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="13" font-weight="bold" fill="#2a1a0e">One file, loaded at the start of every session, before the first prompt</text>
+
+  <!-- Central AGENTS.md card -->
+  <rect x="270" y="200" width="160" height="100" fill="#F5EFE8" stroke="#C8102E" stroke-width="1"/>
+  <text x="350" y="222" text-anchor="middle" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="10" letter-spacing="0.08em" fill="#C8102E" font-weight="bold">AGENTS.MD</text>
+  <text x="350" y="244" text-anchor="middle" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="11" font-weight="bold" fill="#2a1a0e">project root</text>
+  <text x="350" y="262" text-anchor="middle" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="10" font-style="italic" fill="#545454">stack · style · architecture</text>
+  <text x="350" y="276" text-anchor="middle" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="10" font-style="italic" fill="#545454">environment · lessons learned</text>
+  <text x="350" y="292" text-anchor="middle" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="9" letter-spacing="0.08em" fill="#545454">UNDER 200 LINES</text>
+
+  <!-- Session 1 — upper left -->
+  <line x1="280" y1="220" x2="158" y2="148" stroke="#2a1a0e" stroke-width="0.75" marker-end="url(#arrow)"/>
+  <rect x="60" y="120" width="160" height="60" fill="#FFFFFF" stroke="#D4D4D4" stroke-width="1"/>
+  <rect x="60" y="120" width="160" height="22" fill="#F5EFE8" stroke="#D4D4D4" stroke-width="1"/>
+  <text x="70" y="135" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="10" letter-spacing="0.08em" fill="#2a1a0e">CODEX SESSION 1</text>
+  <text x="70" y="158" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="10" fill="#2a1a0e">Monday — feature work</text>
+  <text x="70" y="172" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="10" font-style="italic" fill="#545454">prompts run with full context</text>
+
+  <!-- Session 2 — right -->
+  <line x1="430" y1="250" x2="552" y2="250" stroke="#2a1a0e" stroke-width="0.75" marker-end="url(#arrow)"/>
+  <rect x="560" y="220" width="120" height="60" fill="#FFFFFF" stroke="#D4D4D4" stroke-width="1"/>
+  <rect x="560" y="220" width="120" height="22" fill="#F5EFE8" stroke="#D4D4D4" stroke-width="1"/>
+  <text x="570" y="235" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="10" letter-spacing="0.08em" fill="#2a1a0e">SESSION 2</text>
+  <text x="570" y="256" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="10" fill="#2a1a0e">Wed — bug hunt</text>
+  <text x="570" y="270" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="10" font-style="italic" fill="#545454">same conventions</text>
+
+  <!-- Session 3 — lower left -->
+  <line x1="280" y1="280" x2="158" y2="352" stroke="#2a1a0e" stroke-width="0.75" marker-end="url(#arrow)"/>
+  <rect x="60" y="320" width="160" height="60" fill="#FFFFFF" stroke="#D4D4D4" stroke-width="1"/>
+  <rect x="60" y="320" width="160" height="22" fill="#F5EFE8" stroke="#D4D4D4" stroke-width="1"/>
+  <text x="70" y="335" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="10" letter-spacing="0.08em" fill="#2a1a0e">CODEX SESSION 3</text>
+  <text x="70" y="358" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="10" fill="#2a1a0e">Fri — refactor pass</text>
+  <text x="70" y="372" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="10" font-style="italic" fill="#545454">same never-rules</text>
+
+  <!-- Lower right note: what each session does NOT do -->
+  <rect x="430" y="350" width="250" height="60" fill="#F5EFE8" stroke="#D4D4D4" stroke-width="1" stroke-dasharray="4 3"/>
+  <text x="440" y="368" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="9" letter-spacing="0.08em" fill="#545454">WITHOUT AGENTS.MD</text>
+  <text x="440" y="384" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="10" fill="#2a1a0e">each session re-establishes context</text>
+  <text x="440" y="398" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="10" font-style="italic" fill="#545454">twelve of thirty minutes lost to repetition</text>
+
+  <!-- Bottom rule + caption -->
+  <line x1="32" y1="430" x2="668" y2="430" stroke="#D4D4D4" stroke-width="0.75" stroke-dasharray="4 3"/>
+  <text x="32" y="452" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="10" fill="#545454">Codex reads AGENTS.md automatically — you do not paste it, you do not reference it. The arrows are not requests;</text>
+  <text x="32" y="468" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="10" fill="#545454">they are the loading that happens before the first prompt of every session.</text>
+</svg>

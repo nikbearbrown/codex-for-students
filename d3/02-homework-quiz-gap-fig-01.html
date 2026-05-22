@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Figure 2.1 — The consolidation chain</title>
+<style>
+:root {
+  --color-white: #FFFFFF;
+  --color-fill: #F5EFE8;
+  --color-ink: #2a1a0e;
+  --color-mark: #6B3520;
+  --color-red: #C8102E;
+  --color-slate: #1A3A5C;
+  --color-ochre: #C8860E;
+  --color-secondary: #545454;
+  --color-border: #D4D4D4;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-white: #111111;
+    --color-fill: #1a1612;
+    --color-ink: #F0EBE3;
+    --color-mark: #C8865E;
+    --color-red: #E8243A;
+    --color-slate: #6B8FB8;
+    --color-ochre: #D49A30;
+    --color-secondary: #A0978C;
+    --color-border: #2E2E2E;
+  }
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: var(--color-white); color: var(--color-ink); font-family: 'EB Garamond', Georgia, serif; padding: 24px; }
+#chart { width: 100%; min-height: 380px; }
+.tooltip { position: absolute; pointer-events: none; opacity: 0; background: var(--color-slate); color: var(--color-white); padding: 8px 12px; font-size: 12px; font-family: 'EB Garamond', Georgia, serif; max-width: 280px; line-height: 1.4; }
+text { font-family: 'EB Garamond', Georgia, serif; fill: var(--color-ink); }
+.caps { font-family: 'IBM Plex Mono', 'JetBrains Mono', monospace; letter-spacing: 0.08em; fill: var(--color-secondary); font-size: 10px; }
+.secondary { fill: var(--color-secondary); }
+.chain-node { fill: var(--color-fill); stroke: var(--color-border); stroke-width: 1; cursor: pointer; transition: fill 120ms; }
+.chain-node:hover { fill: var(--color-white); }
+.chain-node.highlight { fill: var(--color-white); stroke: var(--color-red); stroke-width: 1.5; }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+</style>
+</head>
+<body>
+<div id="chart" role="main"></div>
+<div class="tooltip" id="tt"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
+<script>
+function draw() {
+  d3.select('#chart').selectAll('*').remove();
+  const totalWidth = document.getElementById('chart').clientWidth || 700;
+  const totalHeight = 380;
+  const margin = { top: 56, right: 24, bottom: 80, left: 24 };
+  const chartWidth = totalWidth - margin.left - margin.right;
+
+  const svg = d3.select('#chart').append('svg')
+    .attr('width', totalWidth).attr('height', totalHeight)
+    .attr('role','img').attr('aria-labelledby','chart-title chart-desc');
+  svg.append('title').attr('id','chart-title').text('The consolidation chain');
+  svg.append('desc').attr('id','chart-desc').text('Six-step linear sequence from Attempt to Consolidation. Removing the first link breaks the chain.');
+
+  svg.append('defs').append('marker').attr('id','arrow-d3').attr('markerWidth',8).attr('markerHeight',6)
+    .attr('refX',7).attr('refY',3).attr('orient','auto').append('polygon').attr('points','0 0, 8 3, 0 6').attr('fill','var(--color-ink)');
+
+  const g = svg.append('g').attr('transform', `translate(${margin.left},${margin.top})`);
+  g.append('text').attr('class','caps').attr('y',-24).text('FIGURE 2.1 — CONSOLIDATION CHAIN');
+  g.append('text').attr('y',0).attr('font-weight','bold').attr('font-size',13).text('Remove the first link, and the chain breaks');
+
+  const tt = d3.select('#tt');
+  function showTip(html){ tt.html(html).style('opacity',1); }
+  function moveTip(e){ tt.style('left',(e.pageX+12)+'px').style('top',(e.pageY-8)+'px'); }
+  function hideTip(){ tt.style('opacity',0); }
+
+  const nodes = [
+    { name1:'Attempt', name2:'', gloss:'you try', highlight: true,
+      tip:'Step 1 — Attempt. You try the problem before the answer is known. This is the link that AI delegation removes. Without it, none of the downstream events occur.' },
+    { name1:'Prediction', name2:'Error', gloss:'mismatch',
+      tip:'Step 2 — Prediction Error. Your brain made a prediction; reality did not match. The mismatch is the neural signal that something new must be learned.' },
+    { name1:'Dopamine', name2:'Release', gloss:'signal fires',
+      tip:'Step 3 — Dopamine Release. The mismatch triggers a dopamine signal — the reward chemistry that marks this as a learning event worth consolidating.' },
+    { name1:'BDNF', name2:'Upregulation', gloss:'protein rises',
+      tip:'Step 4 — BDNF Upregulation. Brain-derived neurotrophic factor — the protein that supports synaptic growth — upregulates in response to the dopamine signal.' },
+    { name1:'Synaptic', name2:'Strengthening', gloss:'spines form',
+      tip:'Step 5 — Synaptic Strengthening. Dendritic spines form. The connections involved in the attempt physically change.' },
+    { name1:'Consoli-', name2:'dation', gloss:'memory built',
+      tip:"Step 6 — Consolidation. Today's confusion becomes tomorrow's capability. This is what memory looks like at the neural level." }
+  ];
+
+  const nodeW = (chartWidth - 5*14) / 6;
+  const nodeH = 88;
+  const yTop = 80;
+
+  nodes.forEach((n, i) => {
+    const x = i*(nodeW+14);
+    g.append('rect').attr('class','chain-node' + (n.highlight ? ' highlight' : '')).attr('x',x).attr('y',yTop).attr('width',nodeW).attr('height',nodeH)
+      .on('mouseenter',()=>showTip(`<strong>${n.name1} ${n.name2}</strong><br/>${n.tip}`))
+      .on('mousemove',moveTip).on('mouseleave',hideTip);
+    g.append('text').attr('class','caps').attr('x',x+nodeW/2).attr('y',yTop+22).attr('text-anchor','middle')
+      .attr('fill', n.highlight ? 'var(--color-red)' : 'var(--color-secondary)').text(`STEP ${i+1}`);
+    g.append('text').attr('x',x+nodeW/2).attr('y',yTop+44).attr('text-anchor','middle').attr('font-weight','bold').attr('font-size',12)
+      .attr('fill', n.highlight ? 'var(--color-red)' : 'var(--color-ink)').text(n.name1);
+    if (n.name2) {
+      g.append('text').attr('x',x+nodeW/2).attr('y',yTop+58).attr('text-anchor','middle').attr('font-weight','bold').attr('font-size',12)
+        .attr('fill', n.highlight ? 'var(--color-red)' : 'var(--color-ink)').text(n.name2);
+    }
+    g.append('text').attr('class','secondary').attr('x',x+nodeW/2).attr('y',yTop+76).attr('text-anchor','middle').attr('font-size',10).text(n.gloss);
+
+    if (i < nodes.length-1) {
+      const ax1 = x+nodeW+2;
+      const ax2 = x+nodeW+12;
+      g.append('line').attr('x1',ax1).attr('y1',yTop+nodeH/2).attr('x2',ax2).attr('y2',yTop+nodeH/2)
+        .attr('stroke','var(--color-ink)').attr('stroke-width',1.5).attr('marker-end','url(#arrow-d3)');
+    }
+  });
+
+  // annotation above step 1
+  g.append('text').attr('x',nodeW/2).attr('y',yTop-10).attr('text-anchor','middle').attr('font-size',10).attr('font-style','italic').attr('fill','var(--color-red)').text('remove this →');
+
+  g.append('line').attr('x1',0).attr('y1',yTop+nodeH+36).attr('x2',chartWidth).attr('y2',yTop+nodeH+36)
+    .attr('stroke','var(--color-border)').attr('stroke-width',0.75).attr('stroke-dasharray','4 3');
+  g.append('text').attr('class','secondary').attr('y',yTop+nodeH+56).attr('font-size',10).text('Each link is a physical event. When Codex does the attempt, none of the downstream events occur.');
+  g.append('text').attr('class','secondary').attr('y',yTop+nodeH+72).attr('font-size',10).text('The output of the session is fine. The brain that participated is unchanged. Hover any node for detail.');
+}
+draw();
+const ro = new ResizeObserver(() => draw());
+ro.observe(document.getElementById('chart'));
+</script>
+</body>
+</html>

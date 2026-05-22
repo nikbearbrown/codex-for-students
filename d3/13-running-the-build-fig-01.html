@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Figure 13.1 — The build loop</title>
+<style>
+:root {
+  --color-white: #FFFFFF;
+  --color-fill: #F5EFE8;
+  --color-ink: #2a1a0e;
+  --color-mark: #6B3520;
+  --color-red: #C8102E;
+  --color-slate: #1A3A5C;
+  --color-ochre: #C8860E;
+  --color-secondary: #545454;
+  --color-border: #D4D4D4;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-white: #111111;
+    --color-fill: #1a1612;
+    --color-ink: #F0EBE3;
+    --color-mark: #C8865E;
+    --color-red: #E8243A;
+    --color-slate: #6B8FB8;
+    --color-ochre: #D49A30;
+    --color-secondary: #A0978C;
+    --color-border: #2E2E2E;
+  }
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: var(--color-white); color: var(--color-ink); font-family: 'EB Garamond', Georgia, serif; padding: 24px; }
+#chart { width: 100%; min-height: 500px; }
+.tooltip { position: absolute; pointer-events: none; opacity: 0; background: var(--color-slate); color: var(--color-white); padding: 8px 12px; font-size: 12px; font-family: 'EB Garamond', Georgia, serif; max-width: 280px; line-height: 1.4; transition: opacity 150ms; }
+text { font-family: 'EB Garamond', Georgia, serif; fill: var(--color-ink); }
+.caps { font-family: 'IBM Plex Mono', 'JetBrains Mono', monospace; letter-spacing: 0.08em; fill: var(--color-secondary); font-size: 10px; }
+.secondary { fill: var(--color-secondary); }
+.node-body { fill: var(--color-white); stroke: var(--color-border); stroke-width: 1; cursor: pointer; transition: fill 120ms; }
+.node-header { fill: var(--color-fill); stroke: var(--color-border); stroke-width: 1; pointer-events: none; }
+.node-body.highlight { stroke: var(--color-red); }
+.node-header.highlight { stroke: var(--color-red); }
+.node-body:hover { fill: var(--color-fill); }
+.plot-bg { fill: var(--color-fill); stroke: var(--color-border); stroke-width: 1; }
+@media (prefers-reduced-motion: reduce) { *, .tooltip { transition: none !important; animation: none !important; } }
+</style>
+</head>
+<body>
+<div id="chart" role="main"></div>
+<div class="tooltip" id="tt"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
+<script>
+function draw() {
+  d3.select('#chart').selectAll('*').remove();
+  const totalWidth = document.getElementById('chart').clientWidth || 700;
+  const totalHeight = 500;
+
+  const svg = d3.select('#chart').append('svg')
+    .attr('viewBox', `0 0 ${totalWidth} ${totalHeight}`)
+    .attr('role', 'img').attr('aria-labelledby', 'chart-title chart-desc');
+  svg.append('title').attr('id', 'chart-title').text('The build loop');
+  svg.append('desc').attr('id', 'chart-desc').text('A five-node cycle around a central hub. The Verify node is highlighted in red and has a stop branch leaving it to a revert-and-respecify node.');
+
+  const defs = svg.append('defs');
+  defs.append('marker').attr('id', 'arrow13-1').attr('markerWidth', 8).attr('markerHeight', 6)
+    .attr('refX', 7).attr('refY', 3).attr('orient', 'auto')
+    .append('polygon').attr('points', '0 0, 8 3, 0 6').attr('fill', 'var(--color-ink)');
+  defs.append('marker').attr('id', 'arrowred13-1').attr('markerWidth', 8).attr('markerHeight', 6)
+    .attr('refX', 7).attr('refY', 3).attr('orient', 'auto')
+    .append('polygon').attr('points', '0 0, 8 3, 0 6').attr('fill', 'var(--color-red)');
+
+  svg.append('text').attr('class', 'caps').attr('x', 32).attr('y', 48).text('FIGURE 13.1 — THE BUILD LOOP');
+  svg.append('text').attr('x', 32).attr('y', 76).attr('font-weight', 'bold').attr('font-size', 13)
+    .text('One prompt wide — Plan, Pick, Execute, Verify, Next');
+
+  // plot area
+  svg.append('rect').attr('class', 'plot-bg').attr('x', 80).attr('y', 108).attr('width', totalWidth - 160).attr('height', 328);
+
+  const tt = d3.select('#tt');
+  const showTip = (html) => tt.html(html).style('opacity', 1);
+  const moveTip = (e) => tt.style('left', (e.pageX + 12) + 'px').style('top', (e.pageY - 8) + 'px');
+  const hideTip = () => tt.style('opacity', 0);
+
+  const cx = totalWidth / 2 - 25;
+  const nodes = [
+    { id: 'plan', code: 'READ PLAN', body: 'Reference Step N', x: cx - 60, y: 128, w: 120, h: 48,
+      tip: 'Read the plan and pick the next step. The prompt will reference Step N of the plan, which references the spec, which references AGENTS.md.' },
+    { id: 'pick', code: 'PICK STEP', body: 'Specification, AGENTS.md', x: cx + 100, y: 208, w: 120, h: 48,
+      tip: 'Compose the five-element specification — task, invariants, context, output format, negative constraint. Paste relevant AGENTS.md sections.' },
+    { id: 'execute', code: 'EXECUTE', body: 'Code Mode prompt', x: cx + 55, y: 320, w: 140, h: 48,
+      tip: 'Submit the Code Mode prompt and read the output. Predict what it will look like before reading — the prediction creates a target.' },
+    { id: 'verify', code: 'VERIFY', body: 'Handoff + PA', x: cx - 195, y: 320, w: 140, h: 48, highlight: true,
+      tip: 'Check the handoff condition. Then run the plausibility audit even if the handoff passed. The condition you wrote was the condition you thought to write.' },
+    { id: 'next', code: 'NEXT', body: 'Update AGENTS.md', x: cx - 220, y: 208, w: 120, h: 48,
+      tip: 'Update AGENTS.md with any lesson that surfaced. The persistent record is how Executive Integration scales across the session.' }
+  ];
+
+  // Stop branch node
+  const stopNode = { id: 'stop', code: 'STOP — REVERT', body: '/rewind → respecify', x: cx + 245, y: 320, w: 140, h: 48, highlight: true,
+    tip: 'Two failed corrections on the same step. Use /rewind or /clear. The context is now polluted; the third attempt will not work better than the first.' };
+
+  // draw nodes
+  [...nodes, stopNode].forEach(n => {
+    svg.append('rect').attr('class', 'node-body' + (n.highlight ? ' highlight' : ''))
+      .attr('x', n.x).attr('y', n.y).attr('width', n.w).attr('height', n.h)
+      .on('mouseenter', () => showTip(`<strong>${n.code}</strong><br/>${n.tip}`))
+      .on('mousemove', moveTip).on('mouseleave', hideTip);
+    svg.append('rect').attr('class', 'node-header' + (n.highlight ? ' highlight' : ''))
+      .attr('x', n.x).attr('y', n.y).attr('width', n.w).attr('height', 20);
+    svg.append('text').attr('class', 'caps').attr('x', n.x + n.w / 2).attr('y', n.y + 14).attr('text-anchor', 'middle')
+      .attr('fill', n.highlight ? 'var(--color-red)' : 'var(--color-ink)').text(n.code);
+    svg.append('text').attr('x', n.x + n.w / 2).attr('y', n.y + 38).attr('text-anchor', 'middle').attr('font-size', 10)
+      .attr('fill', n.highlight ? 'var(--color-red)' : 'var(--color-secondary)').attr('pointer-events', 'none').text(n.body);
+  });
+
+  // Loop arrows — node centres
+  function nc(n) { return { x: n.x + n.w / 2, y: n.y + n.h / 2 }; }
+  const np = nodes.reduce((acc, n) => { acc[n.id] = nc(n); return acc; }, {});
+
+  // 1 → 2 (plan → pick): curve
+  svg.append('path').attr('d', `M ${nodes[0].x + nodes[0].w} ${nodes[0].y + 22} Q ${nodes[1].x} ${nodes[0].y + 36} ${nodes[1].x} ${nodes[1].y}`)
+    .attr('fill', 'none').attr('stroke', 'var(--color-ink)').attr('stroke-width', 1.5).attr('marker-end', 'url(#arrow13-1)');
+  // 2 → 3 (pick → execute)
+  svg.append('path').attr('d', `M ${nodes[1].x + 30} ${nodes[1].y + nodes[1].h} Q ${nodes[1].x + 12} ${nodes[2].y - 8} ${nodes[2].x + 20} ${nodes[2].y}`)
+    .attr('fill', 'none').attr('stroke', 'var(--color-ink)').attr('stroke-width', 1.5).attr('marker-end', 'url(#arrow13-1)');
+  // 3 → 4 (execute → verify): horizontal
+  svg.append('line').attr('x1', nodes[2].x - 2).attr('y1', nodes[2].y + 24).attr('x2', nodes[3].x + nodes[3].w + 2).attr('y2', nodes[3].y + 24)
+    .attr('stroke', 'var(--color-ink)').attr('stroke-width', 1.5).attr('marker-end', 'url(#arrow13-1)');
+  // 4 → 5 (verify → next)
+  svg.append('path').attr('d', `M ${nodes[3].x + 18} ${nodes[3].y} Q ${nodes[3].x - 8} ${nodes[3].y - 30} ${nodes[4].x + 30} ${nodes[4].y + nodes[4].h}`)
+    .attr('fill', 'none').attr('stroke', 'var(--color-ink)').attr('stroke-width', 1.5).attr('marker-end', 'url(#arrow13-1)');
+  // 5 → 1 (next → plan)
+  svg.append('path').attr('d', `M ${nodes[4].x + nodes[4].w} ${nodes[4].y} Q ${nodes[0].x - 30} ${nodes[0].y + 36} ${nodes[0].x} ${nodes[0].y + 22}`)
+    .attr('fill', 'none').attr('stroke', 'var(--color-ink)').attr('stroke-width', 1.5).attr('marker-end', 'url(#arrow13-1)');
+
+  // Stop branch arrow (execute → stop)
+  svg.append('line').attr('x1', nodes[2].x + nodes[2].w + 2).attr('y1', nodes[2].y + 24).attr('x2', stopNode.x - 2).attr('y2', stopNode.y + 24)
+    .attr('stroke', 'var(--color-red)').attr('stroke-width', 1.5).attr('stroke-dasharray', '4 3').attr('marker-end', 'url(#arrowred13-1)');
+  svg.append('text').attr('x', nodes[2].x + nodes[2].w + 10).attr('y', nodes[2].y + 14).attr('font-size', 10).attr('font-style', 'italic').attr('fill', 'var(--color-red)').text('fail');
+
+  // centre label
+  svg.append('text').attr('class', 'caps').attr('x', cx).attr('y', 262).attr('text-anchor', 'middle').text('ONE PROMPT');
+  svg.append('text').attr('class', 'caps').attr('x', cx).attr('y', 278).attr('text-anchor', 'middle').text('WIDE');
+  svg.append('text').attr('x', cx).attr('y', 296).attr('text-anchor', 'middle').attr('font-size', 10).attr('font-style', 'italic').attr('class', 'secondary').text('PDCA at prompt granularity');
+
+  // bottom rule + caption
+  svg.append('line').attr('x1', 32).attr('y1', 452).attr('x2', totalWidth - 32).attr('y2', 452).attr('stroke', 'var(--color-border)').attr('stroke-width', 0.75).attr('stroke-dasharray', '4 3');
+  svg.append('text').attr('x', 32).attr('y', 472).attr('font-size', 10).attr('class', 'secondary').text('Verify is highlighted because quality is built in at the check, not inspected in at the end. The stop branch fires after two failed corrections.');
+}
+draw();
+const ro = new ResizeObserver(() => draw());
+ro.observe(document.getElementById('chart'));
+</script>
+</body>
+</html>

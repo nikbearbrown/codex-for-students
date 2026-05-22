@@ -1,0 +1,43 @@
+<svg viewBox="0 0 700 400" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">The solve-verify asymmetry</title>
+  <desc id="desc">A timeline diagram. Codex's solve speed rises sharply over time; human verification capacity stays flat. The gap between the two widens. The human's job is not to solve faster but to verify better.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#2a1a0e"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="700" height="400" fill="#FFFFFF"/>
+
+  <text x="32" y="48" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="10" letter-spacing="0.08em" fill="#545454">FIGURE 3.3 — SOLVE-VERIFY ASYMMETRY</text>
+  <text x="32" y="76" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="13" font-weight="bold" fill="#2a1a0e">Codex generates faster than you can verify — and the gap widens</text>
+
+  <!-- Plot area -->
+  <rect x="80" y="108" width="540" height="200" fill="#F5EFE8" stroke="#D4D4D4" stroke-width="1"/>
+
+  <!-- X axis label -->
+  <text x="350" y="338" text-anchor="middle" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="9" letter-spacing="0.08em" fill="#545454">TIME →</text>
+
+  <!-- Y axis label -->
+  <text x="48" y="208" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="9" letter-spacing="0.08em" fill="#545454" transform="rotate(-90 48 208)">SPEED / CAPACITY</text>
+
+  <!-- Codex solve line — sharply rising -->
+  <path d="M 80 280 Q 250 240, 380 180 T 620 120" stroke="#C8102E" stroke-width="2.5" fill="none"/>
+  <circle cx="620" cy="120" r="5" fill="#C8102E"/>
+  <text x="630" y="124" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="11" font-weight="bold" fill="#C8102E">Codex</text>
+  <text x="630" y="138" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="10" fill="#C8102E">solve speed</text>
+
+  <!-- Human verification — flat -->
+  <line x1="80" y1="240" x2="620" y2="240" stroke="#1A3A5C" stroke-width="2"/>
+  <circle cx="620" cy="240" r="5" fill="#1A3A5C"/>
+  <text x="630" y="244" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="11" font-weight="bold" fill="#1A3A5C">Human</text>
+  <text x="630" y="258" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="10" fill="#1A3A5C">verification</text>
+
+  <!-- Gap annotation, mid-plot -->
+  <line x1="450" y1="155" x2="450" y2="240" stroke="#C8102E" stroke-width="1" stroke-dasharray="4 3"/>
+  <text x="460" y="200" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="11" font-style="italic" fill="#C8102E">the gap widens</text>
+
+  <!-- Bottom rule + caption -->
+  <line x1="32" y1="356" x2="668" y2="356" stroke="#D4D4D4" stroke-width="0.75" stroke-dasharray="4 3"/>
+  <text x="32" y="378" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="10" fill="#545454">In AI-assisted work, your time is almost entirely verification time. The generation is essentially free. The bottleneck is you, checking.</text>
+</svg>

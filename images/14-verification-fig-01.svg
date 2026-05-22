@@ -1,0 +1,69 @@
+<svg viewBox="0 0 700 540" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">The verification sequence — three passes</title>
+  <desc id="desc">A three-pass vertical column. Pass 1 asks does it run; Pass 2 asks does it do what was asked; Pass 3 asks does it survive edge cases and meet user needs. Each pass has a side annotation naming what it catches and what it cannot. Pass 3 is highlighted because it is the only pass that catches spec-needs failures.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#2a1a0e"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="700" height="540" fill="#FFFFFF"/>
+
+  <text x="32" y="48" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="10" letter-spacing="0.08em" fill="#545454">FIGURE 14.1 — THE VERIFICATION SEQUENCE</text>
+  <text x="32" y="76" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="13" font-weight="bold" fill="#2a1a0e">Three passes — execution, specification, intent</text>
+
+  <!-- Pass 1 -->
+  <g>
+    <rect x="80" y="116" width="320" height="100" fill="#FFFFFF" stroke="#D4D4D4" stroke-width="1"/>
+    <rect x="80" y="116" width="320" height="32" fill="#F5EFE8" stroke="#D4D4D4" stroke-width="1"/>
+    <text x="92" y="138" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="10" letter-spacing="0.08em" fill="#2a1a0e">PASS 1 — FUNCTIONAL</text>
+    <text x="92" y="172" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="13" font-weight="bold" fill="#2a1a0e">Does it run?</text>
+    <text x="92" y="196" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="11" fill="#545454">Tests pass, no crashes, obvious failure modes handled.</text>
+  </g>
+  <!-- Side annotation 1 -->
+  <text x="416" y="146" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="9" letter-spacing="0.08em" fill="#545454">CATCHES</text>
+  <text x="416" y="164" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="11" fill="#2a1a0e">syntax errors, crashes,</text>
+  <text x="416" y="178" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="11" fill="#2a1a0e">red unit tests.</text>
+  <text x="416" y="200" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="9" letter-spacing="0.08em" fill="#545454">CANNOT SEE</text>
+  <text x="416" y="218" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="11" font-style="italic" fill="#545454">the unspecified case</text>
+
+  <!-- arrow 1 → 2 -->
+  <line x1="240" y1="220" x2="240" y2="244" stroke="#2a1a0e" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <!-- Pass 2 -->
+  <g>
+    <rect x="80" y="252" width="320" height="100" fill="#FFFFFF" stroke="#D4D4D4" stroke-width="1"/>
+    <rect x="80" y="252" width="320" height="32" fill="#F5EFE8" stroke="#D4D4D4" stroke-width="1"/>
+    <text x="92" y="274" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="10" letter-spacing="0.08em" fill="#2a1a0e">PASS 2 — EDGE CASE</text>
+    <text x="92" y="308" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="13" font-weight="bold" fill="#2a1a0e">Does it do what was asked?</text>
+    <text x="92" y="332" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="11" fill="#545454">Empty, oversized, special-character, boundary inputs.</text>
+  </g>
+  <!-- Side annotation 2 -->
+  <text x="416" y="282" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="9" letter-spacing="0.08em" fill="#545454">CATCHES</text>
+  <text x="416" y="300" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="11" fill="#2a1a0e">silent parse fails on</text>
+  <text x="416" y="314" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="11" fill="#2a1a0e">unicode, ampersands, etc.</text>
+  <text x="416" y="336" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="9" letter-spacing="0.08em" fill="#545454">CANNOT SEE</text>
+  <text x="416" y="354" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="11" font-style="italic" fill="#545454">the unmet user need</text>
+
+  <!-- arrow 2 → 3 -->
+  <line x1="240" y1="356" x2="240" y2="380" stroke="#2a1a0e" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <!-- Pass 3 — highlighted -->
+  <g>
+    <rect x="80" y="388" width="320" height="100" fill="#FFFFFF" stroke="#C8102E" stroke-width="1"/>
+    <rect x="80" y="388" width="320" height="32" fill="#F5EFE8" stroke="#C8102E" stroke-width="1"/>
+    <text x="92" y="410" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="10" letter-spacing="0.08em" fill="#C8102E">PASS 3 — SPEC NEEDS</text>
+    <text x="92" y="444" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="13" font-weight="bold" fill="#C8102E">Does it survive real use?</text>
+    <text x="92" y="468" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="11" fill="#545454">User needs from the spec checked against the actual output.</text>
+  </g>
+  <!-- Side annotation 3 -->
+  <text x="416" y="418" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="9" letter-spacing="0.08em" fill="#C8102E">CATCHES</text>
+  <text x="416" y="436" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="11" fill="#C8102E">the phone-readable table</text>
+  <text x="416" y="450" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="11" fill="#C8102E">that's wrong on the device.</text>
+  <text x="416" y="472" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="9" letter-spacing="0.08em" fill="#545454">CANNOT SEE</text>
+  <text x="416" y="490" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="11" font-style="italic" fill="#545454">what the spec never named</text>
+
+  <!-- Bottom rule + caption -->
+  <line x1="32" y1="508" x2="668" y2="508" stroke="#D4D4D4" stroke-width="0.75" stroke-dasharray="4 3"/>
+  <text x="32" y="528" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="10" fill="#545454">The three passes are cumulative. A failure at any pass means the build is not done. The highlighted pass is the only one that checks against the User needs.</text>
+</svg>

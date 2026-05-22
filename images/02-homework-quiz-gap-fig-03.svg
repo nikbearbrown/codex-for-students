@@ -1,0 +1,57 @@
+<svg viewBox="0 0 700 420" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">Brain connectivity during AI-assisted writing</title>
+  <desc id="desc">Bar chart of functional brain connectivity as a percentage of baseline across three writing conditions — Brain Only (100%), Search Engine (about 72%), AI-Assisted (45%). The 55% reduction in the AI-Assisted condition is the headline finding.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#2a1a0e"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="700" height="420" fill="#FFFFFF"/>
+
+  <text x="32" y="48" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="10" letter-spacing="0.08em" fill="#545454">FIGURE 2.3 — KOSMYNA ET AL. (MIT MEDIA LAB, 2025)</text>
+  <text x="32" y="76" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="13" font-weight="bold" fill="#2a1a0e">Functional brain connectivity during writing</text>
+
+  <!-- Plot area -->
+  <rect x="100" y="120" width="500" height="220" fill="#F5EFE8" stroke="#D4D4D4" stroke-width="1"/>
+
+  <!-- Y axis ticks: 0, 25, 50, 75, 100 -->
+  <!-- Plot range: 120 (top, y=120) to 340 (bottom, y=340). 220px = 100%. Each 25 = 55px -->
+  <text x="92" y="124" text-anchor="end" font-family="'EB Garamond', Georgia, serif" font-size="10" fill="#545454">100%</text>
+  <line x1="96" y1="120" x2="100" y2="120" stroke="#545454"/>
+  <text x="92" y="179" text-anchor="end" font-family="'EB Garamond', Georgia, serif" font-size="10" fill="#545454">75%</text>
+  <line x1="96" y1="175" x2="100" y2="175" stroke="#545454"/>
+  <text x="92" y="234" text-anchor="end" font-family="'EB Garamond', Georgia, serif" font-size="10" fill="#545454">50%</text>
+  <line x1="96" y1="230" x2="100" y2="230" stroke="#545454"/>
+  <text x="92" y="289" text-anchor="end" font-family="'EB Garamond', Georgia, serif" font-size="10" fill="#545454">25%</text>
+  <line x1="96" y1="285" x2="100" y2="285" stroke="#545454"/>
+  <text x="92" y="344" text-anchor="end" font-family="'EB Garamond', Georgia, serif" font-size="10" fill="#545454">0%</text>
+
+  <!-- Y axis label -->
+  <text x="48" y="240" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="9" letter-spacing="0.08em" fill="#545454" transform="rotate(-90 48 240)">CONNECTIVITY % OF BASELINE</text>
+
+  <!-- Bars. Range: 100=top (120), 0=bottom (340). 1% = 2.2px -->
+  <!-- Brain Only: 100% -> y=120, h=220 -->
+  <rect x="180" y="120" width="80" height="220" fill="#1A3A5C"/>
+  <text x="220" y="113" text-anchor="middle" font-family="'EB Garamond', Georgia, serif" font-size="11" fill="#1A3A5C" font-weight="bold">100%</text>
+  <text x="220" y="360" text-anchor="middle" font-family="'EB Garamond', Georgia, serif" font-size="11" fill="#2a1a0e">Brain Only</text>
+
+  <!-- Search Engine: 72% -> h = 158.4, y = 340-158.4 = 181.6 -->
+  <rect x="310" y="181.6" width="80" height="158.4" fill="#6B3520"/>
+  <text x="350" y="174" text-anchor="middle" font-family="'EB Garamond', Georgia, serif" font-size="11" fill="#6B3520" font-weight="bold">72%</text>
+  <text x="350" y="360" text-anchor="middle" font-family="'EB Garamond', Georgia, serif" font-size="11" fill="#2a1a0e">Search Engine</text>
+
+  <!-- AI-Assisted: 45% -> h = 99, y = 241 -->
+  <rect x="440" y="241" width="80" height="99" fill="#C8102E"/>
+  <text x="480" y="233" text-anchor="middle" font-family="'EB Garamond', Georgia, serif" font-size="11" fill="#C8102E" font-weight="bold">45%</text>
+  <text x="480" y="360" text-anchor="middle" font-family="'EB Garamond', Georgia, serif" font-size="11" fill="#2a1a0e">AI-Assisted</text>
+
+  <!-- Annotation arrow for the 55% reduction -->
+  <line x1="180" y1="120" x2="540" y2="120" stroke="#545454" stroke-width="0.75" stroke-dasharray="4 3"/>
+  <text x="555" y="180" font-family="'EB Garamond', Georgia, serif" font-size="11" font-style="italic" fill="#C8102E">55% drop</text>
+  <text x="555" y="194" font-family="'EB Garamond', Georgia, serif" font-size="10" fill="#545454">vs. baseline</text>
+
+  <!-- Bottom rule + caption -->
+  <line x1="32" y1="376" x2="668" y2="376" stroke="#D4D4D4" stroke-width="0.75" stroke-dasharray="4 3"/>
+  <text x="32" y="398" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="10" fill="#545454">Source: Kosmyna et al., "Your Brain on ChatGPT," MIT Media Lab, June 2025. EEG measurement during essay writing.</text>
+</svg>

@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Figure 2.4 — Anthropic 2026 RCT quiz scores</title>
+<style>
+:root {
+  --color-white: #FFFFFF;
+  --color-fill: #F5EFE8;
+  --color-ink: #2a1a0e;
+  --color-mark: #6B3520;
+  --color-red: #C8102E;
+  --color-slate: #1A3A5C;
+  --color-ochre: #C8860E;
+  --color-secondary: #545454;
+  --color-border: #D4D4D4;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-white: #111111;
+    --color-fill: #1a1612;
+    --color-ink: #F0EBE3;
+    --color-mark: #C8865E;
+    --color-red: #E8243A;
+    --color-slate: #6B8FB8;
+    --color-ochre: #D49A30;
+    --color-secondary: #A0978C;
+    --color-border: #2E2E2E;
+  }
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: var(--color-white); color: var(--color-ink); font-family: 'EB Garamond', Georgia, serif; padding: 24px; }
+#chart { width: 100%; min-height: 440px; }
+.tooltip { position: absolute; pointer-events: none; opacity: 0; background: var(--color-slate); color: var(--color-white); padding: 8px 12px; font-size: 12px; font-family: 'EB Garamond', Georgia, serif; max-width: 260px; line-height: 1.4; }
+text { font-family: 'EB Garamond', Georgia, serif; fill: var(--color-ink); }
+.caps { font-family: 'IBM Plex Mono', 'JetBrains Mono', monospace; letter-spacing: 0.08em; fill: var(--color-secondary); font-size: 10px; }
+.secondary { fill: var(--color-secondary); }
+.bar { cursor: pointer; transition: opacity 120ms; }
+.bar:hover { opacity: 0.85; }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+</style>
+</head>
+<body>
+<div id="chart" role="main"></div>
+<div class="tooltip" id="tt"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
+<script>
+function draw() {
+  d3.select('#chart').selectAll('*').remove();
+  const totalWidth = document.getElementById('chart').clientWidth || 700;
+  const totalHeight = 460;
+  const margin = { top: 64, right: 60, bottom: 80, left: 80 };
+  const chartWidth = totalWidth - margin.left - margin.right;
+  const chartHeight = totalHeight - margin.top - margin.bottom;
+
+  const svg = d3.select('#chart').append('svg')
+    .attr('width', totalWidth).attr('height', totalHeight)
+    .attr('role','img').attr('aria-labelledby','chart-title chart-desc');
+  svg.append('title').attr('id','chart-title').text('Anthropic 2026 RCT — quiz score by condition');
+  svg.append('desc').attr('id','chart-desc').text('AI-assisted 50% vs hand-coding 67%. 17-point gap.');
+
+  const g = svg.append('g').attr('transform', `translate(${margin.left},${margin.top})`);
+  g.append('text').attr('class','caps').attr('y',-32).text('FIGURE 2.4 — ANTHROPIC 2026 RCT');
+  g.append('text').attr('y',-8).attr('font-weight','bold').attr('font-size',13).text('17 points. Frontier model. p = 0.01.');
+
+  const tt = d3.select('#tt');
+  function showTip(html){ tt.html(html).style('opacity',1); }
+  function moveTip(e){ tt.style('left',(e.pageX+12)+'px').style('top',(e.pageY-8)+'px'); }
+  function hideTip(){ tt.style('opacity',0); }
+
+  const data = [
+    { name:'AI-assisted', val:50, se:6, color:'var(--color-red)', tip:'52 junior engineers. Used AI assistance during learning. Average score on the 14-question unassisted conceptual quiz: 50%.' },
+    { name:'Hand-coding', val:67, se:5, color:'var(--color-slate)', tip:'Same population, same learning material. Coded by hand during practice. Average score on the same quiz: 67%. 17 points higher.' }
+  ];
+
+  const x = d3.scaleBand().domain(data.map(d=>d.name)).range([0, chartWidth]).padding(0.5);
+  const y = d3.scaleLinear().domain([0, 100]).range([chartHeight, 0]);
+
+  g.append('rect').attr('x',0).attr('y',0).attr('width',chartWidth).attr('height',chartHeight)
+    .attr('fill','var(--color-fill)').attr('stroke','var(--color-border)').attr('stroke-width',1);
+
+  [0,25,50,75,100].forEach(v => {
+    g.append('text').attr('x',-8).attr('y',y(v)+4).attr('text-anchor','end').attr('font-size',10).attr('class','secondary').text(v+'%');
+    g.append('line').attr('x1',-4).attr('x2',0).attr('y1',y(v)).attr('y2',y(v)).attr('stroke','var(--color-secondary)');
+  });
+  g.append('text').attr('class','caps').attr('transform',`translate(-56,${chartHeight/2}) rotate(-90)`).attr('text-anchor','middle').text('QUIZ SCORE %');
+
+  g.selectAll('.bar').data(data).join('rect').attr('class','bar')
+    .attr('x',d=>x(d.name)).attr('y',d=>y(d.val)).attr('width',x.bandwidth()).attr('height',d=>chartHeight-y(d.val))
+    .attr('fill',d=>d.color)
+    .on('mouseenter',(e,d)=>showTip(`<strong>${d.name} — ${d.val}%</strong><br/>${d.tip}`))
+    .on('mousemove',moveTip).on('mouseleave',hideTip);
+
+  // error bars and labels
+  data.forEach(d => {
+    const cx = x(d.name) + x.bandwidth()/2;
+    g.append('line').attr('x1',cx).attr('x2',cx).attr('y1',y(d.val-d.se)).attr('y2',y(d.val+d.se)).attr('stroke','var(--color-ink)').attr('stroke-width',1);
+    g.append('line').attr('x1',cx-8).attr('x2',cx+8).attr('y1',y(d.val+d.se)).attr('y2',y(d.val+d.se)).attr('stroke','var(--color-ink)').attr('stroke-width',1);
+    g.append('line').attr('x1',cx-8).attr('x2',cx+8).attr('y1',y(d.val-d.se)).attr('y2',y(d.val-d.se)).attr('stroke','var(--color-ink)').attr('stroke-width',1);
+    g.append('text').attr('x',cx).attr('y',y(d.val+d.se)-6).attr('text-anchor','middle').attr('font-weight','bold').attr('font-size',11).attr('fill',d.color).text(d.val+'%');
+    g.append('text').attr('x',cx).attr('y',chartHeight+24).attr('text-anchor','middle').attr('font-size',11).text(d.name);
+  });
+
+  // gap annotation
+  const cx1 = x('AI-assisted') + x.bandwidth()/2;
+  const cx2 = x('Hand-coding') + x.bandwidth()/2;
+  const midX = (cx1 + cx2) / 2;
+  g.append('line').attr('x1',midX).attr('x2',midX).attr('y1',y(50)).attr('y2',y(67)).attr('stroke','var(--color-red)').attr('stroke-width',1).attr('stroke-dasharray','4 3');
+  g.append('line').attr('x1',midX-6).attr('x2',midX+6).attr('y1',y(50)).attr('y2',y(50)).attr('stroke','var(--color-red)');
+  g.append('line').attr('x1',midX-6).attr('x2',midX+6).attr('y1',y(67)).attr('y2',y(67)).attr('stroke','var(--color-red)');
+  g.append('text').attr('x',midX+12).attr('y',y(58.5)+4).attr('font-weight','bold').attr('font-size',11).attr('fill','var(--color-red)').text('17 pts');
+
+  g.append('line').attr('x1',0).attr('y1',chartHeight+44).attr('x2',chartWidth).attr('y2',chartHeight+44)
+    .attr('stroke','var(--color-border)').attr('stroke-width',0.75).attr('stroke-dasharray','4 3');
+  g.append('text').attr('class','secondary').attr('y',chartHeight+64).attr('font-size',10).text("52 junior engineers, Python's Trio library. Cohen's d = 0.738. p = 0.01. Error bars: 1 SE.");
+}
+draw();
+const ro = new ResizeObserver(() => draw());
+ro.observe(document.getElementById('chart'));
+</script>
+</body>
+</html>

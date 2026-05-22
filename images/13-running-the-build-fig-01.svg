@@ -1,0 +1,99 @@
+<svg viewBox="0 0 700 480" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">The build loop</title>
+  <desc id="desc">A cycle of five steps — Read plan, Pick step, Execute, Verify, Next — connected by arrows around a central hub. A separate stop branch leaves Verify when the step fails: revert and respecify. The discipline is one prompt wide.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#2a1a0e"/>
+    </marker>
+    <marker id="arrowred" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#C8102E"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="700" height="480" fill="#FFFFFF"/>
+
+  <text x="32" y="48" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="10" letter-spacing="0.08em" fill="#545454">FIGURE 13.1 — THE BUILD LOOP</text>
+  <text x="32" y="76" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="13" font-weight="bold" fill="#2a1a0e">One prompt wide — Plan, Pick, Execute, Verify, Next</text>
+
+  <!-- Central plot fill -->
+  <rect x="80" y="108" width="430" height="328" fill="#F5EFE8" stroke="#D4D4D4" stroke-width="1"/>
+
+  <!-- Loop arranged around a central axis. Five nodes positioned at clock-face angles. -->
+  <!-- Centre at (295, 272). Radius ≈ 130. -->
+
+  <!-- Node 1: Read plan (top) -->
+  <g>
+    <rect x="235" y="128" width="120" height="48" fill="#FFFFFF" stroke="#D4D4D4" stroke-width="1"/>
+    <rect x="235" y="128" width="120" height="20" fill="#F5EFE8" stroke="#D4D4D4" stroke-width="1"/>
+    <text x="295" y="142" text-anchor="middle" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="10" letter-spacing="0.08em" fill="#2a1a0e">READ PLAN</text>
+    <text x="295" y="166" text-anchor="middle" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="10" fill="#545454">Reference Step N</text>
+  </g>
+
+  <!-- Node 2: Pick step (right) -->
+  <g>
+    <rect x="395" y="208" width="120" height="48" fill="#FFFFFF" stroke="#D4D4D4" stroke-width="1"/>
+    <rect x="395" y="208" width="120" height="20" fill="#F5EFE8" stroke="#D4D4D4" stroke-width="1"/>
+    <text x="455" y="222" text-anchor="middle" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="10" letter-spacing="0.08em" fill="#2a1a0e">PICK STEP</text>
+    <text x="455" y="246" text-anchor="middle" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="10" fill="#545454">Specification, AGENTS.md</text>
+  </g>
+
+  <!-- Node 3: Execute (bottom-right) -->
+  <g>
+    <rect x="350" y="320" width="140" height="48" fill="#FFFFFF" stroke="#D4D4D4" stroke-width="1"/>
+    <rect x="350" y="320" width="140" height="20" fill="#F5EFE8" stroke="#D4D4D4" stroke-width="1"/>
+    <text x="420" y="334" text-anchor="middle" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="10" letter-spacing="0.08em" fill="#2a1a0e">EXECUTE</text>
+    <text x="420" y="358" text-anchor="middle" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="10" fill="#545454">Code Mode prompt</text>
+  </g>
+
+  <!-- Node 4: Verify (bottom-left) — highlighted -->
+  <g>
+    <rect x="100" y="320" width="140" height="48" fill="#FFFFFF" stroke="#C8102E" stroke-width="1"/>
+    <rect x="100" y="320" width="140" height="20" fill="#F5EFE8" stroke="#C8102E" stroke-width="1"/>
+    <text x="170" y="334" text-anchor="middle" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="10" letter-spacing="0.08em" fill="#C8102E">VERIFY</text>
+    <text x="170" y="358" text-anchor="middle" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="10" fill="#C8102E">Handoff + PA</text>
+  </g>
+
+  <!-- Node 5: Next (left) -->
+  <g>
+    <rect x="75" y="208" width="120" height="48" fill="#FFFFFF" stroke="#D4D4D4" stroke-width="1"/>
+    <rect x="75" y="208" width="120" height="20" fill="#F5EFE8" stroke="#D4D4D4" stroke-width="1"/>
+    <text x="135" y="222" text-anchor="middle" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="10" letter-spacing="0.08em" fill="#2a1a0e">NEXT</text>
+    <text x="135" y="246" text-anchor="middle" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="10" fill="#545454">Update AGENTS.md</text>
+  </g>
+
+  <!-- Loop arrows clockwise between nodes -->
+  <!-- 1 → 2: from (355,150) curve to (415,208) -->
+  <path d="M 358 150 Q 410 156, 430 208" fill="none" stroke="#2a1a0e" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <!-- 2 → 3: from (455,256) to (420,320) -->
+  <path d="M 455 258 Q 460 295, 440 320" fill="none" stroke="#2a1a0e" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <!-- 3 → 4: from (350,344) to (240,344) -->
+  <path d="M 348 344 L 242 344" stroke="#2a1a0e" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <!-- 4 → 5: from (170,320) to (135,256) -->
+  <path d="M 158 320 Q 130 295, 135 258" fill="none" stroke="#2a1a0e" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <!-- 5 → 1: from (180,208) to (235,150) -->
+  <path d="M 182 208 Q 215 165, 235 152" fill="none" stroke="#2a1a0e" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <!-- Stop branch from Verify -->
+  <line x1="100" y1="344" x2="60" y2="344" stroke="#C8102E" stroke-width="1.5" stroke-dasharray="4 3" marker-end="url(#arrowred)"/>
+
+  <!-- Stop branch label box -->
+  <g>
+    <rect x="540" y="320" width="140" height="48" fill="#FFFFFF" stroke="#C8102E" stroke-width="1"/>
+    <rect x="540" y="320" width="140" height="20" fill="#F5EFE8" stroke="#C8102E" stroke-width="1"/>
+    <text x="610" y="334" text-anchor="middle" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="10" letter-spacing="0.08em" fill="#C8102E">STOP — REVERT</text>
+    <text x="610" y="358" text-anchor="middle" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="10" fill="#C8102E">/rewind → respecify</text>
+  </g>
+
+  <!-- Stop arrow from execute to stop -->
+  <path d="M 492 344 L 538 344" stroke="#C8102E" stroke-width="1.5" stroke-dasharray="4 3" marker-end="url(#arrowred)"/>
+  <text x="500" y="334" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="10" font-style="italic" fill="#C8102E">fail</text>
+
+  <!-- Centre label -->
+  <text x="295" y="262" text-anchor="middle" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="10" letter-spacing="0.08em" fill="#545454">ONE PROMPT</text>
+  <text x="295" y="278" text-anchor="middle" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="10" letter-spacing="0.08em" fill="#545454">WIDE</text>
+  <text x="295" y="296" text-anchor="middle" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="10" font-style="italic" fill="#545454">PDCA at prompt granularity</text>
+
+  <!-- Bottom rule + caption -->
+  <line x1="32" y1="452" x2="668" y2="452" stroke="#D4D4D4" stroke-width="0.75" stroke-dasharray="4 3"/>
+  <text x="32" y="472" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="10" fill="#545454">Verify is the highlighted node because quality is built in at the check, not inspected in at the end. The stop branch fires after two failed corrections.</text>
+</svg>

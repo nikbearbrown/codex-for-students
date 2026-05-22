@@ -1,0 +1,73 @@
+<svg viewBox="0 0 700 420" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">Executive Integration as a session timeline</title>
+  <desc id="desc">A horizontal timeline of a Codex session. An initial constraint is set at prompt 3. Locally reasonable prompts accumulate across prompts 4 through 12. EI fires at prompt 13 to catch the drift before ship. Decision, redirect, pivot, and ship moments are marked along the timeline.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#2a1a0e"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="700" height="420" fill="#FFFFFF"/>
+
+  <text x="32" y="56" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="10" letter-spacing="0.08em" fill="#545454">FIGURE 6.4 — EI ACROSS A SESSION</text>
+  <text x="32" y="88" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="13" font-weight="bold" fill="#2a1a0e">The long-range capacity that catches drift, not crashes</text>
+
+  <!-- Timeline horizontal axis -->
+  <line x1="64" y1="240" x2="636" y2="240" stroke="#2a1a0e" stroke-width="1.25" marker-end="url(#arrow)"/>
+  <text x="64" y="262" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="9" letter-spacing="0.08em" fill="#545454">PROMPT 1</text>
+  <text x="636" y="262" text-anchor="end" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="9" letter-spacing="0.08em" fill="#545454">PROMPT 13 + SHIP</text>
+  <text x="350" y="280" text-anchor="middle" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="10" font-style="italic" fill="#545454">session duration — many prompts, hours, sometimes days</text>
+
+  <!-- Tick marks for prompts -->
+  <g stroke="#D4D4D4" stroke-width="0.75">
+    <line x1="100" y1="234" x2="100" y2="246"/>
+    <line x1="148" y1="234" x2="148" y2="246"/>
+    <line x1="196" y1="234" x2="196" y2="246"/>
+    <line x1="244" y1="234" x2="244" y2="246"/>
+    <line x1="292" y1="234" x2="292" y2="246"/>
+    <line x1="340" y1="234" x2="340" y2="246"/>
+    <line x1="388" y1="234" x2="388" y2="246"/>
+    <line x1="436" y1="234" x2="436" y2="246"/>
+    <line x1="484" y1="234" x2="484" y2="246"/>
+    <line x1="532" y1="234" x2="532" y2="246"/>
+    <line x1="580" y1="234" x2="580" y2="246"/>
+  </g>
+
+  <!-- Decision marker: prompt 3 -->
+  <circle cx="196" cy="240" r="6" fill="#2a1a0e"/>
+  <line x1="196" y1="234" x2="196" y2="148" stroke="#2a1a0e" stroke-width="0.75"/>
+  <rect x="120" y="116" width="152" height="32" fill="#F5EFE8" stroke="#D4D4D4" stroke-width="1"/>
+  <text x="128" y="130" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="9" letter-spacing="0.08em" fill="#545454">DECISION</text>
+  <text x="128" y="142" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="10" fill="#2a1a0e">constraint set: no rewrites</text>
+
+  <!-- Drift zone -->
+  <rect x="220" y="190" width="240" height="42" fill="#F5EFE8" stroke="#D4D4D4" stroke-width="1" stroke-dasharray="4 3"/>
+  <text x="340" y="206" text-anchor="middle" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="9" letter-spacing="0.08em" fill="#545454">DRIFT — LOCALLY REASONABLE PROMPTS</text>
+  <text x="340" y="222" text-anchor="middle" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="10" font-style="italic" fill="#545454">each step fine in isolation; cumulative result violates the constraint</text>
+
+  <!-- Redirect: prompt 7 -->
+  <circle cx="388" cy="240" r="5" fill="#2a1a0e"/>
+  <line x1="388" y1="246" x2="388" y2="312" stroke="#2a1a0e" stroke-width="0.75"/>
+  <rect x="324" y="312" width="128" height="32" fill="#F5EFE8" stroke="#D4D4D4" stroke-width="1"/>
+  <text x="332" y="326" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="9" letter-spacing="0.08em" fill="#545454">REDIRECT</text>
+  <text x="332" y="338" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="10" fill="#2a1a0e">small course correction</text>
+
+  <!-- Pivot: prompt 11 -->
+  <circle cx="532" cy="240" r="5" fill="#2a1a0e"/>
+  <line x1="532" y1="234" x2="532" y2="166" stroke="#2a1a0e" stroke-width="0.75"/>
+  <rect x="464" y="134" width="136" height="32" fill="#F5EFE8" stroke="#D4D4D4" stroke-width="1"/>
+  <text x="472" y="148" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="9" letter-spacing="0.08em" fill="#545454">PIVOT</text>
+  <text x="472" y="160" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="10" fill="#2a1a0e">re-scope adjacent feature</text>
+
+  <!-- EI FIRES at prompt 13 -->
+  <circle cx="600" cy="240" r="7" fill="#C8102E"/>
+  <line x1="600" y1="246" x2="600" y2="320" stroke="#C8102E" stroke-width="1"/>
+  <rect x="496" y="320" width="160" height="46" fill="#F5EFE8" stroke="#C8102E" stroke-width="1"/>
+  <text x="506" y="336" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="9" letter-spacing="0.08em" fill="#C8102E" font-weight="bold">EI FIRES — STOP</text>
+  <text x="506" y="350" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="10" fill="#2a1a0e">cumulative result violates</text>
+  <text x="506" y="362" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="10" fill="#2a1a0e">the prompt-3 constraint</text>
+
+  <!-- Bottom caption -->
+  <line x1="32" y1="386" x2="668" y2="386" stroke="#D4D4D4" stroke-width="0.75" stroke-dasharray="4 3"/>
+  <text x="32" y="406" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="10" fill="#545454">EI is the only capacity whose horizon is the whole session. AGENTS.md is the scaffold that makes EI scale across sessions, not just within one.</text>
+</svg>

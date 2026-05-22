@@ -14,7 +14,13 @@ Seventeen percentage points *lower* on the unassisted exam. The same students wh
 
 This is the Bastani finding. Omar Abdel Hamid Bastani and colleagues ran a randomized controlled trial with middle-school students learning algebra. The result is not a speculation about what might happen. It is a measurement of what does happen, with controls.
 
-<!-- → [TABLE: Bastani RCT results — two columns: AI-Assisted group vs. Hand-Coding group. Rows: practice score, exam score, score gap, Cohen's d, p-value. No color. Editorial style.] -->
+| Measure | AI-assisted group | Hand-coding group |
+|---|---|---|
+| Practice score | 48% above control | At control baseline |
+| Unassisted exam score | 17 points below control | At control baseline |
+| Score gap (practice → exam) | −65 points | ~0 |
+| Cohen's *d* (effect size) | 0.738 | — |
+| *p* value | 0.01 | — |
 
 The name I am going to give this phenomenon is the **homework/quiz gap**: the divergence between performance when AI is available and performance when it is not. The gap is the empirical foundation of everything this book argues. If I cannot convince you the gap is real, the rest reads as opinion. So let me try to convince you — not by asserting it, but by explaining the mechanism that produces it.
 
@@ -26,7 +32,8 @@ I want to tell you what is actually happening in your head when you learn someth
 
 When you attempt a problem and cannot yet solve it, a specific sequence of events occurs. Your brain made a prediction — either explicitly (you thought you knew the answer) or implicitly (it expected a familiar pattern and did not find one). The mismatch between the prediction and reality is registered. This is called **prediction error**. Dopamine is released in response to the mismatch. Brain-derived neurotrophic factor — BDNF, a protein — upregulates. The synaptic connections involved in the attempt strengthen. Dendritic spines form. This is what **memory consolidation** looks like at the level of neurons.
 
-<!-- → [INFOGRAPHIC: linear sequence diagram — Attempt → Prediction Error → Dopamine Release → BDNF Upregulation → Synaptic Strengthening → Consolidation. Each node labeled with a plain-language gloss. Student should see the chain and understand that removing the first link (Attempt) breaks the whole sequence.] -->
+![Six-node linear chain — Attempt, Prediction Error, Dopamine Release, BDNF Upregulation, Synaptic Strengthening, Consolidation. The Attempt node is highlighted in red as the link that AI delegation removes.](images/02-homework-quiz-gap-fig-01.png)
+*Figure 2.1 — The consolidation chain*
 
 None of that is metaphor. Those are the physical events. The struggle is not a tax you pay in exchange for learning. The struggle *is* the mechanism of learning. Prediction error, dopamine, BDNF, synaptic strengthening — these are the events that convert today's confusion into tomorrow's capability. The technical literature calls this **desirable difficulty**: the cognitive friction that triggers the biological machinery. John Sweller's Cognitive Load Theory (1988 and forward) is the formal framework; the point here is simpler. You cannot get the consolidation without the friction. They are the same event.
 
@@ -50,7 +57,8 @@ The Bastani students felt like they had learned more. They had not. But the sign
 
 This is the **fluency trap**: AI-assisted work is experienced as mastery because fluency and mastery feel the same from inside your head. The test that distinguishes them is the unassisted task. That is why the homework/quiz gap exists. The exam is not a different kind of evaluation; it is the first time the unassisted task appears. That is when you discover what you actually built.
 
-<!-- → [IMAGE: two-panel illustration — left panel labeled "Fluency" shows a brain reading smooth, clean output with a checkmark; right panel labeled "Mastery" shows a brain mid-struggle with crossed-out predictions and corrections. Caption: "The phenomenological experience is identical. The neural events are not."] -->
+![Two-panel illustration. Left: stylized brain reading smooth output with a checkmark, labeled FLUENCY. Right: same brain mid-struggle with a struck-through prediction and a corrected line, labeled MASTERY.](images/02-homework-quiz-gap-fig-02.png)
+*Figure 2.2 — Fluency vs. Mastery: the phenomenological experience is identical; the neural events are not*
 
 ---
 
@@ -60,7 +68,8 @@ In June 2025, Nataliya Kosmyna and colleagues at MIT Media Lab measured brain co
 
 A follow-up session had the AI-assisted group write without AI, after multiple AI-assisted sessions. They could not remember what they had written. The consolidation that would have built durable memory for their own essays had not occurred.
 
-<!-- → [CHART: grouped bar chart — three conditions (Brain Only, Search Engine, AI-Assisted) on x-axis; functional brain connectivity as percentage of baseline on y-axis. Student should see the 55% reduction in the AI-Assisted condition and notice the search-engine group falls between the two extremes.] -->
+![Bar chart of functional brain connectivity across three writing conditions — Brain Only at 100%, Search Engine at 72%, AI-Assisted at 45%. The 55% drop in the AI-Assisted condition is annotated against the dashed baseline.](images/02-homework-quiz-gap-fig-03.png)
+*Figure 2.3 — Kosmyna et al.: functional brain connectivity during writing*
 
 Bastani measured algebra. Kosmyna measured essays. The same pattern appears: outsource the cognitive work and the brain does not consolidate. The mechanism is domain-general. Prediction error, dopamine, BDNF — these are not specific to math or writing. They are triggered by effortful cognition and suppressed when the effort is removed. The surface differs; the mechanism does not.
 
@@ -79,7 +88,8 @@ The numbers:
 
 This is the homework/quiz gap measured directly in a programming context, with a frontier model, in 2026. The model is recent. The gap is real.
 
-<!-- → [CHART: bar chart comparing Anthropic 2026 RCT groups — AI-assisted vs. hand-coding — on quiz score. Include error bars. Student should see the 17-point gap clearly and note it is not a marginal difference.] -->
+![Bar chart of the Anthropic 2026 RCT — AI-assisted group at 50% and hand-coding group at 67% on the 14-question conceptual quiz. Error bars and a 17-point gap annotation.](images/02-homework-quiz-gap-fig-04.png)
+*Figure 2.4 — Anthropic 2026 RCT: quiz score by condition*
 
 The study did not stop at the headline number. It identified the specific interaction patterns that predicted low performance — averaging below 40%:
 
@@ -93,7 +103,16 @@ And three patterns that predicted high performance — averaging 65% or higher:
 
 Asking follow-up questions about generated code *before* using it. Combining code generation with explanations of *why* the code is correct. Using AI for conceptual questions while coding the actual implementation by hand.
 
-<!-- → [TABLE: Anthropic 2026 interaction patterns — two sections: Low-Scoring Patterns (avg < 40%) and High-Scoring Patterns (avg ≥ 65%). Columns: Pattern Name, Description, Avg Quiz Score, Why It Affects Consolidation. Student should be able to locate their own recent behavior in one of the six rows.] -->
+| Pattern | Description | Avg quiz score | Why it affects consolidation |
+|---|---|---|---|
+| **Low-scoring (< 40%)** | | | |
+| AI Delegation | Prompt, run the output, move on — no engagement with the mechanism | < 40% | No prediction is formed; no mismatch can register |
+| Progressive AI Reliance | Start by hand, hand off more to the AI as difficulty climbs | < 40% | Outsources exactly the hard step that triggers the dopamine signal |
+| Iterative AI Debugging | Let the AI find and name the bugs as well as fix them | < 40% | Skips the prediction-vs-observation loop that builds debugging skill |
+| **High-scoring (≥ 65%)** | | | |
+| Follow-up questioning | Ask *why this data structure, why not the obvious approach* before using the code | ≥ 65% | Forces prediction and comparison against the generated answer |
+| Explanation pairing | Have Codex explain the design decision, then verify the explanation against what you know | ≥ 65% | Verification surfaces prediction errors and consolidates them |
+| Concepts up, code by hand | Use Codex for API and concept lookup, write the implementation yourself | ≥ 65% | Strips extraneous load while preserving the germane reasoning |
 
 The low-scoring patterns share one property: the engineer's cognition is not engaged with the generated material. The high-scoring patterns share the opposite: the engineer is predicting, reading, questioning, comparing. The biological machinery is running. Prediction error is occurring. The consolidation proceeds.
 
@@ -107,7 +126,8 @@ The largest performance disparity between the two groups appeared on **diagnosti
 
 This is not a surprise if you understand the mechanism. Debugging is the irreducible cognitive skill of the working engineer. It requires holding the code in your head, predicting what should happen, noticing what does happen, and reasoning about the gap. That reasoning loop — prediction, observation, mismatch, explanation — is exactly the sequence that triggers the biological machinery of consolidation. Every debugging session is, at the neural level, a learning event. The engineer who lets the AI do the debugging is skipping the event that develops the skill.
 
-<!-- → [CHART: horizontal bar chart — three question types (Declarative, Generative, Diagnostic) on y-axis; performance gap between hand-coding and AI-assisted groups on x-axis. Student should see that the diagnostic gap dwarfs the others and understand why from the mechanism described above.] -->
+![Horizontal bar chart of the performance gap by question type — Declarative 7 points, Generative 13 points, Diagnostic 23 points. The Diagnostic bar is highlighted in red.](images/02-homework-quiz-gap-fig-05.png)
+*Figure 2.5 — Where the gap is largest: diagnostic questions dwarf the others*
 
 The Iterative AI Debugging pattern is the fastest way to create a practitioner who can produce code but cannot maintain it. The maintenance — the finding of what is wrong and why — is the test that exposes what was built. It is the unassisted task in its purest form.
 
@@ -133,7 +153,8 @@ Student B writes the variant from scratch. Not perfectly — they make an error,
 
 The Bastani finding, the Kosmyna finding, and the Anthropic finding all describe the same divergence between these two students. The mechanism is the same in algebra, in essay writing, in Python. Student A borrowed capability. Student B built it. The difference is not detectable at week one. It is exactly detectable at the unassisted task.
 
-<!-- → [INFOGRAPHIC: two-track timeline over six weeks — Student A track and Student B track in parallel. Week 1: same problem set, same grade. Each subsequent week: A's cognitive engagement shown as flat; B's shown as incrementally building. Week 6: quiz result diverges. Caption: "The artifact was identical. The practitioner was not."] -->
+![Two-track six-week timeline. Student A's cognitive engagement plots flat at zero across all six weeks. Student B's plots incrementally upward each week. Both tracks start at the same point in week one. At week six the quiz score diverges sharply.](images/02-homework-quiz-gap-fig-06.png)
+*Figure 2.6 — Two students, six weeks: the artifact was identical; the practitioner was not*
 
 ---
 
@@ -229,3 +250,59 @@ You now know the risk and the mechanism that produces it. The next question is a
 [^2]: "How AI assistance impacts the formation of coding skills." Anthropic, 2026; arXiv:2601.20245.
 [^3]: OpenAI engineers, "How OpenAI Engineers use Codex to Tackle Big Projects with Rigor" (forum.openai.com, December 4, 2025).
 [^4]: James, W. *The Principles of Psychology*. Henry Holt, 1890. The Dover reprint (1950) is the standard modern edition.
+
+---
+
+## Prompts
+
+Use these prompts with Claude to generate interactive D3 v7 versions of the figures in this chapter. Each produces a standalone HTML file you can open in a browser and modify freely.
+
+**Prerequisites:** Load `brutalist/CLAUDE.md` and `brutalist/DESIGN.md` into your Claude project context before using these prompts. They define the stack, naming conventions, color system, and typography the figures use.
+
+---
+
+### Figure 2.1 — The consolidation chain
+
+Build a six-node linear sequence in D3 v7. Each node is a small rectangular card containing a monospace ALL CAPS step number, a one-or-two-line bold name (`Attempt`, `Prediction Error`, `Dopamine Release`, `BDNF Upregulation`, `Synaptic Strengthening`, `Consolidation`), and a short plain-language gloss in `--color-secondary`. The first node (`Attempt`) is bordered and titled in `--color-red` and carries a small italic annotation above it reading `remove this →`. Arrows with marker-ends connect each node to the next. Hovering any node shows the longer mechanistic explanation in a tooltip. Dashed footer rule, then a two-line caption: each link is a physical event; when Codex does the attempt, none of the downstream events occur.
+
+> Reference implementation: `d3/02-homework-quiz-gap-fig-01.html`
+
+---
+
+### Figure 2.2 — Fluency vs. Mastery
+
+Build a two-panel illustration in D3 v7. Two equally-sized `--color-fill` panels side by side, each with a monospace ALL CAPS header (`PANEL A — FLUENCY`, `PANEL B — MASTERY`). Inside each panel: a stylized brain drawn from a closed SVG path (lobed outline with five folds), centered, in `--color-white` with `--color-ink` outline. Panel B additionally has four small red dots scattered across the brain as `prediction error` sparks. Below each brain, a small monospace code card. Panel A shows a clean two-line snippet ending in `# ✓`. Panel B shows a struck-through prediction line above a corrected line. One-line caption under each card describes the cognitive sequence. Hovering either panel shows a tooltip explaining what is happening at the neural level. Dashed footer rule plus a single-line caption.
+
+> Reference implementation: `d3/02-homework-quiz-gap-fig-02.html`
+
+---
+
+### Figure 2.3 — Functional brain connectivity during writing
+
+Build a vertical bar chart in D3 v7. X axis: three categorical conditions — `Brain Only`, `Search Engine`, `AI-Assisted`. Y axis: connectivity as percentage of baseline, domain `[0, 110]`. Bars in slate, mark, and red respectively. Value labels above each bar. A dashed `--color-secondary` line at `y=100` marks the baseline. A small italic annotation in `--color-red` to the right of the chart names the `55% drop`. Hovering any bar shows the condition's reading and a longer note. Y-axis title `CONNECTIVITY % OF BASELINE` in monospace ALL CAPS, rotated. Footer caption cites Kosmyna et al., MIT Media Lab, June 2025.
+
+> Reference implementation: `d3/02-homework-quiz-gap-fig-03.html`
+
+---
+
+### Figure 2.4 — Quiz score by condition
+
+Build a two-bar vertical chart in D3 v7 with error bars. X axis: `AI-assisted`, `Hand-coding`. Y axis: quiz score percentage, domain `[0, 100]`. AI-assisted bar in `--color-red` at 50%; hand-coding bar in `--color-slate` at 67%. Add 1-SE error bars (caps top and bottom) on each. Value labels above each bar. Between the two bars, draw a dashed vertical bracket in `--color-red` connecting the two values with a label `17 pts` at the midpoint. Hovering any bar shows the condition's full reading. Footer caption: 52 junior engineers, Python's Trio, Cohen's d = 0.738, p = 0.01.
+
+> Reference implementation: `d3/02-homework-quiz-gap-fig-04.html`
+
+---
+
+### Figure 2.5 — Where the gap is largest
+
+Build a horizontal bar chart in D3 v7. Y axis (categorical): three question types — `Declarative`, `Generative`, `Diagnostic`. X axis (continuous): performance gap in points, domain `[0, 25]`. Bars colored `--color-mark`, `--color-slate`, `--color-red` respectively. The `Diagnostic` row's label and value are bold and red. Y labels positioned to the left of the bars; value labels (`7 pts`, `13 pts`, `23 pts`) at the right end of each bar. Hovering any bar reveals the mechanism behind the gap. X-axis title `PERFORMANCE GAP (POINTS)` in monospace ALL CAPS. Footer caption ties debugging to the consolidation loop.
+
+> Reference implementation: `d3/02-homework-quiz-gap-fig-05.html`
+
+---
+
+### Figure 2.6 — Two students, six weeks
+
+Build a two-track line chart in D3 v7. X axis: weeks 1 through 6 as a `scalePoint`. Y axis: cognitive engagement on an abstract `[0, 5]` scale. Two lines: Student B in `--color-slate` rises linearly from 0 at week 1 to 5 at week 6; Student A in `--color-secondary` stays flat at 0 across all six weeks. Both lines drawn with circle markers at each week, with the week-6 endpoints rendered larger to highlight divergence. A dashed `--color-red` vertical line at week 6 connects the two endpoints, with the label `diverges` to its right. The X-axis label at week 6 reads `W6: quiz` in red. Hover any point for the per-week interaction description. Footer caption: the difference is not detectable at week one — it is exactly detectable at the unassisted task.
+
+> Reference implementation: `d3/02-homework-quiz-gap-fig-06.html`

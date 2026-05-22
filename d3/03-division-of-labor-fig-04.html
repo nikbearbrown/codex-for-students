@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Figure 3.4 — Same prompt, different outcomes</title>
+<style>
+:root {
+  --color-white: #FFFFFF;
+  --color-fill: #F5EFE8;
+  --color-ink: #2a1a0e;
+  --color-mark: #6B3520;
+  --color-red: #C8102E;
+  --color-slate: #1A3A5C;
+  --color-ochre: #C8860E;
+  --color-secondary: #545454;
+  --color-border: #D4D4D4;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-white: #111111;
+    --color-fill: #1a1612;
+    --color-ink: #F0EBE3;
+    --color-mark: #C8865E;
+    --color-red: #E8243A;
+    --color-slate: #6B8FB8;
+    --color-ochre: #D49A30;
+    --color-secondary: #A0978C;
+    --color-border: #2E2E2E;
+  }
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: var(--color-white); color: var(--color-ink); font-family: 'EB Garamond', Georgia, serif; padding: 24px; }
+#chart { width: 100%; min-height: 500px; }
+.tooltip { position: absolute; pointer-events: none; opacity: 0; background: var(--color-slate); color: var(--color-white); padding: 8px 12px; font-size: 12px; font-family: 'EB Garamond', Georgia, serif; max-width: 300px; line-height: 1.4; }
+text { font-family: 'EB Garamond', Georgia, serif; fill: var(--color-ink); }
+.caps { font-family: 'IBM Plex Mono', 'JetBrains Mono', monospace; letter-spacing: 0.08em; fill: var(--color-secondary); font-size: 10px; }
+.mono { font-family: 'IBM Plex Mono', monospace; font-size: 9px; }
+.secondary { fill: var(--color-secondary); }
+.panel { fill: var(--color-white); stroke: var(--color-border); stroke-width: 1; cursor: pointer; transition: stroke 120ms; }
+.panel:hover { stroke: var(--color-ink); }
+.panel-header { fill: var(--color-fill); stroke: var(--color-border); stroke-width: 1; pointer-events: none; }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+</style>
+</head>
+<body>
+<div id="chart" role="main"></div>
+<div class="tooltip" id="tt"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
+<script>
+function draw() {
+  d3.select('#chart').selectAll('*').remove();
+  const totalWidth = document.getElementById('chart').clientWidth || 700;
+  const totalHeight = 500;
+  const margin = { top: 56, right: 32, bottom: 56, left: 32 };
+  const chartWidth = totalWidth - margin.left - margin.right;
+
+  const svg = d3.select('#chart').append('svg')
+    .attr('width', totalWidth).attr('height', totalHeight)
+    .attr('role','img').attr('aria-labelledby','chart-title chart-desc');
+  svg.append('title').attr('id','chart-title').text('Same prompt, different outcomes');
+  svg.append('desc').attr('id','chart-desc').text('Side-by-side code snippets — pandas (run one) vs stdlib with audit (run two).');
+
+  const g = svg.append('g').attr('transform', `translate(${margin.left},${margin.top})`);
+  g.append('text').attr('class','caps').attr('y',-24).text('FIGURE 3.4 — SAME PROMPT, DIFFERENT OUTCOMES');
+  g.append('text').attr('y',0).attr('font-weight','bold').attr('font-size',13).text('The supervisory intelligence happens after the generation');
+
+  const tt = d3.select('#tt');
+  function showTip(html){ tt.html(html).style('opacity',1); }
+  function moveTip(e){ tt.style('left',(e.pageX+12)+'px').style('top',(e.pageY-8)+'px'); }
+  function hideTip(){ tt.style('opacity',0); }
+
+  const panelW = (chartWidth - 12) / 2;
+
+  const panels = [
+    { x: 0, header:'RUN ONE — PANDAS', headerColor:'var(--color-secondary)', dotColor:'var(--color-red)',
+      code: [
+        ['import pandas as pd', 'var(--color-secondary)'],
+        ['', 'var(--color-secondary)'],
+        ['def word_counts(paths):', 'var(--color-secondary)'],
+        ['    out = []', 'var(--color-secondary)'],
+        ['    for p in paths:', 'var(--color-secondary)'],
+        ['        df = pd.read_csv(p)', 'var(--color-red)'],
+        ['        df["wc"] = df["content"]\\', 'var(--color-secondary)'],
+        ['          .apply(lambda s: len(s.split()))', 'var(--color-secondary)'],
+        ['        out.append(df)', 'var(--color-secondary)'],
+        ['    return pd.concat(out)', 'var(--color-secondary)']
+      ],
+      annotTitle: '→ no quoting / dialect handling',
+      annotTitleColor: 'var(--color-red)',
+      annot: ["Curly quotes inside a 'content' field", 'break the column boundary silently.'],
+      outcome: ['200-word "article" that\'s actually 1,700.', 'Afternoon lost to debugging.'],
+      tip: 'Run one: pandas defaults applied to a non-default situation. The function compiles. The tests pass. The number is wrong for the case Seth\'s actual data hit a month later.' },
+    { x: panelW+12, header:'RUN TWO — STDLIB + AUDIT', headerColor:'var(--color-secondary)', dotColor:'var(--color-slate)',
+      code: [
+        ['import csv  # WORD_DEFINITION: see note', 'var(--color-secondary)'],
+        ['', 'var(--color-secondary)'],
+        ['def word_counts(paths):', 'var(--color-secondary)'],
+        ['    out = []', 'var(--color-secondary)'],
+        ['    for p in paths:', 'var(--color-secondary)'],
+        ['        rows = csv.DictReader(', 'var(--color-slate)'],
+        ["          open(p, encoding='utf-8'),", 'var(--color-slate)'],
+        ['          quoting=csv.QUOTE_ALL)', 'var(--color-slate)'],
+        ['        for r in rows:', 'var(--color-slate)'],
+        ['          out.append(count(r, errors))', 'var(--color-slate)'],
+        ['    return out, errors', 'var(--color-secondary)']
+      ],
+      annotTitle: '→ explicit quoting, error path',
+      annotTitleColor: 'var(--color-slate)',
+      annot: ['PA, PF, TO, IJ, EI applied to the', 'function before it ships.'],
+      outcome: ['Quoted dialogue flagged for review.', 'Schedule generated correctly.'],
+      tip: 'Run two: same prompt, same Codex. Then Seth applied the five capacities. He audited (PA), reformulated for stdlib (PF), orchestrated edge-case tests (TO), defined "word" for his domain (IJ), and checked the contract with the downstream script (EI).' }
+  ];
+
+  panels.forEach(p => {
+    g.append('rect').attr('class','panel').attr('x',p.x).attr('y',32).attr('width',panelW).attr('height',360)
+      .on('mouseenter',()=>showTip(`<strong>${p.header}</strong><br/>${p.tip}`))
+      .on('mousemove',moveTip).on('mouseleave',hideTip);
+    g.append('rect').attr('class','panel-header').attr('x',p.x).attr('y',32).attr('width',panelW).attr('height',32);
+    g.append('text').attr('class','caps').attr('x',p.x+panelW/2).attr('y',53).attr('text-anchor','middle').text(p.header);
+
+    p.code.forEach((row, i) => {
+      g.append('text').attr('class','mono').attr('x',p.x+12).attr('y',82+i*14).attr('fill',row[1]).text(row[0]);
+    });
+
+    g.append('circle').attr('cx',p.x+6).attr('cy',150).attr('r',4).attr('fill',p.dotColor);
+    g.append('text').attr('x',p.x+12).attr('y',244).attr('font-size',11).attr('font-weight','bold').attr('fill',p.annotTitleColor).text(p.annotTitle);
+    p.annot.forEach((line, i) => {
+      g.append('text').attr('class','secondary').attr('x',p.x+12).attr('y',260+i*14).attr('font-size',10).text(line);
+    });
+    g.append('text').attr('class','secondary').attr('x',p.x+12).attr('y',304).attr('font-size',11).attr('font-style','italic').text('Outcome:');
+    p.outcome.forEach((line, i) => {
+      g.append('text').attr('class','secondary').attr('x',p.x+12).attr('y',320+i*14).attr('font-size',11).attr('font-style','italic').text(line);
+    });
+  });
+
+  g.append('line').attr('x1',0).attr('y1',404).attr('x2',chartWidth).attr('y2',404)
+    .attr('stroke','var(--color-border)').attr('stroke-width',0.75).attr('stroke-dasharray','4 3');
+  g.append('text').attr('class','secondary').attr('y',422).attr('font-size',10).text('Same prompt, same Codex. The difference is fifteen minutes of supervisory work — paid back in an afternoon not lost.');
+}
+draw();
+const ro = new ResizeObserver(() => draw());
+ro.observe(document.getElementById('chart'));
+</script>
+</body>
+</html>

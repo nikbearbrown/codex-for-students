@@ -1,0 +1,74 @@
+<svg viewBox="0 0 700 480" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">Knuth's literate programming, applied to AGENTS.md</title>
+  <desc id="desc">Two side-by-side panels comparing a literate document — code with human-readable prose woven through it — against a bare-code panel where the prose is absent. The literate version serves three readers; the bare version serves only the machine.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#2a1a0e"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="700" height="480" fill="#FFFFFF"/>
+
+  <text x="32" y="56" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="10" letter-spacing="0.08em" fill="#545454">FIGURE 7.2 — LITERATE VS. BARE</text>
+  <text x="32" y="88" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="13" font-weight="bold" fill="#2a1a0e">Knuth's discipline applied to the file Codex reads every session</text>
+
+  <!-- Left: literate (with prose) — highlighted -->
+  <g>
+    <rect x="32" y="110" width="306" height="290" fill="#FFFFFF" stroke="#C8102E" stroke-width="1"/>
+    <rect x="32" y="110" width="306" height="32" fill="#F5EFE8" stroke="#C8102E" stroke-width="1"/>
+    <text x="46" y="131" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="10" letter-spacing="0.08em" fill="#C8102E" font-weight="bold">LITERATE — PROSE + RULE</text>
+
+    <!-- Prose section -->
+    <text x="48" y="162" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="10" fill="#2a1a0e">All requests go through the central client</text>
+    <text x="48" y="176" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="10" fill="#2a1a0e">because we hit rate limits in feature modules</text>
+    <text x="48" y="190" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="10" fill="#2a1a0e">that bypassed it during the v0.3 incident.</text>
+
+    <!-- Rule (mono) -->
+    <rect x="48" y="208" width="274" height="44" fill="#F5EFE8" stroke="#D4D4D4" stroke-width="1"/>
+    <text x="58" y="226" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="10" letter-spacing="0.08em" fill="#2a1a0e">RULE — NO DIRECT HTTP CALLS</text>
+    <text x="58" y="242" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="9" letter-spacing="0.08em" fill="#545454">USE NetClient.request()</text>
+
+    <!-- Three readers -->
+    <line x1="48" y1="278" x2="322" y2="278" stroke="#D4D4D4" stroke-width="0.75" stroke-dasharray="4 3"/>
+    <text x="48" y="298" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="9" letter-spacing="0.08em" fill="#545454">SERVES THREE READERS</text>
+
+    <rect x="48" y="310" width="84" height="42" fill="#F5EFE8" stroke="#D4D4D4" stroke-width="1"/>
+    <text x="90" y="326" text-anchor="middle" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="9" letter-spacing="0.08em" fill="#545454">YOU</text>
+    <text x="90" y="342" text-anchor="middle" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="10" font-style="italic" fill="#2a1a0e">remember why</text>
+
+    <rect x="143" y="310" width="84" height="42" fill="#F5EFE8" stroke="#D4D4D4" stroke-width="1"/>
+    <text x="185" y="326" text-anchor="middle" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="9" letter-spacing="0.08em" fill="#545454">COLLAB.</text>
+    <text x="185" y="342" text-anchor="middle" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="10" font-style="italic" fill="#2a1a0e">understand</text>
+
+    <rect x="238" y="310" width="84" height="42" fill="#F5EFE8" stroke="#D4D4D4" stroke-width="1"/>
+    <text x="280" y="326" text-anchor="middle" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="9" letter-spacing="0.08em" fill="#545454">CODEX</text>
+    <text x="280" y="342" text-anchor="middle" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="10" font-style="italic" fill="#2a1a0e">follow</text>
+
+    <text x="48" y="380" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="10" font-style="italic" fill="#C8102E">The "why" is the entry's load-bearing part.</text>
+  </g>
+
+  <!-- Right: bare (rule only) -->
+  <g>
+    <rect x="362" y="110" width="306" height="290" fill="#FFFFFF" stroke="#D4D4D4" stroke-width="1"/>
+    <rect x="362" y="110" width="306" height="32" fill="#F5EFE8" stroke="#D4D4D4" stroke-width="1"/>
+    <text x="376" y="131" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="10" letter-spacing="0.08em" fill="#545454" font-weight="bold">BARE — RULE ALONE</text>
+
+    <rect x="378" y="208" width="274" height="44" fill="#F5EFE8" stroke="#D4D4D4" stroke-width="1"/>
+    <text x="388" y="226" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="10" letter-spacing="0.08em" fill="#2a1a0e">RULE — NO DIRECT HTTP CALLS</text>
+    <text x="388" y="242" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="9" letter-spacing="0.08em" fill="#545454">USE NetClient.request()</text>
+
+    <line x1="378" y1="278" x2="652" y2="278" stroke="#D4D4D4" stroke-width="0.75" stroke-dasharray="4 3"/>
+    <text x="378" y="298" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="9" letter-spacing="0.08em" fill="#545454">SERVES ONE READER</text>
+
+    <rect x="488" y="310" width="84" height="42" fill="#F5EFE8" stroke="#D4D4D4" stroke-width="1"/>
+    <text x="530" y="326" text-anchor="middle" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="9" letter-spacing="0.08em" fill="#545454">CODEX</text>
+    <text x="530" y="342" text-anchor="middle" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="10" font-style="italic" fill="#2a1a0e">follow only</text>
+
+    <text x="378" y="380" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="10" font-style="italic" fill="#545454">Future-you forgets why. Pattern-matched around.</text>
+  </g>
+
+  <!-- Bottom rule + caption -->
+  <line x1="32" y1="420" x2="668" y2="420" stroke="#D4D4D4" stroke-width="0.75" stroke-dasharray="4 3"/>
+  <text x="32" y="442" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="10" fill="#545454">Knuth's argument: explain to humans what you want the computer to do. AGENTS.md is the artifact</text>
+  <text x="32" y="458" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="10" fill="#545454">that has to read well to three audiences at once — you, future collaborators, and Codex.</text>
+</svg>

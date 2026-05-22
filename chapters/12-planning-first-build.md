@@ -20,7 +20,9 @@ The planning sequence has six steps. Each takes a few minutes. Together they pro
 
 The sequence is front-loaded by design. Everything before Step 6 is thinking work. Step 6 is the first Code Mode prompt. The investment is repaid by every prompt that does not need to be rolled back because the planning caught what would have made it wrong.
 
-<!-- → [DIAGRAM: The planning sequence — Ask Mode interrogation → Problem formulation → Spec → Ask Mode plan → Review and approve → Code Mode execution. Phase gates labeled. Editorial style.] -->
+![Horizontal flow of five planning phases — Question, Constraints, Plan, Approval, Build — connected by arrows, with Approval highlighted as the gate.](images/12-planning-first-build-fig-01.png)
+
+*Figure 12.1 — The planning sequence. Everything before Build is thinking work; the highlighted gate is plan review.*
 
 **Step 1: Ask Mode interrogation.** Use Ask Mode to investigate the problem space before committing to a frame. Ask Codex what considerations matter. Note the ones you had not thought of. This is PF in its earliest form — not writing a spec, but discovering what the spec needs to contain.
 
@@ -34,73 +36,83 @@ The sequence is front-loaded by design. Everything before Step 6 is thinking wor
 
 **Step 6: First Code Mode prompt.** Now you start the build. The prompt references the plan; the plan references the spec; the spec references AGENTS.md. The chain is complete.
 
-<!-- → [TABLE: Six steps at a glance — three columns: step number / step name / artifact produced. Rows: interrogation → notes; formulation → three sentences; spec → half-page contract; Ask Mode plan → Codex draft; plan review → corrected plan; first Code Mode prompt → build begins. Quick reference for the sequence.] -->
+| # | Step | Artifact produced |
+|---|---|---|
+| 1 | Ask Mode interrogation | Notes on the considerations you hadn't thought of |
+| 2 | One-sentence problem formulation | Three sentences: what it does, what it touches, what it never touches |
+| 3 | Minimum viable spec | Half-page contract — problem, architecture, user flows, user needs, out of scope |
+| 4 | Ask Mode plan | Codex's draft sequence of steps with dependencies |
+| 5 | Plan review | The same plan, with the unstated assumptions corrected in your words |
+| 6 | First Code Mode prompt | The build begins — prompt → plan → spec → AGENTS.md |
 
 ---
 
 ## A Worked Planning Session
 
-The best way to understand the sequence is to watch it run. Here is Seth's planning for a personal-finance tool — a script that reads his bank CSV exports and produces a monthly summary.
+The best way to understand the sequence is to watch it run. Here is Seth's planning for an asset-budget tracker for Haunt & Harvest — a script that reads his Godot export logs and produces a per-build markdown summary of asset sizes, scene counts, and audio file counts so he can spot regressions before he ships a release.
 
 **Step 1: Ask Mode interrogation (10 minutes).**
 
-Seth asks Codex about effective personal-finance summary design. The interrogation surfaces things he had not considered: categorization approaches (auto vs. manual), recurring-transaction detection, the difference between a cash-flow view and a net-worth view, multi-account handling. Seth had been thinking only about cash flow. The net-worth view is what he actually wants.
+Seth asks Codex about effective game-asset-budget tracking design. The interrogation surfaces things he had not considered: categorization approaches (auto-by-folder vs. manual tags), recurring large-asset detection across builds, the difference between a per-build view and a delta-versus-last-build view, multi-platform export handling (Windows + Mac + Linux). Seth had been thinking only about a per-build snapshot. The delta-versus-last-build view is what he actually wants.
 
 Ten minutes in Ask Mode changes the thing he is building. That is what the interrogation step is for.
 
 **Step 2: One-sentence formulation (3 minutes).**
 
-- *What does it do?* A script that reads bank CSV exports and produces a monthly net-worth summary with cash-flow detail.
-- *What does it touch?* The CSV files (read), a local SQLite database for transaction history (read/write), a markdown output file (write).
-- *What does it never touch?* Bank credentials. The cloud. Either one would make this tool a different kind of tool than Seth wants.
+- *What does it do?* A script that reads Godot export logs and produces a per-build markdown summary of asset sizes, scene counts, and audio file counts, with deltas against the previous build.
+- *What does it touch?* The export-log CSVs Godot writes (read), a local SQLite database for build history (read/write), a markdown output file (write).
+- *What does it never touch?* The Godot project files themselves. The cloud. Either one would make this tool a different kind of tool than Seth wants.
 
 **Step 3: Minimum viable spec (15 minutes).**
 
 ```markdown
-# Spec — Personal Finance Summary
+# Spec — Haunt & Harvest Asset Budget Tracker
 
 ## Problem
-A local Python script that processes manually-downloaded bank CSV exports
-into a monthly net-worth summary with cash-flow detail.
+A local Python script that processes Godot export logs from each release
+build into a per-build markdown summary, with delta-versus-last-build detail.
 
 ## Architecture
 - Single Python script + a SQLite database.
-- CSVs in ~/finance/inputs/; output to ~/finance/reports/YYYY-MM.md.
+- Export logs in ~/HauntAndHarvest/exports/; output to
+  ~/HauntAndHarvest/budgets/v{build}.md.
 - One module per concern: parse, dedupe, categorize, summarize.
 
 ## User flows
-1. I download new CSVs from each bank.
+1. I export a new build from Godot; the engine writes its export log.
 2. I run the script.
-3. It reads new CSVs, deduplicates against existing SQLite, categorizes
-   new transactions (auto if rules match; "uncategorized" otherwise).
-4. It writes a summary markdown file for the most recent complete month.
+3. It reads the new log, deduplicates assets against existing SQLite
+   build history, categorizes new assets by folder convention (auto if
+   rules match; "uncategorized" otherwise).
+4. It writes a summary markdown file for the most recent build.
 5. I review the markdown; manually categorize anything "uncategorized";
    re-run.
 
 ## User needs
 - Idempotent: running twice produces the same output.
-- Dedup is reliable across CSV format differences between banks.
+- Dedup is reliable across export-log format differences between
+  Windows and Mac builds.
 - Categorization rules are in a config file I can edit.
-- Output is one markdown file per month, under 200 lines, readable on phone.
+- Output is one markdown file per build, under 200 lines, readable on phone.
 
 ## Out of scope
-- Automatic CSV downloading.
-- Multi-currency.
-- Tax calculation.
-- Investment portfolio (separate tool).
+- Automatic build triggering.
+- Mobile (Android/iOS) exports.
+- Per-shader complexity analysis.
+- Audio compression suggestions (separate tool).
 ```
 
-The spec is one page. It took fifteen minutes. Notice what it does: it makes the out-of-scope decisions as explicit as the in-scope decisions. The "never touch bank credentials" from Step 2 becomes a section heading. The net-worth view Seth discovered in Step 1 becomes the problem statement. The spec is the formulation hardened into a contract.
+The spec is one page. It took fifteen minutes. Notice what it does: it makes the out-of-scope decisions as explicit as the in-scope decisions. The "never touch the Godot project files" from Step 2 becomes a section heading. The delta-versus-last-build view Seth discovered in Step 1 becomes the problem statement. The spec is the formulation hardened into a contract.
 
 **Step 4: Ask Mode plan (5 minutes).**
 
 Seth asks Codex to propose an implementation plan given the spec. Codex returns seven steps with dependencies:
 
 1. Set up SQLite schema; migration script.
-2. CSV parser per bank (format detection on first run, then cached).
-3. Deduplication logic against existing transactions.
+2. Export-log parser per platform (format detection on first run, then cached).
+3. Deduplication logic against existing build history.
 4. Categorization rule engine.
-5. Monthly summary generator.
+5. Per-build summary generator with deltas.
 6. Main script orchestration.
 7. Tests for each module.
 
@@ -108,11 +120,11 @@ Seth asks Codex to propose an implementation plan given the spec. Codex returns 
 
 Seth reads the plan. Three things are wrong.
 
-First: Step 2 assumes a single CSV format. Seth has two banks with different formats. He corrects: "Step 2 needs to handle two distinct bank CSV formats. Format detection is per-file based on header row matching."
+First: Step 2 assumes a single export-log format. Seth's Windows and Mac exports produce logs with different column orders. He corrects: "Step 2 needs to handle two distinct platform log formats. Format detection is per-file based on header row matching."
 
 Second: Step 4 implies categorization rules are hardcoded. The spec says they should be in a config file. He corrects.
 
-Third: Step 5 does not specify the markdown output format. The spec says under 200 lines, with sections for net worth, cash flow by category, and an uncategorized list. He adds it.
+Third: Step 5 does not specify the markdown output format. The spec says under 200 lines, with sections for total budget, asset count by folder, audio file counts, and an uncategorized list. He adds it.
 
 The plan is now in his words. He approves.
 
@@ -120,13 +132,22 @@ The plan is now in his words. He approves.
 
 Seth writes a five-element specification for the SQLite schema (per Chapter 9) and starts the build. The build that follows is ninety minutes. Total planning: thirty-eight minutes. Total conducted build: two hours and eight minutes.
 
-Compare that to the alternative. Past-Seth would have opened a new file and started typing after two minutes of thought. Past-Seth would have spent three hours stop-starting, discovered the two-bank CSV problem at hour two, found the hardcoded categorization at hour two and a half, realized at the end that the output format was undefined. Same build. Worse outcome. More time.
+Compare that to the alternative. Past-Seth would have opened a new file and started typing after two minutes of thought. Past-Seth would have spent three hours stop-starting, discovered the two-platform log problem at hour two, found the hardcoded categorization at hour two and a half, realized at the end that the output format was undefined. Same build. Worse outcome. More time.
 
 The planning did not add forty minutes. It removed ninety.
 
-<!-- → [TABLE: Planning session timeline — six rows, one per step. Columns: step name, time spent, artifact produced. Shows the front-loaded investment and what each step generates.] -->
+| Step | Time | Artifact produced |
+|---|---|---|
+| Ask Mode interrogation | 10 min | Notes — surfaced delta-vs-last-build view and the Windows/Mac log split |
+| One-sentence formulation | 3 min | Three sentences: what it does, what it reads/writes, what it never touches |
+| Minimum viable spec | 15 min | One-page spec with five sections, including explicit Out-of-scope list |
+| Ask Mode plan | 5 min | Codex's seven-step plan with dependencies |
+| Plan review | 5 min | Three corrections — platform log formats, config-file rules, output format |
+| First Code Mode prompt | — | Five-element spec for the SQLite schema; build begins |
 
-<!-- → [IMAGE: Annotated plan diff — left side: Codex's original seven-step plan; right side: Seth's corrected version, with three inline annotations marking the single-format assumption, the hardcoded-rules assumption, and the missing output-format spec. Caption: "The three corrections Seth made in Step 5. Each one was worth more than the five minutes the review took."] -->
+![Two side-by-side panels. Left: Codex's original seven-step plan with three red dots marking buried assumptions. Right: Seth's corrected version with three inline italic annotations — scope cut for the single-format assumption, added for the config-file requirement, added for the explicit output format — plus a v2 deferral.](images/12-planning-first-build-fig-02.png)
+
+*Figure 12.2 — Annotated plan diff. The three corrections Seth made in Step 5 — each one worth more than the five minutes the review took.*
 
 ---
 
@@ -170,7 +191,9 @@ Without the spec and plan, Code Mode is generating against your one-sentence pro
 
 Planning is not overhead added to building. Planning is the work that makes building reliable.
 
-<!-- → [INFOGRAPHIC: Two build timelines side by side — left: unplanned build (early start, multiple rollbacks, late discovery of assumptions, total time 3h). Right: conducted build (front-loaded planning, fewer rollbacks, earlier completion, total time 2h10m). Columns show where time goes in each.] -->
+![Two stacked horizontal timelines. The top — planned — shows a steady forty-minute thinking block followed by a ninety-minute build block, finishing at 2:10. The bottom — unplanned — shows four forward-work segments interrupted by three rework loops, finishing at 3:00.](images/12-planning-first-build-fig-03.png)
+
+*Figure 12.3 — Planned versus unplanned. Same build, two trajectories. The planned timeline is steady because assumptions were caught upstream; the unplanned one is jagged because they surfaced as rework.*
 
 ---
 
@@ -186,7 +209,9 @@ Planning is not overhead added to building. Planning is the work that makes buil
 
 **The ratio changes with experience.** For a first conducted build, planning is thirty to forty percent of total build time. By the third build, it is closer to ten to fifteen percent — because the spec template is familiar, the interrogation is faster, and the plan-review eye is sharper. The overhead is front-loaded once, then amortized.
 
-<!-- → [CHART: Planning time as percentage of total build time — line chart across builds 1 through 10. Shows the ratio declining from ~35% at build 1 to ~12% at build 10. Conveys that the overhead is front-loaded once, not permanent.] -->
+![A U-shaped line chart. X-axis is minutes spent planning from zero to ninety; y-axis is total session time. The curve dips at around thirty to forty-five minutes — the sweet spot — and rises at both extremes. Zone labels: too little (rework loops at hour two), too much (over-specified, slow start).](images/12-planning-first-build-fig-04.png)
+
+*Figure 12.4 — The planning-time U-curve. Both extremes lengthen the session — too little planning spends the cost downstream as rework; too much spends it upstream as over-specification.*
 
 ---
 
@@ -243,3 +268,43 @@ The plan is complete. The spec is approved. The next chapter executes the plan.
 ---
 
 [^1]: Alexander, C. *Notes on the Synthesis of Form*. Harvard University Press, 1964. See also *A Pattern Language* (Oxford University Press, 1977).
+
+---
+
+## Prompts
+
+Use these prompts with Claude to generate interactive D3 v7 versions of the figures in this chapter. Each produces a standalone HTML file you can open in a browser and modify freely.
+
+**Prerequisites:** Load `brutalist/CLAUDE.md` and `brutalist/DESIGN.md` into your Claude project context before using these prompts. They define the stack, naming conventions, color system, and typography the figures use.
+
+---
+
+### Figure 12.1 — The planning sequence
+
+Build a horizontal five-phase flow in D3 v7. Each phase is a rectangular card with a `--color-fill` header strip containing a monospace ALL CAPS label (`QUESTION`, `CONSTRAINTS`, `PLAN`, `APPROVAL`, `BUILD`) and a body with a two-line bold title and a three-line `--color-secondary` gloss. Cards are connected left-to-right with single-headed arrows that share one `<defs>` arrowhead marker. The fourth card (`APPROVAL`) is highlighted in `--color-red` — header text, code label, and card stroke all switch to red. Below the cards, draw two bracketed time spans: a long bracket under cards 1–4 labeled `Thinking work — about forty minutes`, and a short bracket under card 5 labeled `Build — ninety`. Hovering any card shows a tooltip with the longer step description. Dashed footer rule plus a two-line caption noting that a plan approved without correction is a plan you have not read.
+
+> Reference implementation: `d3/12-planning-first-build-fig-01.html`
+
+---
+
+### Figure 12.2 — Annotated plan diff
+
+Build a two-panel side-by-side annotated plan display in D3 v7. Left panel header `BEFORE — CODEX DRAFT` in monospace ALL CAPS over a `--color-fill` header strip; right panel header `AFTER — SETH'S CORRECTION` over the same strip but in `--color-red` with the panel border also in red. Inside the left panel, render seven monospace plan lines; place a red dot at the left margin opposite the three lines that contain buried assumptions (the parser, the categorization engine, the summary generator). Inside the right panel, render the same seven steps with three inline italic annotations in `--color-red` directly below the affected lines: `scope cut: single-format assumption`, `added: config-file requirement`, `added: output format made explicit`, plus a final greyed `deferred to v2: trend-chart view`. Between panels, draw a single-headed arrow labeled `REVIEW` in monospace ALL CAPS. Hovering either panel shows the longer narrative (the buried assumptions on the left, the specific corrections on the right). Dashed footer rule plus a one-line caption naming what the red marks versus italic notes are.
+
+> Reference implementation: `d3/12-planning-first-build-fig-02.html`
+
+---
+
+### Figure 12.3 — Planned versus unplanned timelines
+
+Build two stacked horizontal timelines in D3 v7. Shared x-axis: minutes from 0 to 210, with ticks at every 30 minutes. Each timeline is a `--color-fill` background rectangle the full width of the chart. The top timeline (`PLANNED — 2h 10m` in monospace ALL CAPS, `--color-ink` border) contains two segments: a `thinking` block (40 min, white fill, grey border) and a `build` block (90 min, white fill). Mark the 2:10 finish with a `--color-slate` vertical line and a monospace `DONE 2:10` label. The bottom timeline (`UNPLANNED — 3h 00m`, `--color-red` border) contains four white `build` segments interleaved with three `--color-fill`-on-`--color-red` `rework` segments, italic red labels on the rework blocks. Mark the 3:00 finish with a `--color-red` vertical line. Below the axis, a small legend showing the two segment styles. Hovering any segment shows what happened in that block. Dashed footer rule plus a caption naming what makes each trajectory's shape.
+
+> Reference implementation: `d3/12-planning-first-build-fig-03.html`
+
+---
+
+### Figure 12.4 — The planning-time U-curve
+
+Build a single-curve line chart in D3 v7. X axis: `MINUTES PLANNING →` in monospace ALL CAPS, domain `[0, 90]`, ticks every 15. Y axis: `TOTAL SESSION TIME →` rotated, monospace ALL CAPS, with hint labels at 1.5h / 2h / 3h. Plot area filled with `--color-fill` and bordered with `--color-border`. Render a U-shaped Catmull-Rom curve in `--color-red` with values approximately: 0→180, 15→158, 30→135, 38→130 (minimum), 45→132, 60→148, 75→175, 90→188. Mark the minimum with a `--color-red` dot, a vertical dashed `--color-red` segment dropping to the x-axis, and a two-line annotation `sweet spot / ≈ 30–45 min` in red, bold then italic. Add two zone labels: `too little` (bold) with subtitle `rework loops at hour two` (secondary) at the left, and `too much` with `over-specified, slow start` at the right. Hovering the curve or any of seven hover-dots placed along it shows a longer description of what's happening at that planning amount. Dashed footer rule plus a one-line caption naming both extremes' costs.
+
+> Reference implementation: `d3/12-planning-first-build-fig-04.html`

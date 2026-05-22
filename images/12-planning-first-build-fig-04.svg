@@ -1,0 +1,63 @@
+<svg viewBox="0 0 700 480" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">The planning-time U-curve</title>
+  <desc id="desc">A line chart. X-axis is minutes spent planning, from zero to ninety. Y-axis is total session time. The curve is U-shaped: too little planning yields long sessions of rework; too much planning yields long sessions of over-specification. The minimum sits near thirty to forty minutes.</desc>
+
+  <rect x="0" y="0" width="700" height="480" fill="#FFFFFF"/>
+
+  <text x="32" y="48" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="10" letter-spacing="0.08em" fill="#545454">FIGURE 12.4 — THE PLANNING-TIME U-CURVE</text>
+  <text x="32" y="76" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="13" font-weight="bold" fill="#2a1a0e">Too little planning lengthens the session — too much does too</text>
+
+  <!-- Plot area -->
+  <rect x="80" y="108" width="540" height="252" fill="#F5EFE8" stroke="#D4D4D4" stroke-width="1"/>
+
+  <!-- Y axis label -->
+  <text x="48" y="234" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="9" letter-spacing="0.08em" fill="#545454" transform="rotate(-90 48 234)">TOTAL SESSION TIME →</text>
+
+  <!-- X axis label -->
+  <text x="350" y="392" text-anchor="middle" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="9" letter-spacing="0.08em" fill="#545454">MINUTES PLANNING →</text>
+
+  <!-- X axis ticks: 0, 15, 30, 45, 60, 75, 90 mapped to 80..620 -->
+  <line x1="80" y1="360" x2="80" y2="364" stroke="#545454" stroke-width="0.75"/>
+  <text x="80" y="378" text-anchor="middle" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="9" fill="#545454">0</text>
+  <line x1="170" y1="360" x2="170" y2="364" stroke="#545454" stroke-width="0.75"/>
+  <text x="170" y="378" text-anchor="middle" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="9" fill="#545454">15</text>
+  <line x1="260" y1="360" x2="260" y2="364" stroke="#545454" stroke-width="0.75"/>
+  <text x="260" y="378" text-anchor="middle" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="9" fill="#545454">30</text>
+  <line x1="350" y1="360" x2="350" y2="364" stroke="#545454" stroke-width="0.75"/>
+  <text x="350" y="378" text-anchor="middle" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="9" fill="#545454">45</text>
+  <line x1="440" y1="360" x2="440" y2="364" stroke="#545454" stroke-width="0.75"/>
+  <text x="440" y="378" text-anchor="middle" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="9" fill="#545454">60</text>
+  <line x1="530" y1="360" x2="530" y2="364" stroke="#545454" stroke-width="0.75"/>
+  <text x="530" y="378" text-anchor="middle" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="9" fill="#545454">75</text>
+  <line x1="620" y1="360" x2="620" y2="364" stroke="#545454" stroke-width="0.75"/>
+  <text x="620" y="378" text-anchor="middle" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="9" fill="#545454">90</text>
+
+  <!-- Y axis hint markers -->
+  <text x="72" y="148" text-anchor="end" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="9" fill="#545454">3h</text>
+  <text x="72" y="252" text-anchor="end" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="9" fill="#545454">2h</text>
+  <text x="72" y="356" text-anchor="end" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="9" fill="#545454">1h</text>
+
+  <!-- U-curve: total session time -->
+  <!-- approx points: (0,150)=180 too-little; (15,200)=160; (30,260)=125 dip; (45,290)=115; (60,330)=140; (75,500)=170; (90,580)=180 -->
+  <!-- map: x=80 + (min/90)*540 ; y interpolation in plot 108..360, lower y = higher value -->
+  <path d="M 80 150 Q 170 175, 260 230 T 440 230 Q 530 250, 620 165" stroke="#C8102E" stroke-width="2.5" fill="none"/>
+
+  <!-- Sweet spot marker -->
+  <circle cx="350" cy="230" r="5" fill="#C8102E"/>
+  <line x1="350" y1="230" x2="350" y2="360" stroke="#C8102E" stroke-width="0.75" stroke-dasharray="3 2"/>
+  <text x="356" y="222" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="11" font-weight="bold" fill="#C8102E">sweet spot</text>
+  <text x="356" y="236" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="10" font-style="italic" fill="#C8102E">≈ 30–45 min</text>
+
+  <!-- Left zone label: too little -->
+  <text x="120" y="148" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="11" font-weight="bold" fill="#2a1a0e">too little</text>
+  <text x="92" y="164" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="10" fill="#545454">rework loops at hour two</text>
+
+  <!-- Right zone label: too much -->
+  <text x="498" y="148" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="11" font-weight="bold" fill="#2a1a0e">too much</text>
+  <text x="476" y="164" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="10" fill="#545454">over-specified, slow start</text>
+
+  <!-- Bottom rule + caption -->
+  <line x1="32" y1="416" x2="668" y2="416" stroke="#D4D4D4" stroke-width="0.75" stroke-dasharray="4 3"/>
+  <text x="32" y="438" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="10" fill="#545454">The curve is U-shaped because both extremes cost time. Zero planning spends the cost downstream as rework. Excess planning spends it upstream as friction</text>
+  <text x="32" y="454" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="10" fill="#545454">over-specification a half-page contract did not need. The minimum is the half-page spec at roughly thirty to forty minutes for a first build.</text>
+</svg>

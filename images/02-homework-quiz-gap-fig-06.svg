@@ -1,0 +1,67 @@
+<svg viewBox="0 0 700 420" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">Two students, six weeks apart</title>
+  <desc id="desc">Two-track six-week timeline. Student A's cognitive engagement stays flat at zero across weeks 1-5; Student B's builds incrementally. Both submit identical artifacts at week 1. At week 6, the quiz score diverges sharply.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#2a1a0e"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="700" height="420" fill="#FFFFFF"/>
+
+  <text x="32" y="48" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="10" letter-spacing="0.08em" fill="#545454">FIGURE 2.6 — TWO STUDENTS, SIX WEEKS</text>
+  <text x="32" y="76" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="13" font-weight="bold" fill="#2a1a0e">The artifact was identical. The practitioner was not.</text>
+
+  <!-- Plot area -->
+  <rect x="80" y="110" width="540" height="220" fill="#F5EFE8" stroke="#D4D4D4" stroke-width="1"/>
+
+  <!-- Week labels (1..6 across) -->
+  <!-- x positions: 80, 170, 260, 350, 440, 530, 620 -->
+  <!-- Actually 6 weeks: 80(W1) ... 620(W6). step = (540)/5 = 108. -->
+  <!-- W1=80, W2=188, W3=296, W4=404, W5=512, W6=620 -->
+
+  <!-- Y axis label -->
+  <text x="48" y="220" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="9" letter-spacing="0.08em" fill="#545454" transform="rotate(-90 48 220)">COGNITIVE ENGAGEMENT</text>
+
+  <!-- Two horizontal track guides -->
+  <text x="72" y="160" text-anchor="end" font-family="'EB Garamond', Georgia, serif" font-size="10" fill="#1A3A5C">Student B</text>
+  <text x="72" y="290" text-anchor="end" font-family="'EB Garamond', Georgia, serif" font-size="10" fill="#545454">Student A</text>
+
+  <!-- Student B (top track) — builds incrementally. Points rise. -->
+  <!-- baseline at y=290, peaks at y=140 -->
+  <polyline points="80,290 188,260 296,230 404,200 512,170 620,140" stroke="#1A3A5C" stroke-width="2" fill="none"/>
+  <circle cx="80" cy="290" r="4" fill="#1A3A5C"/>
+  <circle cx="188" cy="260" r="4" fill="#1A3A5C"/>
+  <circle cx="296" cy="230" r="4" fill="#1A3A5C"/>
+  <circle cx="404" cy="200" r="4" fill="#1A3A5C"/>
+  <circle cx="512" cy="170" r="4" fill="#1A3A5C"/>
+  <circle cx="620" cy="140" r="6" fill="#1A3A5C"/>
+
+  <!-- Student A (bottom track) — flat at y=290 -->
+  <polyline points="80,290 188,290 296,290 404,290 512,290 620,290" stroke="#545454" stroke-width="2" fill="none"/>
+  <circle cx="80" cy="290" r="4" fill="#545454"/>
+  <circle cx="188" cy="290" r="4" fill="#545454"/>
+  <circle cx="296" cy="290" r="4" fill="#545454"/>
+  <circle cx="404" cy="290" r="4" fill="#545454"/>
+  <circle cx="512" cy="290" r="4" fill="#545454"/>
+  <circle cx="620" cy="290" r="6" fill="#545454"/>
+
+  <!-- Week labels along bottom -->
+  <text x="80" y="350" text-anchor="middle" font-family="'EB Garamond', Georgia, serif" font-size="10" fill="#545454">W1</text>
+  <text x="188" y="350" text-anchor="middle" font-family="'EB Garamond', Georgia, serif" font-size="10" fill="#545454">W2</text>
+  <text x="296" y="350" text-anchor="middle" font-family="'EB Garamond', Georgia, serif" font-size="10" fill="#545454">W3</text>
+  <text x="404" y="350" text-anchor="middle" font-family="'EB Garamond', Georgia, serif" font-size="10" fill="#545454">W4</text>
+  <text x="512" y="350" text-anchor="middle" font-family="'EB Garamond', Georgia, serif" font-size="10" fill="#545454">W5</text>
+  <text x="620" y="350" text-anchor="middle" font-family="'EB Garamond', Georgia, serif" font-size="10" font-weight="bold" fill="#C8102E">W6: quiz</text>
+
+  <!-- W1 annotation: same grade -->
+  <text x="80" y="100" text-anchor="middle" font-family="'EB Garamond', Georgia, serif" font-size="10" font-style="italic" fill="#545454">same grade</text>
+
+  <!-- W6 annotation: divergence -->
+  <line x1="620" y1="146" x2="620" y2="284" stroke="#C8102E" stroke-width="1" stroke-dasharray="4 3"/>
+  <text x="635" y="220" font-family="'EB Garamond', Georgia, serif" font-size="10" font-weight="bold" fill="#C8102E">diverges</text>
+
+  <!-- Bottom rule + caption -->
+  <line x1="32" y1="374" x2="668" y2="374" stroke="#D4D4D4" stroke-width="0.75" stroke-dasharray="4 3"/>
+  <text x="32" y="396" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="10" fill="#545454">The difference between the two students is not detectable at week one. It is exactly detectable at the unassisted task.</text>
+</svg>

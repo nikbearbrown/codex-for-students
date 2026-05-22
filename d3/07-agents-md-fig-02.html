@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Figure 7.2 — Literate vs. bare</title>
+<style>
+:root {
+  --color-white: #FFFFFF;
+  --color-fill: #F5EFE8;
+  --color-ink: #2a1a0e;
+  --color-mark: #6B3520;
+  --color-red: #C8102E;
+  --color-slate: #1A3A5C;
+  --color-ochre: #C8860E;
+  --color-secondary: #545454;
+  --color-border: #D4D4D4;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-white: #111111;
+    --color-fill: #1a1612;
+    --color-ink: #F0EBE3;
+    --color-mark: #C8865E;
+    --color-red: #E8243A;
+    --color-slate: #6B8FB8;
+    --color-ochre: #D49A30;
+    --color-secondary: #A0978C;
+    --color-border: #2E2E2E;
+  }
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: var(--color-white); color: var(--color-ink); font-family: 'EB Garamond', Georgia, serif; padding: 24px; }
+#chart { width: 100%; min-height: 500px; }
+.tooltip { position: absolute; pointer-events: none; opacity: 0; background: var(--color-slate); color: var(--color-white); padding: 8px 12px; font-size: 12px; font-family: 'EB Garamond', Georgia, serif; max-width: 260px; line-height: 1.4; }
+text { font-family: 'EB Garamond', Georgia, serif; fill: var(--color-ink); }
+.caps { font-family: 'IBM Plex Mono', 'JetBrains Mono', monospace; letter-spacing: 0.08em; fill: var(--color-secondary); font-size: 10px; }
+.secondary { fill: var(--color-secondary); }
+.panel { cursor: pointer; transition: fill 120ms; }
+.panel:hover { fill: var(--color-fill); }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+</style>
+</head>
+<body>
+<div id="chart" role="main"></div>
+<div class="tooltip" id="tt"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
+<script>
+function draw() {
+  d3.select('#chart').selectAll('*').remove();
+  const totalWidth = document.getElementById('chart').clientWidth || 700;
+  const totalHeight = 480;
+
+  const svg = d3.select('#chart').append('svg').attr('viewBox',`0 0 ${totalWidth} ${totalHeight}`)
+    .attr('role','img').attr('aria-labelledby','chart-title chart-desc');
+  svg.append('title').attr('id','chart-title').text("Literate vs. bare — Knuth applied to AGENTS.md");
+  svg.append('desc').attr('id','chart-desc').text('Two panels comparing an AGENTS.md entry written with prose and rationale against one with the rule alone.');
+
+  svg.append('text').attr('class','caps').attr('x',32).attr('y',56).text('FIGURE 7.2 — LITERATE VS. BARE');
+  svg.append('text').attr('x',32).attr('y',88).attr('font-weight','bold').attr('font-size',13).text("Knuth's discipline applied to the file Codex reads every session");
+
+  const tt = d3.select('#tt');
+  function showTip(html){ tt.html(html).style('opacity',1); }
+  function moveTip(e){ tt.style('left',(e.pageX+12)+'px').style('top',(e.pageY-8)+'px'); }
+  function hideTip(){ tt.style('opacity',0); }
+
+  const panelW = (totalWidth - 32 - 32 - 24) / 2;
+
+  const panels = [
+    { x:32, label:'LITERATE — PROSE + RULE', stroke:'var(--color-red)', labelColor:'var(--color-red)',
+      proseLines:['All requests go through the central client','because we hit rate limits in feature modules','that bypassed it during the v0.3 incident.'],
+      readersLabel:'SERVES THREE READERS', readers:[{cap:'YOU', italic:'remember why'},{cap:'COLLAB.', italic:'understand'},{cap:'CODEX', italic:'follow'}],
+      footer:'The "why" is the entry\'s load-bearing part.', footerColor:'var(--color-red)', highlight:true,
+      tip:'Prose carries the reasoning. Months later, future-you can read it and reconstruct the decision. A new collaborator joins and understands without asking. Codex follows the rule and inherits the context.' },
+    { x:32+panelW+24, label:'BARE — RULE ALONE', stroke:'var(--color-border)', labelColor:'var(--color-secondary)',
+      proseLines:[], readersLabel:'SERVES ONE READER', readers:[{cap:'CODEX', italic:'follow only'}], onlyLast:true,
+      footer:'Future-you forgets why. Pattern-matched around.', footerColor:'var(--color-secondary)',
+      tip:'No prose, no reasoning. The rule exists as a constraint, but the reason behind it is invisible. When pattern pressure pushes Codex toward a violation, the rule alone is easier to argue around.' }
+  ];
+
+  panels.forEach(p => {
+    const g = svg.append('g')
+      .on('mouseenter',()=>showTip(`<strong>${p.label}</strong><br/>${p.tip}`))
+      .on('mousemove',moveTip).on('mouseleave',hideTip);
+
+    g.append('rect').attr('class','panel').attr('x',p.x).attr('y',110).attr('width',panelW).attr('height',290)
+      .attr('fill','var(--color-white)').attr('stroke',p.stroke).attr('stroke-width',1);
+    g.append('rect').attr('x',p.x).attr('y',110).attr('width',panelW).attr('height',32)
+      .attr('fill','var(--color-fill)').attr('stroke',p.stroke).attr('stroke-width',1).attr('pointer-events','none');
+    g.append('text').attr('x',p.x+14).attr('y',131).attr('class','caps').attr('font-weight','bold').attr('fill',p.labelColor).text(p.label).attr('pointer-events','none');
+
+    p.proseLines.forEach((t,i)=>g.append('text').attr('x',p.x+16).attr('y',162+i*14).attr('font-size',10).text(t).attr('pointer-events','none'));
+
+    g.append('rect').attr('x',p.x+16).attr('y',208).attr('width',panelW-32).attr('height',44).attr('fill','var(--color-fill)').attr('stroke','var(--color-border)').attr('stroke-width',1).attr('pointer-events','none');
+    g.append('text').attr('x',p.x+26).attr('y',226).attr('class','caps').attr('fill','var(--color-ink)').text('RULE — NO DIRECT HTTP CALLS').attr('pointer-events','none');
+    g.append('text').attr('x',p.x+26).attr('y',242).attr('class','caps').text('USE NetClient.request()').attr('pointer-events','none');
+
+    g.append('line').attr('x1',p.x+16).attr('y1',278).attr('x2',p.x+panelW-16).attr('y2',278).attr('stroke','var(--color-border)').attr('stroke-width',0.75).attr('stroke-dasharray','4 3').attr('pointer-events','none');
+    g.append('text').attr('x',p.x+16).attr('y',298).attr('class','caps').text(p.readersLabel).attr('pointer-events','none');
+
+    const cardW = 84, gap = 11;
+    const totalCards = p.readers.length;
+    const cardsW = totalCards*cardW + (totalCards-1)*gap;
+    const startX = p.onlyLast ? (p.x + panelW - 16 - cardW) : (p.x+16);
+    p.readers.forEach((r, i) => {
+      const rx = startX + (p.onlyLast ? 0 : i*(cardW+gap));
+      g.append('rect').attr('x',rx).attr('y',310).attr('width',cardW).attr('height',42).attr('fill','var(--color-fill)').attr('stroke','var(--color-border)').attr('stroke-width',1).attr('pointer-events','none');
+      g.append('text').attr('x',rx+cardW/2).attr('y',326).attr('text-anchor','middle').attr('class','caps').text(r.cap).attr('pointer-events','none');
+      g.append('text').attr('x',rx+cardW/2).attr('y',342).attr('text-anchor','middle').attr('font-size',10).attr('font-style','italic').text(r.italic).attr('pointer-events','none');
+    });
+
+    g.append('text').attr('x',p.x+16).attr('y',380).attr('font-size',10).attr('font-style','italic').attr('fill',p.footerColor).text(p.footer).attr('pointer-events','none');
+  });
+
+  svg.append('line').attr('x1',32).attr('y1',420).attr('x2',totalWidth-32).attr('y2',420).attr('stroke','var(--color-border)').attr('stroke-width',0.75).attr('stroke-dasharray','4 3');
+  svg.append('text').attr('x',32).attr('y',442).attr('class','secondary').attr('font-size',10).text("Knuth's argument: explain to humans what you want the computer to do. AGENTS.md is the artifact");
+  svg.append('text').attr('x',32).attr('y',458).attr('class','secondary').attr('font-size',10).text('that has to read well to three audiences at once — you, future collaborators, and Codex.');
+}
+draw();
+const ro = new ResizeObserver(() => draw());
+ro.observe(document.getElementById('chart'));
+</script>
+</body>
+</html>

@@ -7,11 +7,11 @@
 
 Here is a thing that happens to almost every student who uses Codex across multiple sessions on the same project.
 
-The first session goes well. You spent twenty minutes at the start explaining the project — the structure, the conventions, the things to avoid, the decision to use SQLite instead of Postgres, the fact that your school machine does not have Node and should never be offered a JavaScript solution. By the end of the session, Codex's outputs were good. The context you had built up was doing its job.
+The first session goes well. You spent twenty minutes at the start explaining the project — the structure, the conventions, the things to avoid, the decision to keep the inventory autoload untouched, the fact that you migrated this project from Unreal and Codex should never propose reintroducing Unreal-style components. By the end of the session, Codex's outputs were good. The context you had built up was doing its job.
 
 The next session, Codex has no memory of any of it.
 
-You type the same context into your first prompt. Codex generates something that violates the SQLite decision you explained yesterday. You correct it. By the third prompt you are repeating the same constraints again. By the fifth, you have spent twelve of your thirty Monday-night minutes re-establishing context you already established. The session is shorter than the last one. The outputs are weaker because the context never fully rebuilt.
+You type the same context into your first prompt. Codex generates something that touches the inventory autoload you explained yesterday. You correct it. By the third prompt you are repeating the same constraints again. By the fifth, you have spent twelve of your thirty Monday-night minutes re-establishing context you already established. The session is shorter than the last one. The outputs are weaker because the context never fully rebuilt.
 
 There is a fix. It is a single file. It costs twenty minutes to set up and two minutes per session to maintain, and once it exists you never repeat yourself across sessions again.
 
@@ -27,7 +27,9 @@ It holds the things that are true about your project every session: the stack, t
 
 The context you are currently rebuilding by hand at the start of each session is exactly the content that belongs in this file.
 
-<!-- → [DIAGRAM: AGENTS.md in the session context — loaded at session start, persists across the session, governs every prompt. Contrast: without AGENTS.md (Codex guesses) vs. with AGENTS.md (Codex knows). Editorial style.] -->
+![Central AGENTS.md card connected by hairline arrows to three Codex session cards — Monday feature work, Wednesday bug hunt, Friday refactor pass. Each session inherits the same persistent project knowledge. A dashed side note labeled WITHOUT AGENTS.MD shows the alternative: each session re-establishes context, twelve of thirty minutes lost to repetition.](images/07-agents-md-fig-01.png)
+
+*Figure 7.1 — AGENTS.md at the center of every session. Codex loads it before the first prompt; you stop repeating yourself across sessions.*
 
 Three locations matter, in order of precedence. The project-root `./AGENTS.md` is the one you write; it is specific to this project and is the one that covers the vast majority of student use. A home-directory `~/.codex/AGENTS.md` holds your personal defaults and applies to every project. Organizational deployments can enforce a managed-policy location. For student work, the project root is what matters. Put it there. Commit it to git.
 
@@ -43,57 +45,65 @@ A useful AGENTS.md for a student build has five categories of entry. None of the
 
 ```markdown
 ## Stack
-- Python 3.11
-- pytest for tests
-- ruff for linting
-- run tests with `make test`
-- run the app with `python -m app`
+- Godot 4.3, GDScript (no C#).
+- GUT for unit tests.
+- run tests with `godot --headless -s addons/gut/gut_cmdln.gd`
+- run the game with `godot --path . scenes/main.tscn`
 ```
 
-**Code style deviations.** Standard conventions Codex already knows. Write down the *deviations* from those conventions — the things Codex will default away from if you don't tell it otherwise. If your project uses 4-space indentation in Python, do not write that; Codex knows. If your project uses snake_case for a specific reason and you do not want Codex "fixing" it, write that.
+**Code style deviations.** Standard conventions Codex already knows. Write down the *deviations* from those conventions — the things Codex will default away from if you don't tell it otherwise. If your project uses snake_case for GDScript files, do not write that; Codex knows. If your project uses PascalCase for autoload singletons specifically and you do not want Codex "fixing" it, write that.
 
 ```markdown
 ## Style
-- snake_case for variables (yes, even for one-letter throwaways).
-- Type hints required on public functions; optional on helpers.
-- f-strings, never .format() or % formatting.
-- No `from x import *` ever.
+- snake_case for variables and methods; PascalCase for autoload singletons.
+- Type hints required on every public method; optional on locals.
+- Signals declared at top of file, named in past tense (`died`, `picked_up`).
+- No `preload()` inside `_ready()` — declare at file scope or use `load()`.
 ```
 
-**Architectural decisions.** Decisions you have already made that you do not want revisited every session. "We use SQLite, not Postgres." "All requests go through the central client; no direct HTTP calls in feature modules." "The data layer is one module; no business logic in there." These are the decisions that, if Codex ignores them, produce a refactor you did not ask for.
+**Architectural decisions.** Decisions you have already made that you do not want revisited every session. "Inventory is an autoload; do not refactor it into a component." "All networked state changes go through the `NetSync` autoload; no direct RPCs in scene scripts." "Save-game schema is versioned; never break field names without a migration." These are the decisions that, if Codex ignores them, produce a refactor you did not ask for.
 
 ```markdown
 ## Architecture
-- Single-file scripts in `scripts/`; importable modules in `src/`.
-- The `grading` module is the only one that touches student data;
-  other modules call into it but do not parse submissions themselves.
-- No background tasks for now; cron the script externally.
+- Player scenes in `scenes/player/`; AI behavior trees in `scripts/ai/`.
+- The `Inventory` autoload is the only system that mutates player items;
+  other scripts call into it but do not modify the inventory dict directly.
+- Save schema is versioned (`save_version: int`); never rename fields
+  without writing a migration in `scripts/save/migrations.gd`.
 ```
 
-**Environment quirks.** Things about your machine or school environment that affect what works. Old library versions. Missing tools. Permissions issues. Anything that has already bitten you.
+**Environment quirks.** Things about your machine or build environment that affect what works. Old library versions. Missing tools. Permissions issues. Anything that has already bitten you.
 
 ```markdown
 ## Environment
-- macOS; default `python` is 3.9. Use `python3.11` explicitly.
-- School machine does not have node; do not propose JS tooling.
-- No write access to /tmp; use ./tmp/ instead.
+- macOS; Godot 4.3 binary lives at `/Applications/Godot.app/Contents/MacOS/Godot`.
+- Windows export template required for co-op playtests; mac builds for solo only.
+- Do not propose `.NET` / C# tooling — this project is GDScript-only.
 ```
 
 **Lessons learned.** This section starts empty and grows. Each entry: a date, the mistake or near-miss, the fix. By month six, this section is the most valuable part of the file — a running record of every place where Codex's default behavior diverged from what your project needed and you caught it before it cost you.
 
 ```markdown
 ## Lessons learned
-- 2026-03-19: Codex generated code that bypassed the central client
-  and made direct HTTP calls in a feature module. Reverted. Rule added
-  to Architecture above.
-- 2026-04-02: Codex assumed grading rubrics were stored in YAML.
-  They are in JSON. Specified in Stack above.
-- 2026-04-15: Codex iterated on a failing test by inserting try/except
-  to pass the test. The exception was hiding a real bug. New rule: do
-  not add exception handling to make tests pass; fix the underlying bug.
+- 2026-03-19: Codex generated code that bypassed the Inventory autoload
+  and mutated the player's item dict directly in a pickup script.
+  Reverted. Rule added to Architecture above.
+- 2026-04-02: Codex assumed save files were JSON. They are Godot resource
+  files (.tres). Specified in Stack above.
+- 2026-04-15: Codex iterated on a failing GUT test by inserting try/except
+  to pass the test. The exception was hiding a real bug in the AI behavior
+  tree. New rule: do not add exception handling to make tests pass; fix
+  the underlying bug.
 ```
 
-<!-- → [TABLE: AGENTS.md include/exclude — two columns. Include: bash commands, code style deviations, test runners, architectural decisions, quirks. Exclude: what Codex can figure out, standard conventions, changing content. No color.] -->
+| Include in AGENTS.md | Exclude from AGENTS.md |
+|---|---|
+| Exact bash commands (run, test, lint, export) for this project | Anything Codex can read off `project.godot`, `package.json`, or the repo itself |
+| Code-style deviations from the language default | Standard conventions Codex already knows (e.g. GDScript uses snake_case) |
+| Test runner, framework, and how to invoke it | The current sprint or whatever feature you happen to be on this week |
+| Architectural decisions and load-bearing invariants | Secrets, API keys, credentials — those go in an uncommitted `.env` |
+| Quirks: filesystem oddities, OS-specific paths, "do not propose X" rules | Personal preferences that aren't project-specific (those belong in `~/.codex/AGENTS.md`) |
+| Lessons learned — dated entries for past misses and the rule that prevents them | Constantly changing state, status updates, or session-level context |
 
 ---
 
@@ -103,9 +113,9 @@ A common failure mode is the AGENTS.md that contains too much. It fills with ent
 
 Things that do not belong:
 
-Things Codex can figure out from the code. If the project uses pytest and the `Makefile` references it, Codex does not need a line about pytest in AGENTS.md. It reads the Makefile. Save AGENTS.md for what Codex *cannot* infer.
+Things Codex can figure out from the code. If the project uses GUT and the `project.godot` file already declares the GUT plugin, Codex does not need a line about GUT in AGENTS.md. It reads the project file. Save AGENTS.md for what Codex *cannot* infer.
 
-Standard conventions. Codex knows Python uses snake_case by default. The AGENTS.md is for the deviations.
+Standard conventions. Codex knows GDScript uses snake_case by default. The AGENTS.md is for the deviations.
 
 Constantly changing state. "The current sprint is on the auth feature" does not belong in AGENTS.md. Sprints change. Put it in your prompt for the session.
 
@@ -153,6 +163,8 @@ The two minutes are an upstream investment. By the end of the semester, the less
 
 One more maintenance discipline: if an entry stops getting followed, it is either buried in a file that is too long, or it is worded in a way that Codex is pattern-matching around rather than applying. Fix it. Rewrite it. Move it higher in the file. AGENTS.md is a living document; it is not set-and-forget.
 
+For full-strength reference implementations of the AGENTS.md form — what the file looks like when the discipline is taken all the way — see the appendix (`chapters/98-appendix-walker-and-zelda.md`). Walker and Zelda are two production agent prompts Seth and I co-built, public at humanitarians.ai/tools. Walker is a senior Unity architect for legacy-codebase refactoring; Zelda is a senior game-design consultant with a 34-command library. Both are structured exactly as this chapter describes: stack, style, architectural decisions, environment, lessons learned — extended into phase gates, never-rules, and explicit refusals. They are AGENTS.md at full strength. Read them when you want to see what the form scales to.
+
 ---
 
 ## The Knuth connection
@@ -165,7 +177,9 @@ AGENTS.md is literate programming applied to AI collaboration. The file is read 
 
 The discipline of writing for three readers at once is what makes AGENTS.md more than a workaround for Codex's statelessness. It is a clarity exercise. Every entry you write for Codex forces you to make an implicit convention explicit. The artifact that results is useful for the project even if Codex's statelessness problem were solved tomorrow.
 
-<!-- → [IMAGE: Knuth's literate programming paradigm visualized as a document written once, producing two outputs: human-readable explanation and machine-executable code. Updated for this context: AGENTS.md as written-once-read-by-three artifact — you, collaborators, Codex.] -->
+![Two panels comparing the same AGENTS.md rule. Left panel — LITERATE — PROSE + RULE: three prose lines explaining why the rule exists, followed by the rule itself, followed by three small reader cards for YOU, COLLABORATORS, and CODEX. Right panel — BARE — RULE ALONE: the same rule with no prose, followed by a single reader card for CODEX. The literate panel is highlighted in red and footnoted "The why is the entry's load-bearing part"; the bare panel notes that future-you forgets the reason.](images/07-agents-md-fig-02.png)
+
+*Figure 7.2 — Knuth's literate programming applied to AGENTS.md. Writing for three readers at once is what makes the artifact more than a workaround for statelessness.*
 
 ---
 
@@ -224,3 +238,27 @@ You have AGENTS.md. Codex knows your project at every session. Chapter 8 teaches
 ---
 
 [^1]: Knuth, D. E. "Literate Programming." *The Computer Journal* 27, no. 2 (1984): 97–111.
+
+---
+
+## Prompts
+
+Use these prompts with Claude to generate interactive D3 v7 versions of the figures in this chapter. Each produces a standalone HTML file you can open in a browser and modify freely.
+
+**Prerequisites:** Load `brutalist/CLAUDE.md` and `brutalist/DESIGN.md` into your Claude project context before using these prompts. They define the stack, naming conventions, color system, and typography the figures use.
+
+---
+
+### Figure 7.1 — AGENTS.md as persistent session context
+
+Build a hub-and-spoke diagram in D3 v7. A central rectangular card in `--color-fill` with a `--color-red` border, holding a monospace ALL CAPS title `AGENTS.MD`, a bold subtitle `project root`, two italic lines summarizing contents (`stack · style · architecture` / `environment · lessons learned`), and a monospace footer `UNDER 200 LINES`. Three session cards around the hub: upper-left `CODEX SESSION 1` (Monday — feature work), right `SESSION 2` (Wed — bug hunt), and lower-left `CODEX SESSION 3` (Fri — refactor pass). Each session card is a small rectangle with a `--color-fill` header strip carrying a monospace ALL CAPS label, a bold title line, and an italic gloss. Hairline `--color-ink` arrows fan from the central card to each session card. A dashed contrast box in the lower right labeled `WITHOUT AGENTS.MD` notes that each session re-establishes context. Hovering any card shows a tooltip with the longer description. Dashed footer rule plus a two-line caption noting the arrows are loading, not requests.
+
+> Reference implementation: `d3/07-agents-md-fig-01.html`
+
+---
+
+### Figure 7.2 — Literate vs. bare
+
+Build a two-panel comparison in D3 v7. Left panel `LITERATE — PROSE + RULE` highlighted with a `--color-red` border; right panel `BARE — RULE ALONE` with a `--color-border` border. Each panel has a `--color-fill` header strip with the monospace ALL CAPS label. Inside the literate panel: three prose lines explaining why the rule exists, a `--color-fill` rule box with the monospace ALL CAPS rule (`RULE — NO DIRECT HTTP CALLS` / `USE NetClient.request()`), then a dashed divider, then a label `SERVES THREE READERS` with three small reader cards (`YOU`, `COLLAB.`, `CODEX`) each holding a monospace ALL CAPS cap and an italic verb. Footer line in `--color-red`: *The "why" is the entry's load-bearing part.* The bare panel omits the prose, shows the same rule box, divider, and label `SERVES ONE READER` with only the `CODEX` card. Footer in secondary: *Future-you forgets why. Pattern-matched around.* Hover either panel for the longer narrative. Dashed footer rule plus a two-line caption tying the figure to Knuth.
+
+> Reference implementation: `d3/07-agents-md-fig-02.html`

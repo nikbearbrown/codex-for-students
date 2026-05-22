@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Figure 12.1 — The planning sequence</title>
+<style>
+:root {
+  --color-white: #FFFFFF;
+  --color-fill: #F5EFE8;
+  --color-ink: #2a1a0e;
+  --color-mark: #6B3520;
+  --color-red: #C8102E;
+  --color-slate: #1A3A5C;
+  --color-ochre: #C8860E;
+  --color-secondary: #545454;
+  --color-border: #D4D4D4;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-white: #111111;
+    --color-fill: #1a1612;
+    --color-ink: #F0EBE3;
+    --color-mark: #C8865E;
+    --color-red: #E8243A;
+    --color-slate: #6B8FB8;
+    --color-ochre: #D49A30;
+    --color-secondary: #A0978C;
+    --color-border: #2E2E2E;
+  }
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: var(--color-white); color: var(--color-ink); font-family: 'EB Garamond', Georgia, serif; padding: 24px; }
+#chart { width: 100%; min-height: 440px; }
+.tooltip { position: absolute; pointer-events: none; opacity: 0; background: var(--color-slate); color: var(--color-white); padding: 8px 12px; font-size: 12px; font-family: 'EB Garamond', Georgia, serif; max-width: 260px; line-height: 1.4; transition: opacity 150ms; }
+text { font-family: 'EB Garamond', Georgia, serif; fill: var(--color-ink); }
+.caps { font-family: 'IBM Plex Mono', 'JetBrains Mono', monospace; letter-spacing: 0.08em; fill: var(--color-secondary); font-size: 10px; }
+.secondary { fill: var(--color-secondary); }
+.card-body { fill: var(--color-white); stroke: var(--color-border); stroke-width: 1; cursor: pointer; transition: fill 120ms; }
+.card-header { fill: var(--color-fill); stroke: var(--color-border); stroke-width: 1; pointer-events: none; }
+.card-body.highlight { stroke: var(--color-red); }
+.card-header.highlight { stroke: var(--color-red); }
+.card-body:hover { fill: var(--color-fill); }
+@media (prefers-reduced-motion: reduce) { *, .tooltip { transition: none !important; animation: none !important; } }
+</style>
+</head>
+<body>
+<div id="chart" role="main"></div>
+<div class="tooltip" id="tt"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
+<script>
+function draw() {
+  d3.select('#chart').selectAll('*').remove();
+  const totalWidth = document.getElementById('chart').clientWidth || 700;
+  const totalHeight = 440;
+  const margin = { top: 56, right: 32, bottom: 80, left: 32 };
+  const chartWidth = totalWidth - margin.left - margin.right;
+
+  const svg = d3.select('#chart').append('svg')
+    .attr('viewBox', `0 0 ${totalWidth} ${totalHeight}`)
+    .attr('role', 'img').attr('aria-labelledby', 'chart-title chart-desc');
+  svg.append('title').attr('id', 'chart-title').text('The planning sequence');
+  svg.append('desc').attr('id', 'chart-desc').text('Five horizontal phase cards — Question, Constraints, Plan, Approval, Build — connected by arrows, with Approval highlighted as the gate.');
+
+  // arrowhead marker
+  const defs = svg.append('defs');
+  defs.append('marker').attr('id', 'arrow12-1').attr('markerWidth', 8).attr('markerHeight', 6)
+    .attr('refX', 7).attr('refY', 3).attr('orient', 'auto')
+    .append('polygon').attr('points', '0 0, 8 3, 0 6').attr('fill', 'var(--color-ink)');
+
+  const g = svg.append('g').attr('transform', `translate(${margin.left},${margin.top})`);
+  g.append('text').attr('class', 'caps').attr('y', -24).text('FIGURE 12.1 — THE PLANNING SEQUENCE');
+  g.append('text').attr('y', 0).attr('font-weight', 'bold').attr('font-size', 13).text('Five phases — thinking first, building last');
+
+  const tt = d3.select('#tt');
+  const showTip = (html) => tt.html(html).style('opacity', 1);
+  const moveTip = (e) => tt.style('left', (e.pageX + 12) + 'px').style('top', (e.pageY - 8) + 'px');
+  const hideTip = () => tt.style('opacity', 0);
+
+  const phases = [
+    { code: 'QUESTION', n1: 'Ask Mode', n2: 'interrogation',
+      body: ['What considerations', 'had I not', 'thought of?'],
+      tip: 'Step 1 — Ask Mode interrogation. Ten minutes investigating the problem space before committing to a frame. The interrogation surfaces the considerations the spec needs to contain.' },
+    { code: 'CONSTRAINTS', n1: 'Formulation', n2: '+ spec',
+      body: ['One-sentence', 'test; half-page', 'contract.'],
+      tip: 'Steps 2 and 3 — formulation and minimum viable spec. Three one-sentence answers; five sections; half a page. The spec is a contract between you and the build.' },
+    { code: 'PLAN', n1: 'Ask Mode', n2: 'draft',
+      body: ['Codex proposes', 'a sequence with', 'dependencies.'],
+      tip: 'Step 4 — Ask Mode plan. Codex returns a sequence of steps. This is the conductor\'s score, drafted by Codex.' },
+    { code: 'APPROVAL', n1: 'Plan review', n2: '— the gate',
+      body: ['Find at least one', 'wrong assumption.', 'Correct it.'],
+      highlight: true,
+      tip: 'Step 5 — plan review. The gate. Find at least one assumption Codex got wrong. A plan approved without correction is a plan you have not read.' },
+    { code: 'BUILD', n1: 'Code Mode', n2: 'begins',
+      body: ['Prompt →', 'plan → spec →', 'AGENTS.md.'],
+      tip: 'Step 6 — first Code Mode prompt. The chain is now complete: prompt references plan, plan references spec, spec references AGENTS.md.' }
+  ];
+
+  // last card is narrower
+  const wideCards = 4;
+  const narrowW = 80;
+  const gapPx = 16;
+  const wideW = (chartWidth - narrowW - gapPx * wideCards) / wideCards;
+  const yTop = 64;
+  const cardH = 140;
+  const headerH = 32;
+
+  const positions = [];
+  let x = 0;
+  for (let i = 0; i < 5; i++) {
+    const w = (i === 4) ? narrowW : wideW;
+    positions.push({ x, w });
+    x += w + gapPx;
+  }
+
+  phases.forEach((p, i) => {
+    const pos = positions[i];
+    const isH = p.highlight;
+    g.append('rect').attr('class', 'card-body' + (isH ? ' highlight' : ''))
+      .attr('x', pos.x).attr('y', yTop).attr('width', pos.w).attr('height', cardH)
+      .on('mouseenter', () => showTip(`<strong>${p.code}</strong><br/>${p.tip}`))
+      .on('mousemove', moveTip).on('mouseleave', hideTip);
+    g.append('rect').attr('class', 'card-header' + (isH ? ' highlight' : ''))
+      .attr('x', pos.x).attr('y', yTop).attr('width', pos.w).attr('height', headerH);
+
+    g.append('text').attr('class', 'caps').attr('x', pos.x + pos.w / 2).attr('y', yTop + 20)
+      .attr('text-anchor', 'middle')
+      .attr('fill', isH ? 'var(--color-red)' : 'var(--color-ink)').text(p.code);
+
+    g.append('text').attr('x', pos.x + pos.w / 2).attr('y', yTop + 58).attr('text-anchor', 'middle')
+      .attr('font-weight', 'bold').attr('font-size', 11)
+      .attr('fill', isH ? 'var(--color-red)' : 'var(--color-ink)')
+      .attr('pointer-events', 'none').text(p.n1);
+    g.append('text').attr('x', pos.x + pos.w / 2).attr('y', yTop + 72).attr('text-anchor', 'middle')
+      .attr('font-weight', 'bold').attr('font-size', 11)
+      .attr('fill', isH ? 'var(--color-red)' : 'var(--color-ink)')
+      .attr('pointer-events', 'none').text(p.n2);
+
+    p.body.forEach((line, j) => {
+      g.append('text').attr('x', pos.x + 10).attr('y', yTop + 98 + j * 14)
+        .attr('font-size', 10).attr('class', 'secondary')
+        .attr('pointer-events', 'none').text(line);
+    });
+
+    if (i < 4) {
+      const ax1 = pos.x + pos.w;
+      const ax2 = ax1 + gapPx;
+      const ay = yTop + cardH / 2;
+      g.append('line').attr('x1', ax1).attr('y1', ay).attr('x2', ax2 - 2).attr('y2', ay)
+        .attr('stroke', 'var(--color-ink)').attr('stroke-width', 1.5)
+        .attr('marker-end', 'url(#arrow12-1)');
+    }
+  });
+
+  // brackets
+  const bracketY = yTop + cardH + 18;
+  const thinkEnd = positions[3].x + positions[3].w;
+  g.append('line').attr('x1', 0).attr('y1', bracketY).attr('x2', thinkEnd).attr('y2', bracketY)
+    .attr('stroke', 'var(--color-secondary)').attr('stroke-width', 0.75);
+  g.append('line').attr('x1', 0).attr('y1', bracketY - 4).attr('x2', 0).attr('y2', bracketY + 4)
+    .attr('stroke', 'var(--color-secondary)').attr('stroke-width', 0.75);
+  g.append('line').attr('x1', thinkEnd).attr('y1', bracketY - 4).attr('x2', thinkEnd).attr('y2', bracketY + 4)
+    .attr('stroke', 'var(--color-secondary)').attr('stroke-width', 0.75);
+  g.append('text').attr('x', thinkEnd / 2).attr('y', bracketY + 18).attr('text-anchor', 'middle')
+    .attr('font-size', 10).attr('font-style', 'italic').attr('class', 'secondary')
+    .text('Thinking work — about forty minutes');
+
+  const buildStart = positions[4].x;
+  const buildEnd = positions[4].x + positions[4].w;
+  g.append('line').attr('x1', buildStart).attr('y1', bracketY).attr('x2', buildEnd).attr('y2', bracketY)
+    .attr('stroke', 'var(--color-secondary)').attr('stroke-width', 0.75);
+  g.append('line').attr('x1', buildStart).attr('y1', bracketY - 4).attr('x2', buildStart).attr('y2', bracketY + 4)
+    .attr('stroke', 'var(--color-secondary)').attr('stroke-width', 0.75);
+  g.append('line').attr('x1', buildEnd).attr('y1', bracketY - 4).attr('x2', buildEnd).attr('y2', bracketY + 4)
+    .attr('stroke', 'var(--color-secondary)').attr('stroke-width', 0.75);
+  g.append('text').attr('x', (buildStart + buildEnd) / 2).attr('y', bracketY + 18).attr('text-anchor', 'middle')
+    .attr('font-size', 10).attr('font-style', 'italic').attr('class', 'secondary')
+    .text('Build — ninety');
+
+  // bottom rule
+  const footRule = yTop + cardH + 56;
+  g.append('line').attr('x1', 0).attr('y1', footRule).attr('x2', chartWidth).attr('y2', footRule)
+    .attr('stroke', 'var(--color-border)').attr('stroke-width', 0.75).attr('stroke-dasharray', '4 3');
+  g.append('text').attr('class', 'secondary').attr('y', footRule + 20).attr('font-size', 10)
+    .text('The build does not begin at the first prompt. It begins when the plan is approved.');
+  g.append('text').attr('class', 'secondary').attr('y', footRule + 36).attr('font-size', 10).attr('font-style', 'italic')
+    .text('Highlighted: the gate — a plan approved without correction is a plan you have not read.');
+}
+draw();
+const ro = new ResizeObserver(() => draw());
+ro.observe(document.getElementById('chart'));
+</script>
+</body>
+</html>

@@ -1,0 +1,43 @@
+<svg viewBox="0 0 700 360" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">Seth's arc from observer to practitioner</title>
+  <desc id="desc">A two-point timeline showing the move from watching friends borrow capability from Codex to building the conducting discipline on real projects.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#2a1a0e"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="700" height="360" fill="#FFFFFF"/>
+
+  <text x="32" y="48" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="10" letter-spacing="0.08em" fill="#545454">FIGURE 1.1 — SETH'S ARC</text>
+  <text x="32" y="76" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="13" font-weight="bold" fill="#2a1a0e">From observer to practitioner</text>
+
+  <!-- Timeline rule -->
+  <line x1="120" y1="200" x2="580" y2="200" stroke="#2a1a0e" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <!-- Tick marks -->
+  <line x1="150" y1="194" x2="150" y2="206" stroke="#2a1a0e" stroke-width="1.5"/>
+  <line x1="540" y1="194" x2="540" y2="206" stroke="#2a1a0e" stroke-width="1.5"/>
+
+  <!-- Left node -->
+  <circle cx="150" cy="200" r="8" fill="#FFFFFF" stroke="#2a1a0e" stroke-width="1.5"/>
+  <rect x="60" y="124" width="180" height="56" fill="#F5EFE8" stroke="#D4D4D4" stroke-width="1"/>
+  <text x="150" y="146" text-anchor="middle" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="10" letter-spacing="0.08em" fill="#545454">OBSERVER</text>
+  <text x="150" y="166" text-anchor="middle" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="12" font-weight="bold" fill="#2a1a0e">Watches friends</text>
+  <text x="150" y="232" text-anchor="middle" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="11" fill="#545454">Friend aces homework,</text>
+  <text x="150" y="246" text-anchor="middle" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="11" fill="#545454">freezes on the quiz.</text>
+  <text x="150" y="260" text-anchor="middle" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="11" font-style="italic" fill="#545454">The gap surfaces.</text>
+
+  <!-- Right node -->
+  <circle cx="540" cy="200" r="8" fill="#FFFFFF" stroke="#2a1a0e" stroke-width="1.5"/>
+  <rect x="450" y="124" width="180" height="56" fill="#F5EFE8" stroke="#D4D4D4" stroke-width="1"/>
+  <text x="540" y="146" text-anchor="middle" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="10" letter-spacing="0.08em" fill="#545454">PRACTITIONER</text>
+  <text x="540" y="166" text-anchor="middle" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="12" font-weight="bold" fill="#2a1a0e">Builds the discipline</text>
+  <text x="540" y="232" text-anchor="middle" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="11" fill="#545454">Ships games. Tests</text>
+  <text x="540" y="246" text-anchor="middle" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="11" fill="#545454">Codex under real load.</text>
+  <text x="540" y="260" text-anchor="middle" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="11" font-style="italic" fill="#545454">The discipline forms.</text>
+
+  <!-- Bottom rule + caption -->
+  <line x1="32" y1="296" x2="668" y2="296" stroke="#D4D4D4" stroke-width="0.75" stroke-dasharray="4 3"/>
+  <text x="32" y="320" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="10" fill="#545454">Eighteen months separate the two points. The arc is not luck; it is what the rest of the book teaches.</text>
+</svg>

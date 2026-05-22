@@ -30,9 +30,14 @@ The shape has four requirements.
 
 **Scope-appropriate.** Doable in a three-to-five hour single sitting or across two evenings. Not a semester project. Not a one-prompt exercise. The scope is calibrated to the discipline's cost: enough steps to exercise every capacity, short enough that the first conducted build does not become its own blocking obstacle.
 
-<!-- → [TABLE: Project shape requirements — four rows, two columns: requirement / what it exercises. Multi-step → dangerous middle and handoff conditions; Aesthetic dimensions → IJ on output quality; Real life → PA on situational correctness; Scope-appropriate → full discipline without scope-creep. Quick reference for evaluating your project choice.] -->
+| Requirement | What it exercises |
+|---|---|
+| Multi-step — at least five Code Mode prompts | The dangerous middle and the handoff-condition discipline; an assumption made in step two can surface as a silent wrong answer in step five |
+| Aesthetic dimensions — visual or stylistic | **IJ** on output quality — when the output has to be good for a person, fluent-but-wrong gets caught |
+| Touches your real life — something you would actually use or share | **PA** on situational correctness — stakes are real enough that the off-feeling matters |
+| Scope-appropriate — three to five hours, or two evenings | The full discipline runs without scope creep; enough steps to exercise every capacity, short enough that the first conducted build doesn't become its own obstacle |
 
-Candidate projects from past students, to make the shape concrete: a personal-finance summary tool that processes bank CSVs into monthly summaries; a reading-list manager that tracks what you have read and what friends recommended; a study-tracker for a single class that identifies the topics where you have spent the least time; a small portfolio website; a homework-summary script that reads your calendar and produces a morning briefing; a vocab study tool for a class in a language you are learning.
+Candidate projects from past students, to make the shape concrete: an asset-budget tracker for a Godot or Unity project that reads export logs into a per-build markdown summary (the worked example from Chapters 12–14, which you can extend rather than rebuild); a horror-game playtest-feedback aggregator that groups beta-tester comments by game system into a per-build markdown; a weighted-GPA calculator with transcript CSV input that handles AP-weighted credits and shows what each remaining grade does to your cumulative; a custom AGENTS.md (with optional DESIGN.md and PROJECT.md) for one of your own projects, with the Walker and Zelda appendix as full-strength reference implementations; a reading-list manager that tracks what you have read and what friends recommended; a study-tracker for a single class that identifies the topics where you have spent the least time; a small portfolio or platform site; a vocab study tool for a class in a language you are learning.
 
 Pick one of these, or pick something else that fits the shape. The brief is orientation. The choice is yours.
 
@@ -42,7 +47,7 @@ Pick one of these, or pick something else that fits the shape. The brief is orie
 
 Here is the book in fourteen steps. Each step names the chapter where the discipline lives. Apply each to your project.
 
-**1. Ask Mode interrogation** (Chapter 7). Before you commit to a frame, investigate. Ask Codex what considerations matter for a problem like yours. Note what surfaces that you had not thought of. This is where Seth discovered the net-worth view. This is where the spec becomes possible.
+**1. Ask Mode interrogation** (Chapter 7). Before you commit to a frame, investigate. Ask Codex what considerations matter for a problem like yours. Note what surfaces that you had not thought of. This is where Seth discovered the delta-versus-last-build view for the asset-budget tracker. This is where the spec becomes possible.
 
 **2. One-sentence problem formulation** (Chapter 7). Three sentences: what does this build do, what does it touch, what does it never touch. If you cannot write each in one sentence, the scope is not small enough yet.
 
@@ -96,7 +101,13 @@ The project works for the use you built it for.
 
 A build that meets these criteria is the chapter's success. Whether it took three hours or six is less important than whether it taught you what the discipline costs and what it provides.
 
-<!-- → [TABLE: Success criteria checklist — five rows, one per criterion. Columns: criterion / what it looks like if met / what it looks like if skipped. Designed as a self-assessment tool after the build is complete.] -->
+| Criterion | What it looks like if met | What it looks like if skipped |
+|---|---|---|
+| You can account for every Codex prompt | For each prompt: what it asked, why at that step, what alternative you considered, what you'd change in hindsight | A vague "Codex wrote a lot of it" with no per-prompt record — the build runs but the discipline didn't |
+| AGENTS.md grew during the build | At least one new dated entry under Lessons learned, added after a real surprise the build surfaced | AGENTS.md is byte-identical to the version you wrote before starting — the build taught you nothing the file kept |
+| Post-build document names a specific reversal | A concrete "I would write the dedup spec with `INSERT OR IGNORE` from the start" — a named step, assumption, or negative constraint you'd change | A generic "I would plan more carefully next time" — the reflection didn't reach a decision |
+| Supervisory capacities labeled at major moments | PA catches, PF revisits, IJ calls, EI integration checks named in the log at the moments that mattered | The log is just step numbers and pass/fail — the supervisory work is invisible to future-you |
+| The project works for the use you built it for | The Pass 3 spec-needs check passes — opening it on the phone, sharing it, running it for real all work | Pass 1 passed and you stopped — the spec's User needs were never converted into verification |
 
 ---
 

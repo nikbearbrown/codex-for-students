@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Figure 5.2 — The Ask Mode / Code Mode gate</title>
+<style>
+:root {
+  --color-white: #FFFFFF;
+  --color-fill: #F5EFE8;
+  --color-ink: #2a1a0e;
+  --color-mark: #6B3520;
+  --color-red: #C8102E;
+  --color-slate: #1A3A5C;
+  --color-ochre: #C8860E;
+  --color-secondary: #545454;
+  --color-border: #D4D4D4;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-white: #111111;
+    --color-fill: #1a1612;
+    --color-ink: #F0EBE3;
+    --color-mark: #C8865E;
+    --color-red: #E8243A;
+    --color-slate: #6B8FB8;
+    --color-ochre: #D49A30;
+    --color-secondary: #A0978C;
+    --color-border: #2E2E2E;
+  }
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: var(--color-white); color: var(--color-ink); font-family: 'EB Garamond', Georgia, serif; padding: 24px; }
+#chart { width: 100%; min-height: 440px; }
+.tooltip { position: absolute; pointer-events: none; opacity: 0; background: var(--color-slate); color: var(--color-white); padding: 8px 12px; font-size: 12px; font-family: 'EB Garamond', Georgia, serif; max-width: 300px; line-height: 1.4; }
+text { font-family: 'EB Garamond', Georgia, serif; fill: var(--color-ink); }
+.caps { font-family: 'IBM Plex Mono', 'JetBrains Mono', monospace; letter-spacing: 0.08em; fill: var(--color-secondary); font-size: 10px; }
+.secondary { fill: var(--color-secondary); }
+.stage { fill: var(--color-fill); stroke: var(--color-border); stroke-width: 1; cursor: pointer; transition: fill 120ms; }
+.stage:hover { fill: var(--color-white); }
+.gate { fill: var(--color-white); stroke: var(--color-red); stroke-width: 1.5; cursor: pointer; transition: fill 120ms; }
+.gate:hover { fill: var(--color-fill); }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+</style>
+</head>
+<body>
+<div id="chart" role="main"></div>
+<div class="tooltip" id="tt"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
+<script>
+function draw() {
+  d3.select('#chart').selectAll('*').remove();
+  const totalWidth = document.getElementById('chart').clientWidth || 700;
+  const totalHeight = 440;
+  const margin = { top: 56, right: 24, bottom: 80, left: 24 };
+  const chartWidth = totalWidth - margin.left - margin.right;
+
+  const svg = d3.select('#chart').append('svg')
+    .attr('width', totalWidth).attr('height', totalHeight)
+    .attr('role','img').attr('aria-labelledby','chart-title chart-desc');
+  svg.append('title').attr('id','chart-title').text('The Ask Mode / Code Mode gate');
+  svg.append('desc').attr('id','chart-desc').text('Three-stage flow: Ask Mode, the gate, Code Mode.');
+
+  svg.append('defs').append('marker').attr('id','arrow-d3').attr('markerWidth',8).attr('markerHeight',6)
+    .attr('refX',7).attr('refY',3).attr('orient','auto').append('polygon').attr('points','0 0, 8 3, 0 6').attr('fill','var(--color-ink)');
+
+  const g = svg.append('g').attr('transform', `translate(${margin.left},${margin.top})`);
+  g.append('text').attr('class','caps').attr('y',-24).text('FIGURE 5.2 — THE GATE');
+  g.append('text').attr('y',0).attr('font-weight','bold').attr('font-size',13).text('Nothing goes from Ask Mode to Code Mode until you have reviewed the plan');
+
+  const tt = d3.select('#tt');
+  function showTip(html){ tt.html(html).style('opacity',1); }
+  function moveTip(e){ tt.style('left',(e.pageX+12)+'px').style('top',(e.pageY-8)+'px'); }
+  function hideTip(){ tt.style('opacity',0); }
+
+  const stageY = 80;
+  const stageW = (chartWidth - 80) / 3 - 10;
+  const gateW = stageW - 30;
+
+  // Stage 1: Ask Mode
+  g.append('rect').attr('class','stage').attr('x',0).attr('y',stageY).attr('width',stageW).attr('height',160)
+    .on('mouseenter',()=>showTip('<strong>Ask Mode — Human.</strong> Read-only. Codex reads your project, answers questions, proposes plans. Nothing changes on disk. Use it to understand before doing. The conductor\'s questions before the orchestra starts playing.'))
+    .on('mousemove',moveTip).on('mouseleave',hideTip);
+  g.append('text').attr('class','caps').attr('x',stageW/2).attr('y',stageY+24).attr('text-anchor','middle').text('ASK MODE');
+  g.append('text').attr('x',stageW/2).attr('y',stageY+50).attr('text-anchor','middle').attr('font-weight','bold').attr('font-size',12).text('Human');
+  ['→ interrogate','→ plan','→ formulate'].forEach((line, i) => {
+    g.append('text').attr('x',10).attr('y',stageY+82+i*18).attr('font-size',11).text(line);
+  });
+  g.append('text').attr('class','secondary').attr('x',10).attr('y',stageY+144).attr('font-size',10).attr('font-style','italic').text('no files change.');
+
+  // Arrow 1
+  const ax1Start = stageW + 6;
+  const ax1End = stageW + 36;
+  g.append('line').attr('x1',ax1Start).attr('y1',stageY+80).attr('x2',ax1End).attr('y2',stageY+80)
+    .attr('stroke','var(--color-ink)').attr('stroke-width',1.5).attr('marker-end','url(#arrow-d3)');
+
+  // Stage 2: Gate (highlighted)
+  const gateX = stageW + 46;
+  g.append('rect').attr('class','gate').attr('x',gateX).attr('y',stageY+20).attr('width',gateW).attr('height',120)
+    .on('mouseenter',()=>showTip('<strong>The gate.</strong> Read the plan with a specific purpose: find the assumptions Codex made that you did not state. Confirm or correct each one. The average plan contains two or three. "Looks good" is not the gate.'))
+    .on('mousemove',moveTip).on('mouseleave',hideTip);
+  g.append('text').attr('class','caps').attr('x',gateX+gateW/2).attr('y',stageY+44).attr('text-anchor','middle').attr('fill','var(--color-red)').text('THE GATE');
+  g.append('text').attr('x',gateX+gateW/2).attr('y',stageY+72).attr('text-anchor','middle').attr('font-weight','bold').attr('font-size',12).attr('fill','var(--color-red)').text('plan reviewed');
+  g.append('text').attr('x',gateX+gateW/2).attr('y',stageY+88).attr('text-anchor','middle').attr('font-weight','bold').attr('font-size',12).attr('fill','var(--color-red)').text('and approved');
+  g.append('text').attr('class','secondary').attr('x',gateX+gateW/2).attr('y',stageY+114).attr('text-anchor','middle').attr('font-size',10).attr('font-style','italic').text('find one assumption.');
+  g.append('text').attr('class','secondary').attr('x',gateX+gateW/2).attr('y',stageY+128).attr('text-anchor','middle').attr('font-size',10).attr('font-style','italic').text('confirm or correct.');
+
+  // Arrow 2
+  const ax2Start = gateX + gateW + 6;
+  const ax2End = gateX + gateW + 36;
+  g.append('line').attr('x1',ax2Start).attr('y1',stageY+80).attr('x2',ax2End).attr('y2',stageY+80)
+    .attr('stroke','var(--color-ink)').attr('stroke-width',1.5).attr('marker-end','url(#arrow-d3)');
+
+  // Stage 3: Code Mode
+  const codeX = gateX + gateW + 46;
+  g.append('rect').attr('class','stage').attr('x',codeX).attr('y',stageY).attr('width',stageW).attr('height',160)
+    .on('mouseenter',()=>showTip('<strong>Code Mode — Human.</strong> Executing. Codex writes files, modifies state, runs commands. Side effects accumulate. Use it for one thing: executing the plan that Ask Mode produced and you reviewed. Verify the handoff condition before the next step.'))
+    .on('mousemove',moveTip).on('mouseleave',hideTip);
+  g.append('text').attr('class','caps').attr('x',codeX+stageW/2).attr('y',stageY+24).attr('text-anchor','middle').text('CODE MODE');
+  g.append('text').attr('x',codeX+stageW/2).attr('y',stageY+50).attr('text-anchor','middle').attr('font-weight','bold').attr('font-size',12).text('Human');
+  ['→ execute','→ check handoff','→ verify output'].forEach((line, i) => {
+    g.append('text').attr('x',codeX+10).attr('y',stageY+82+i*18).attr('font-size',11).text(line);
+  });
+  g.append('text').attr('class','secondary').attr('x',codeX+10).attr('y',stageY+144).attr('font-size',10).attr('font-style','italic').text('files, state, effects.');
+
+  // bottom rule + caption
+  g.append('line').attr('x1',0).attr('y1',stageY+200).attr('x2',chartWidth).attr('y2',stageY+200)
+    .attr('stroke','var(--color-border)').attr('stroke-width',0.75).attr('stroke-dasharray','4 3');
+  g.append('text').attr('class','secondary').attr('y',stageY+222).attr('font-size',10).text('The gate is not a skim. It is a specific review with a specific purpose. Hover any stage for the operational detail.');
+  g.append('text').attr('class','secondary').attr('y',stageY+238).attr('font-size',10).text('Correction in Ask Mode: a sentence. Correction in Code Mode: a rollback.');
+}
+draw();
+const ro = new ResizeObserver(() => draw());
+ro.observe(document.getElementById('chart'));
+</script>
+</body>
+</html>

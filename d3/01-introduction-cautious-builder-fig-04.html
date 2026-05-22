@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Figure 1.4 — The three-act arc of the book</title>
+<style>
+:root {
+  --color-white: #FFFFFF;
+  --color-fill: #F5EFE8;
+  --color-ink: #2a1a0e;
+  --color-mark: #6B3520;
+  --color-red: #C8102E;
+  --color-slate: #1A3A5C;
+  --color-ochre: #C8860E;
+  --color-secondary: #545454;
+  --color-border: #D4D4D4;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-white: #111111;
+    --color-fill: #1a1612;
+    --color-ink: #F0EBE3;
+    --color-mark: #C8865E;
+    --color-red: #E8243A;
+    --color-slate: #6B8FB8;
+    --color-ochre: #D49A30;
+    --color-secondary: #A0978C;
+    --color-border: #2E2E2E;
+  }
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: var(--color-white); color: var(--color-ink); font-family: 'EB Garamond', Georgia, serif; padding: 24px; }
+#chart { width: 100%; min-height: 380px; }
+.tooltip { position: absolute; pointer-events: none; opacity: 0; background: var(--color-slate); color: var(--color-white); padding: 8px 12px; font-size: 12px; font-family: 'EB Garamond', Georgia, serif; max-width: 260px; line-height: 1.4; }
+text { font-family: 'EB Garamond', Georgia, serif; fill: var(--color-ink); }
+.caps { font-family: 'IBM Plex Mono', 'JetBrains Mono', monospace; letter-spacing: 0.08em; fill: var(--color-secondary); font-size: 10px; }
+.secondary { fill: var(--color-secondary); }
+.act-box { fill: var(--color-fill); stroke: var(--color-border); stroke-width: 1; cursor: pointer; transition: fill 120ms; }
+.act-box:hover { fill: var(--color-white); }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+</style>
+</head>
+<body>
+<div id="chart" role="main"></div>
+<div class="tooltip" id="tt"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
+<script>
+function draw() {
+  d3.select('#chart').selectAll('*').remove();
+  const totalWidth = document.getElementById('chart').clientWidth || 700;
+  const totalHeight = 360;
+  const margin = { top: 56, right: 32, bottom: 56, left: 32 };
+  const chartWidth = totalWidth - margin.left - margin.right;
+
+  const svg = d3.select('#chart').append('svg')
+    .attr('width', totalWidth).attr('height', totalHeight)
+    .attr('role','img').attr('aria-labelledby','chart-title chart-desc');
+  svg.append('title').attr('id','chart-title').text('The three-act arc of the book');
+  svg.append('desc').attr('id','chart-desc').text('Horizontal timeline of three acts mapped to chapter ranges 1-3, 4-10, 11-14.');
+
+  svg.append('defs').append('marker').attr('id','arrow-d3').attr('markerWidth',8).attr('markerHeight',6)
+    .attr('refX',7).attr('refY',3).attr('orient','auto').append('polygon').attr('points','0 0, 8 3, 0 6').attr('fill','var(--color-ink)');
+
+  const g = svg.append('g').attr('transform', `translate(${margin.left},${margin.top})`);
+  g.append('text').attr('class','caps').attr('y',-24).text("FIGURE 1.4 — THE BOOK'S ARC");
+  g.append('text').attr('y',0).attr('font-weight','bold').attr('font-size',13).text('Three acts. Fourteen chapters.');
+
+  const tt = d3.select('#tt');
+  function showTip(html){ tt.html(html).style('opacity',1); }
+  function moveTip(e){ tt.style('left',(e.pageX+12)+'px').style('top',(e.pageY-8)+'px'); }
+  function hideTip(){ tt.style('opacity',0); }
+
+  // Timeline arrow
+  g.append('line').attr('x1',16).attr('y1',144).attr('x2',chartWidth-8).attr('y2',144)
+    .attr('stroke','var(--color-ink)').attr('stroke-width',1.5).attr('marker-end','url(#arrow-d3)');
+
+  const acts = [
+    { x: 28, w: 160, label:'ACT ONE', title:'The problem', chs:'CH 1 — 3',
+      body:['The homework/quiz','gap, named and','measured.'],
+      tip:'Chapter 1 introduces Seth and the homework/quiz gap. Chapter 2 grounds it empirically (Bastani, Kosmyna, Anthropic 2026). Chapter 3 maps the labor split between human and Codex.' },
+    { x: 208, w: 220, label:'ACT TWO', title:'The discipline', chs:'CH 4 — 10',
+      body:['Ask Mode gate, the five','capacities, AGENTS.md,','spec format, handoffs.'],
+      tip:'The operational core. Why school is not teaching it (4), conducting (5), the five capacities (6), AGENTS.md (7), problem formulation (8), specs (9), handoffs and the dangerous middle (10).' },
+    { x: 448, w: 160, label:'ACT THREE', title:'The build', chs:'CH 11 — 14',
+      body:['Plan, run, verify, and','teach your conducted','build.'],
+      tip:'Apply the discipline end-to-end. Plan (11), run (12), verify (13), produce the post-build learning document that converts the build experience into the capacity to teach it (14).' }
+  ];
+
+  acts.forEach(a => {
+    g.append('rect').attr('class','act-box').attr('x',a.x).attr('y',84).attr('width',a.w).attr('height',60)
+      .on('mouseenter',()=>showTip(`<strong>${a.label} — ${a.title}</strong><br/>${a.tip}`))
+      .on('mousemove',moveTip).on('mouseleave',hideTip);
+    g.append('text').attr('class','caps').attr('x',a.x+a.w/2).attr('y',106).attr('text-anchor','middle').text(a.label);
+    g.append('text').attr('x',a.x+a.w/2).attr('y',126).attr('text-anchor','middle').attr('font-weight','bold').attr('font-size',12).text(a.title);
+    g.append('text').attr('class','caps').attr('x',a.x+a.w/2).attr('y',168).attr('text-anchor','middle').attr('fill','var(--color-mark)').text(a.chs);
+    a.body.forEach((line, i) => {
+      g.append('text').attr('class','secondary').attr('x',a.x+a.w/2).attr('y',194+i*14).attr('text-anchor','middle').attr('font-size',11).text(line);
+    });
+  });
+
+  g.append('line').attr('x1',0).attr('y1',256).attr('x2',chartWidth).attr('y2',256)
+    .attr('stroke','var(--color-border)').attr('stroke-width',0.75).attr('stroke-dasharray','4 3');
+  g.append('text').attr('class','secondary').attr('y',278).attr('font-size',10).text('Read in order the first time. After that, consult independently during a live build.');
+}
+draw();
+const ro = new ResizeObserver(() => draw());
+ro.observe(document.getElementById('chart'));
+</script>
+</body>
+</html>

@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Figure 3.2 — The five supervisory capacities</title>
+<style>
+:root {
+  --color-white: #FFFFFF;
+  --color-fill: #F5EFE8;
+  --color-ink: #2a1a0e;
+  --color-mark: #6B3520;
+  --color-red: #C8102E;
+  --color-slate: #1A3A5C;
+  --color-ochre: #C8860E;
+  --color-secondary: #545454;
+  --color-border: #D4D4D4;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-white: #111111;
+    --color-fill: #1a1612;
+    --color-ink: #F0EBE3;
+    --color-mark: #C8865E;
+    --color-red: #E8243A;
+    --color-slate: #6B8FB8;
+    --color-ochre: #D49A30;
+    --color-secondary: #A0978C;
+    --color-border: #2E2E2E;
+  }
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: var(--color-white); color: var(--color-ink); font-family: 'EB Garamond', Georgia, serif; padding: 24px; }
+#chart { width: 100%; min-height: 500px; }
+.tooltip { position: absolute; pointer-events: none; opacity: 0; background: var(--color-slate); color: var(--color-white); padding: 8px 12px; font-size: 12px; font-family: 'EB Garamond', Georgia, serif; max-width: 280px; line-height: 1.4; }
+text { font-family: 'EB Garamond', Georgia, serif; fill: var(--color-ink); }
+.caps { font-family: 'IBM Plex Mono', 'JetBrains Mono', monospace; letter-spacing: 0.08em; fill: var(--color-secondary); font-size: 10px; }
+.secondary { fill: var(--color-secondary); }
+.row-rect { fill: var(--color-white); stroke: var(--color-border); stroke-width: 1; cursor: pointer; transition: fill 120ms; }
+.row-rect:hover { fill: var(--color-fill); }
+.row-label { fill: var(--color-fill); stroke: var(--color-border); stroke-width: 1; pointer-events: none; }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+</style>
+</head>
+<body>
+<div id="chart" role="main"></div>
+<div class="tooltip" id="tt"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
+<script>
+function draw() {
+  d3.select('#chart').selectAll('*').remove();
+  const totalWidth = document.getElementById('chart').clientWidth || 700;
+  const totalHeight = 500;
+  const margin = { top: 56, right: 32, bottom: 56, left: 32 };
+  const chartWidth = totalWidth - margin.left - margin.right;
+
+  const svg = d3.select('#chart').append('svg')
+    .attr('width', totalWidth).attr('height', totalHeight)
+    .attr('role','img').attr('aria-labelledby','chart-title chart-desc');
+  svg.append('title').attr('id','chart-title').text('The five supervisory capacities');
+  svg.append('desc').attr('id','chart-desc').text('Vertical stack of five capacities: PA, PF, IJ, TO, EI. Each with a short gloss.');
+
+  const g = svg.append('g').attr('transform', `translate(${margin.left},${margin.top})`);
+  g.append('text').attr('class','caps').attr('y',-24).text('FIGURE 3.2 — THE FIVE SUPERVISORY CAPACITIES');
+  g.append('text').attr('y',0).attr('font-weight','bold').attr('font-size',13).text('The five things you keep, no matter how fluent Codex becomes');
+
+  const tt = d3.select('#tt');
+  function showTip(html){ tt.html(html).style('opacity',1); }
+  function moveTip(e){ tt.style('left',(e.pageX+12)+'px').style('top',(e.pageY-8)+'px'); }
+  function hideTip(){ tt.style('opacity',0); }
+
+  const rows = [
+    { code:'PA', name1:'Plausibility', name2:'Auditing', title:'Hear the wrong note before verification',
+      gloss:'The itch that something is off, before you can name what.',
+      tip:'Polanyian connoisseurship applied to Codex output — trained perception built by exposure to labeled wrong cases. The capacity Seth used when he typed hunting and haunting.' },
+    { code:'PF', name1:'Problem', name2:'Formulation', title:'Decide what the build is before Codex sees it',
+      gloss:'Codex optimizes within the frame. You set the frame.',
+      tip:'The work upstream of any prompt. Wrong frame produces wrong output, elegantly. Suchman: plans are resources for situated action, not substitutes for it.' },
+    { code:'IJ', name1:'Interpretive', name2:'Judgment', title:'Supply meaning the output cannot carry',
+      gloss:'"Old," "modified," "average" mean different things in your project.',
+      tip:"Schön's reflection-in-action. The paragraph you write under the 92%. The act of deciding what the measurement means for this user, this deadline, this constraint." },
+    { code:'TO', name1:'Tool', name2:'Orchestration', title:'Choose which mode, in what order, with what trust',
+      gloss:'Ask vs. Code Mode, best-of-N, by-hand. Sequencing matters.',
+      tip:'Which Codex task, in what order, trusted how far. Cheap-to-verify tasks on long leash. Expensive-to-verify tasks on short leash. The sequencing decides whether the diff is reviewable.' },
+    { code:'EI', name1:'Executive', name2:'Integration', title:'Hold the whole build toward a single goal',
+      gloss:"Codex starts fresh each session. You don't.",
+      tip:'Catches the drift between prompt 3 and prompt 17. The most common failure mode of human-AI collaboration is over-trust by reviewers — each individual suggestion reasonable, the accumulation an architecture nobody chose.' }
+  ];
+
+  const rowH = 60;
+  const gap = 8;
+  const yTop = 52;
+  const labelW = 120;
+
+  rows.forEach((r, i) => {
+    const y = yTop + i*(rowH+gap);
+    g.append('rect').attr('class','row-rect').attr('x',0).attr('y',y).attr('width',chartWidth).attr('height',rowH)
+      .on('mouseenter',()=>showTip(`<strong>${r.code} — ${r.name1} ${r.name2}</strong><br/>${r.tip}`))
+      .on('mousemove',moveTip).on('mouseleave',hideTip);
+    g.append('rect').attr('class','row-label').attr('x',0).attr('y',y).attr('width',labelW).attr('height',rowH);
+    g.append('text').attr('class','caps').attr('x',labelW/2).attr('y',y+22).attr('text-anchor','middle').attr('fill','var(--color-ink)').text(r.code);
+    g.append('text').attr('x',labelW/2).attr('y',y+42).attr('text-anchor','middle').attr('font-weight','bold').attr('font-size',11).text(r.name1);
+    g.append('text').attr('x',labelW/2).attr('y',y+55).attr('text-anchor','middle').attr('font-weight','bold').attr('font-size',11).text(r.name2);
+    g.append('text').attr('x',labelW+18).attr('y',y+26).attr('font-size',12).attr('font-weight','bold').text(r.title);
+    g.append('text').attr('class','secondary').attr('x',labelW+18).attr('y',y+47).attr('font-size',11).attr('font-style','italic').text(r.gloss);
+  });
+
+  const bottom = yTop + 5*(rowH+gap) + 16;
+  g.append('line').attr('x1',0).attr('y1',bottom).attr('x2',chartWidth).attr('y2',bottom)
+    .attr('stroke','var(--color-border)').attr('stroke-width',0.75).attr('stroke-dasharray','4 3');
+  g.append('text').attr('class','secondary').attr('y',bottom+20).attr('font-size',10).text('None of these has a horizon on which a model release closes it. Hover any row for the longer definition.');
+}
+draw();
+const ro = new ResizeObserver(() => draw());
+ro.observe(document.getElementById('chart'));
+</script>
+</body>
+</html>

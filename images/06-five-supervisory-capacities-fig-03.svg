@@ -1,0 +1,66 @@
+<svg viewBox="0 0 700 540" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">Problem Formulation as a funnel</title>
+  <desc id="desc">A funnel-shaped infographic. A wide top labeled vague intent narrows through interrogation, scope, and constraint stages to a narrow well-specified prompt at the bottom. Side annotations name the questions PF converts before Codex sees the prompt.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#2a1a0e"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="700" height="540" fill="#FFFFFF"/>
+
+  <text x="32" y="56" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="10" letter-spacing="0.08em" fill="#545454">FIGURE 6.3 — PROBLEM FORMULATION AS A FUNNEL</text>
+  <text x="32" y="88" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="13" font-weight="bold" fill="#2a1a0e">What PF converts before Codex sees a single prompt</text>
+
+  <!-- Funnel: top wide (250..450, y=130), narrows to bottom (320..380, y=440) -->
+  <polygon points="240,130 460,130 380,440 320,440" fill="#F5EFE8" stroke="#D4D4D4" stroke-width="1"/>
+
+  <!-- Horizontal stage dividers across the funnel -->
+  <line x1="246" y1="200" x2="454" y2="200" stroke="#D4D4D4" stroke-width="0.75" stroke-dasharray="3 2"/>
+  <line x1="262" y1="270" x2="438" y2="270" stroke="#D4D4D4" stroke-width="0.75" stroke-dasharray="3 2"/>
+  <line x1="282" y1="340" x2="418" y2="340" stroke="#D4D4D4" stroke-width="0.75" stroke-dasharray="3 2"/>
+  <line x1="304" y1="400" x2="396" y2="400" stroke="#D4D4D4" stroke-width="0.75" stroke-dasharray="3 2"/>
+
+  <!-- Stage labels (centered inside funnel) -->
+  <text x="350" y="158" text-anchor="middle" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="10" letter-spacing="0.08em" fill="#545454">VAGUE INTENT</text>
+  <text x="350" y="178" text-anchor="middle" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="11" font-style="italic" fill="#2a1a0e">"a feedback notifier"</text>
+
+  <text x="350" y="228" text-anchor="middle" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="10" letter-spacing="0.08em" fill="#545454">INTERROGATION</text>
+  <text x="350" y="246" text-anchor="middle" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="10" fill="#545454">Ask Mode surfaces blind spots</text>
+
+  <text x="350" y="298" text-anchor="middle" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="10" letter-spacing="0.08em" fill="#545454">SCOPE + INVARIANTS</text>
+  <text x="350" y="316" text-anchor="middle" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="10" fill="#545454">touches; never touches</text>
+
+  <text x="350" y="368" text-anchor="middle" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="10" letter-spacing="0.08em" fill="#545454">SHAPE + DONE</text>
+  <text x="350" y="384" text-anchor="middle" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="10" fill="#545454">where it lives; how to check</text>
+
+  <text x="350" y="424" text-anchor="middle" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="10" letter-spacing="0.08em" fill="#C8102E" font-weight="bold">WELL-SPECIFIED</text>
+
+  <!-- Left annotations: questions PF asks -->
+  <text x="36" y="158" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="9" letter-spacing="0.08em" fill="#545454">QUESTIONS PF ASKS</text>
+  <text x="36" y="186" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="11" fill="#2a1a0e">— what does this build do?</text>
+  <text x="36" y="208" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="11" fill="#2a1a0e">— what knowledge does</text>
+  <text x="36" y="222" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="11" fill="#2a1a0e">   it need that isn't here?</text>
+  <text x="36" y="252" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="11" fill="#2a1a0e">— what does it touch?</text>
+  <text x="36" y="274" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="11" fill="#2a1a0e">— what does it</text>
+  <text x="36" y="288" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="11" fill="#2a1a0e">   never touch?</text>
+  <text x="36" y="318" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="11" fill="#2a1a0e">— what does done</text>
+  <text x="36" y="332" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="11" fill="#2a1a0e">   look like?</text>
+
+  <!-- Right annotations: what gets excluded -->
+  <text x="490" y="158" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="9" letter-spacing="0.08em" fill="#545454">WHAT GETS EXCLUDED</text>
+  <text x="490" y="186" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="11" fill="#2a1a0e">— wrong verb</text>
+  <text x="490" y="208" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="11" fill="#2a1a0e">— unspecified target</text>
+  <text x="490" y="252" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="11" fill="#2a1a0e">— hidden dependencies</text>
+  <text x="490" y="274" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="11" fill="#2a1a0e">— scope creep into</text>
+  <text x="490" y="288" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="11" fill="#2a1a0e">   adjacent files</text>
+  <text x="490" y="318" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="11" fill="#2a1a0e">— "looks good" as a</text>
+  <text x="490" y="332" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="11" fill="#2a1a0e">   handoff condition</text>
+
+  <!-- Arrow at bottom: well-specified prompt to Codex -->
+  <line x1="350" y1="448" x2="350" y2="478" stroke="#2a1a0e" stroke-width="1.25" marker-end="url(#arrow)"/>
+  <text x="350" y="500" text-anchor="middle" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="10" letter-spacing="0.08em" fill="#2a1a0e">→ CODEX SEES THIS</text>
+
+  <!-- Bottom caption -->
+  <text x="32" y="528" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="10" fill="#545454">PF is the most under-exercised of the five. The funnel collapses to a sentence; the sentence is the prompt.</text>
+</svg>

@@ -1,0 +1,58 @@
+<svg viewBox="0 0 700 420" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">Anthropic 2026 RCT — quiz score by condition</title>
+  <desc id="desc">Bar chart comparing the AI-assisted group (50%) to the hand-coding group (67%) on a 14-question conceptual quiz on Python's Trio library. Error bars shown. The 17-point gap is statistically significant.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#2a1a0e"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="700" height="420" fill="#FFFFFF"/>
+
+  <text x="32" y="48" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="10" letter-spacing="0.08em" fill="#545454">FIGURE 2.4 — ANTHROPIC 2026 RCT</text>
+  <text x="32" y="76" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="13" font-weight="bold" fill="#2a1a0e">17 points. Frontier model. p = 0.01.</text>
+
+  <!-- Plot area -->
+  <rect x="100" y="120" width="500" height="220" fill="#F5EFE8" stroke="#D4D4D4" stroke-width="1"/>
+
+  <!-- Y axis ticks 0, 25, 50, 75, 100 -->
+  <text x="92" y="124" text-anchor="end" font-family="'EB Garamond', Georgia, serif" font-size="10" fill="#545454">100%</text>
+  <line x1="96" y1="120" x2="100" y2="120" stroke="#545454"/>
+  <text x="92" y="179" text-anchor="end" font-family="'EB Garamond', Georgia, serif" font-size="10" fill="#545454">75%</text>
+  <line x1="96" y1="175" x2="100" y2="175" stroke="#545454"/>
+  <text x="92" y="234" text-anchor="end" font-family="'EB Garamond', Georgia, serif" font-size="10" fill="#545454">50%</text>
+  <line x1="96" y1="230" x2="100" y2="230" stroke="#545454"/>
+  <text x="92" y="289" text-anchor="end" font-family="'EB Garamond', Georgia, serif" font-size="10" fill="#545454">25%</text>
+  <line x1="96" y1="285" x2="100" y2="285" stroke="#545454"/>
+  <text x="92" y="344" text-anchor="end" font-family="'EB Garamond', Georgia, serif" font-size="10" fill="#545454">0%</text>
+
+  <text x="48" y="240" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="9" letter-spacing="0.08em" fill="#545454" transform="rotate(-90 48 240)">QUIZ SCORE %</text>
+
+  <!-- AI-assisted: 50% -> y = 340 - 110 = 230, h = 110 -->
+  <rect x="200" y="230" width="120" height="110" fill="#C8102E"/>
+  <text x="260" y="222" text-anchor="middle" font-family="'EB Garamond', Georgia, serif" font-size="11" font-weight="bold" fill="#C8102E">50%</text>
+  <text x="260" y="360" text-anchor="middle" font-family="'EB Garamond', Georgia, serif" font-size="11" fill="#2a1a0e">AI-assisted</text>
+  <!-- Error bars: ±6 -->
+  <line x1="260" y1="216" x2="260" y2="244" stroke="#2a1a0e" stroke-width="1"/>
+  <line x1="252" y1="216" x2="268" y2="216" stroke="#2a1a0e" stroke-width="1"/>
+  <line x1="252" y1="244" x2="268" y2="244" stroke="#2a1a0e" stroke-width="1"/>
+
+  <!-- Hand-coding: 67% -> y = 340 - 147.4 = 192.6, h = 147.4 -->
+  <rect x="380" y="192.6" width="120" height="147.4" fill="#1A3A5C"/>
+  <text x="440" y="184" text-anchor="middle" font-family="'EB Garamond', Georgia, serif" font-size="11" font-weight="bold" fill="#1A3A5C">67%</text>
+  <text x="440" y="360" text-anchor="middle" font-family="'EB Garamond', Georgia, serif" font-size="11" fill="#2a1a0e">Hand-coding</text>
+  <!-- Error bars ±5 -->
+  <line x1="440" y1="178" x2="440" y2="206" stroke="#2a1a0e" stroke-width="1"/>
+  <line x1="432" y1="178" x2="448" y2="178" stroke="#2a1a0e" stroke-width="1"/>
+  <line x1="432" y1="206" x2="448" y2="206" stroke="#2a1a0e" stroke-width="1"/>
+
+  <!-- Gap annotation -->
+  <line x1="340" y1="230" x2="340" y2="192.6" stroke="#C8102E" stroke-width="1" stroke-dasharray="4 3"/>
+  <line x1="335" y1="230" x2="365" y2="230" stroke="#C8102E" stroke-width="1"/>
+  <line x1="335" y1="192.6" x2="365" y2="192.6" stroke="#C8102E" stroke-width="1"/>
+  <text x="355" y="215" font-family="'EB Garamond', Georgia, serif" font-size="11" font-weight="bold" fill="#C8102E">17 pts</text>
+
+  <!-- Bottom rule + caption -->
+  <line x1="32" y1="376" x2="668" y2="376" stroke="#D4D4D4" stroke-width="0.75" stroke-dasharray="4 3"/>
+  <text x="32" y="398" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="10" fill="#545454">52 junior engineers learning Python's Trio library. Cohen's d = 0.738. p = 0.01. Error bars: 1 SE.</text>
+</svg>

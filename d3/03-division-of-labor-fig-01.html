@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Figure 3.1 — Four pattern-completion strengths</title>
+<style>
+:root {
+  --color-white: #FFFFFF;
+  --color-fill: #F5EFE8;
+  --color-ink: #2a1a0e;
+  --color-mark: #6B3520;
+  --color-red: #C8102E;
+  --color-slate: #1A3A5C;
+  --color-ochre: #C8860E;
+  --color-secondary: #545454;
+  --color-border: #D4D4D4;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-white: #111111;
+    --color-fill: #1a1612;
+    --color-ink: #F0EBE3;
+    --color-mark: #C8865E;
+    --color-red: #E8243A;
+    --color-slate: #6B8FB8;
+    --color-ochre: #D49A30;
+    --color-secondary: #A0978C;
+    --color-border: #2E2E2E;
+  }
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: var(--color-white); color: var(--color-ink); font-family: 'EB Garamond', Georgia, serif; padding: 24px; }
+#chart { width: 100%; min-height: 380px; }
+.tooltip { position: absolute; pointer-events: none; opacity: 0; background: var(--color-slate); color: var(--color-white); padding: 8px 12px; font-size: 12px; font-family: 'EB Garamond', Georgia, serif; max-width: 260px; line-height: 1.4; }
+text { font-family: 'EB Garamond', Georgia, serif; fill: var(--color-ink); }
+.caps { font-family: 'IBM Plex Mono', 'JetBrains Mono', monospace; letter-spacing: 0.08em; fill: var(--color-secondary); font-size: 10px; }
+.secondary { fill: var(--color-secondary); }
+.col-rect { fill: var(--color-white); stroke: var(--color-border); stroke-width: 1; cursor: pointer; transition: fill 120ms; }
+.col-rect:hover { fill: var(--color-fill); }
+.col-header { fill: var(--color-fill); stroke: var(--color-border); stroke-width: 1; pointer-events: none; }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+</style>
+</head>
+<body>
+<div id="chart" role="main"></div>
+<div class="tooltip" id="tt"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
+<script>
+function draw() {
+  d3.select('#chart').selectAll('*').remove();
+  const totalWidth = document.getElementById('chart').clientWidth || 700;
+  const totalHeight = 380;
+  const margin = { top: 56, right: 32, bottom: 64, left: 32 };
+  const chartWidth = totalWidth - margin.left - margin.right;
+
+  const svg = d3.select('#chart').append('svg')
+    .attr('width', totalWidth).attr('height', totalHeight)
+    .attr('role','img').attr('aria-labelledby','chart-title chart-desc');
+  svg.append('title').attr('id','chart-title').text('Four pattern-completion strengths');
+  svg.append('desc').attr('id','chart-desc').text('Four labeled cards: Syntax, Idiom, Recall, Translation. Each with a one-line description.');
+
+  const g = svg.append('g').attr('transform', `translate(${margin.left},${margin.top})`);
+  g.append('text').attr('class','caps').attr('y',-24).text('FIGURE 3.1 — WHERE PATTERN COMPLETION EXCELS');
+  g.append('text').attr('y',0).attr('font-weight','bold').attr('font-size',13).text('The four things Codex is genuinely good at');
+
+  const tt = d3.select('#tt');
+  function showTip(html){ tt.html(html).style('opacity',1); }
+  function moveTip(e){ tt.style('left',(e.pageX+12)+'px').style('top',(e.pageY-8)+'px'); }
+  function hideTip(){ tt.style('opacity',0); }
+
+  const cards = [
+    { code:'SYNTAX',
+      body:['Exact API call,','argument order,','exception shape.'],
+      italic:['The mechanical','precision of','getting the call right.'],
+      tip:'Codex has effectively seen every API call thousands of times. Argument order, exception shapes, edge-case parameters — the mechanical precision is real. Free up your attention for the parts that need yours.' },
+    { code:'IDIOM',
+      body:['Conventional','structure for this','kind of code.'],
+      italic:['The expected','loop pattern,','the idiomatic move.'],
+      tip:"Idiom — the shape competent code in this language and ecosystem usually takes. Comprehension loops, context managers, the standard async pattern. Pattern completion across millions of examples gives this away cheaply." },
+    { code:'RECALL',
+      body:['Library flags,','functions, options',"you'd look up."],
+      italic:['Effectively','memorized','documentation.'],
+      tip:"Recall — the catalog of library options, flags, signatures you would otherwise have to search for. The model has memorized the documentation. Use it." },
+    { code:'TRANSLATION',
+      body:['Natural language','into code.','',],
+      italic:['Would have seemed','implausible','five years ago.'],
+      tip:"Translation — taking your prose specification and producing code that does roughly what you said. Genuinely strong, and the most novel capability of this generation of tools. Strong on the average case; the gap to your specific situation is what supervisory intelligence is for." }
+  ];
+
+  const colW = Math.min(150, (chartWidth - 3*12) / 4);
+  const gap = (chartWidth - colW*4) / 3;
+  const colH = 160;
+  const headerH = 40;
+  const yTop = 60;
+
+  cards.forEach((c,i) => {
+    const x = i*(colW+gap);
+    g.append('rect').attr('class','col-rect').attr('x',x).attr('y',yTop).attr('width',colW).attr('height',colH)
+      .on('mouseenter',()=>showTip(`<strong>${c.code}</strong><br/>${c.tip}`))
+      .on('mousemove',moveTip).on('mouseleave',hideTip);
+    g.append('rect').attr('class','col-header').attr('x',x).attr('y',yTop).attr('width',colW).attr('height',headerH);
+    g.append('text').attr('class','caps').attr('x',x+colW/2).attr('y',yTop+26).attr('text-anchor','middle').attr('fill','var(--color-ink)').text(c.code);
+
+    c.body.forEach((line, j) => {
+      g.append('text').attr('x',x+10).attr('y',yTop+headerH+24+j*16).attr('font-size',11).attr('font-weight','bold').text(line);
+    });
+    c.italic.forEach((line, j) => {
+      g.append('text').attr('class','secondary').attr('x',x+10).attr('y',yTop+headerH+88+j*14).attr('font-size',10).attr('font-style','italic').text(line);
+    });
+  });
+
+  g.append('line').attr('x1',0).attr('y1',yTop+colH+32).attr('x2',chartWidth).attr('y2',yTop+colH+32)
+    .attr('stroke','var(--color-border)').attr('stroke-width',0.75).attr('stroke-dasharray','4 3');
+  g.append('text').attr('class','secondary').attr('y',yTop+colH+52).attr('font-size',10).text('Fighting Codex on these four is a waste of your time. The next figure names what is yours instead.');
+}
+draw();
+const ro = new ResizeObserver(() => draw());
+ro.observe(document.getElementById('chart'));
+</script>
+</body>
+</html>

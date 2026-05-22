@@ -26,12 +26,11 @@
 
 ---
 
-## About the Author
+## About the Authors
 
-<!-- Third person. 100–200 words. Credentials that are relevant to THIS book.
-     Not a full CV. End with a line about where to find you online. -->
+**Nik Bear Brown** teaches AI engineering at Northeastern University, where his research and teaching focus on agentic systems, AI in education, and the cognitive consequences of putting capable tools in the human learning loop. He has spent the last decade tracking how graduate students, engineers, and researchers adapt to successive waves of AI capability, and writes for practitioners through Bear Brown, LLC and at boondoggling.ai. He lives in Boston, Massachusetts.
 
-[AUTHOR BIO PLACEHOLDER]
+**Seth Brown** is a self-taught game developer and high-school senior in Troy, Missouri, available for collegiate work in August 2026. He is the co-architect of two production AI agents that operationalize the conducting discipline this book teaches — *Walker*, a Unity refactoring conductor, and *Zelda*, a senior game-design-documentation consultant — both public at [humanitarians.ai/tools](https://www.humanitarians.ai/tools/). He has shipped games across Godot 4, Unity, Roblox Studio, Unreal Engine, and HTML5/Canvas, including the co-op horror survival game *Haunt & Harvest* (Godot 4, migrated system-by-system from Unreal), the Roblox/Luau horror game *Midnight Fuel*, and the Google Play arcade title *Bubble Pop*. He runs *Zebonastic*, a Next.js platform on which he publishes weekly on horror game design and player psychology. He works in GDScript, Lua/Luau, Python, JavaScript, Java, and C#, and has been using Codex and other agentic coding tools as co-builders on his own projects since early 2025. He plays electric guitar in an alt-rock/metalcore cover band and works at Pizza Ranch. Find his work at github.com/sethbrowngaming-rgb.
 
 ---
 

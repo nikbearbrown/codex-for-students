@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Figure 2.3 — Brain connectivity during AI-assisted writing</title>
+<style>
+:root {
+  --color-white: #FFFFFF;
+  --color-fill: #F5EFE8;
+  --color-ink: #2a1a0e;
+  --color-mark: #6B3520;
+  --color-red: #C8102E;
+  --color-slate: #1A3A5C;
+  --color-ochre: #C8860E;
+  --color-secondary: #545454;
+  --color-border: #D4D4D4;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-white: #111111;
+    --color-fill: #1a1612;
+    --color-ink: #F0EBE3;
+    --color-mark: #C8865E;
+    --color-red: #E8243A;
+    --color-slate: #6B8FB8;
+    --color-ochre: #D49A30;
+    --color-secondary: #A0978C;
+    --color-border: #2E2E2E;
+  }
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: var(--color-white); color: var(--color-ink); font-family: 'EB Garamond', Georgia, serif; padding: 24px; }
+#chart { width: 100%; min-height: 440px; }
+.tooltip { position: absolute; pointer-events: none; opacity: 0; background: var(--color-slate); color: var(--color-white); padding: 8px 12px; font-size: 12px; font-family: 'EB Garamond', Georgia, serif; max-width: 260px; line-height: 1.4; }
+text { font-family: 'EB Garamond', Georgia, serif; fill: var(--color-ink); }
+.caps { font-family: 'IBM Plex Mono', 'JetBrains Mono', monospace; letter-spacing: 0.08em; fill: var(--color-secondary); font-size: 10px; }
+.secondary { fill: var(--color-secondary); }
+.bar { cursor: pointer; transition: opacity 120ms; }
+.bar:hover { opacity: 0.85; }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+</style>
+</head>
+<body>
+<div id="chart" role="main"></div>
+<div class="tooltip" id="tt"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
+<script>
+function draw() {
+  d3.select('#chart').selectAll('*').remove();
+  const totalWidth = document.getElementById('chart').clientWidth || 700;
+  const totalHeight = 460;
+  const margin = { top: 64, right: 120, bottom: 80, left: 80 };
+  const chartWidth = totalWidth - margin.left - margin.right;
+  const chartHeight = totalHeight - margin.top - margin.bottom;
+
+  const svg = d3.select('#chart').append('svg')
+    .attr('width', totalWidth).attr('height', totalHeight)
+    .attr('role','img').attr('aria-labelledby','chart-title chart-desc');
+  svg.append('title').attr('id','chart-title').text('Brain connectivity during AI-assisted writing');
+  svg.append('desc').attr('id','chart-desc').text('Bar chart: Brain Only 100%, Search Engine 72%, AI-Assisted 45%.');
+
+  const g = svg.append('g').attr('transform', `translate(${margin.left},${margin.top})`);
+  g.append('text').attr('class','caps').attr('y',-32).text('FIGURE 2.3 — KOSMYNA ET AL. (MIT MEDIA LAB, 2025)');
+  g.append('text').attr('y',-8).attr('font-weight','bold').attr('font-size',13).text('Functional brain connectivity during writing');
+
+  const tt = d3.select('#tt');
+  function showTip(html){ tt.html(html).style('opacity',1); }
+  function moveTip(e){ tt.style('left',(e.pageX+12)+'px').style('top',(e.pageY-8)+'px'); }
+  function hideTip(){ tt.style('opacity',0); }
+
+  const data = [
+    { name:'Brain Only', val:100, color:'var(--color-slate)', tip:'Control. Participants wrote with no assistance. Functional connectivity sets the 100% baseline against which the other conditions are scaled.' },
+    { name:'Search Engine', val:72, color:'var(--color-mark)', tip:'Search-engine assistance. Participants used a search engine but composed themselves. Connectivity at roughly 72% of baseline — diminished, but the network is still substantially active.' },
+    { name:'AI-Assisted', val:45, color:'var(--color-red)', tip:'ChatGPT assistance. Connectivity fell to roughly 45% of baseline — a 55% drop. Follow-up sessions found participants could not remember what they had written. The consolidation that would have built durable memory had not occurred.' }
+  ];
+
+  const x = d3.scaleBand().domain(data.map(d=>d.name)).range([0, chartWidth]).padding(0.35);
+  const y = d3.scaleLinear().domain([0, 110]).range([chartHeight, 0]);
+
+  // bg
+  g.append('rect').attr('x',0).attr('y',0).attr('width',chartWidth).attr('height',chartHeight)
+    .attr('fill','var(--color-fill)').attr('stroke','var(--color-border)').attr('stroke-width',1);
+
+  // y ticks
+  [0,25,50,75,100].forEach(v => {
+    g.append('text').attr('x',-8).attr('y',y(v)+4).attr('text-anchor','end').attr('font-size',10).attr('class','secondary').text(v+'%');
+    g.append('line').attr('x1',-4).attr('x2',0).attr('y1',y(v)).attr('y2',y(v)).attr('stroke','var(--color-secondary)');
+  });
+  g.append('text').attr('class','caps').attr('transform',`translate(-56,${chartHeight/2}) rotate(-90)`).attr('text-anchor','middle').text('CONNECTIVITY % OF BASELINE');
+
+  // bars
+  g.selectAll('.bar').data(data).join('rect').attr('class','bar')
+    .attr('x',d=>x(d.name)).attr('y',d=>y(d.val)).attr('width',x.bandwidth()).attr('height',d=>chartHeight-y(d.val))
+    .attr('fill',d=>d.color)
+    .on('mouseenter',(e,d)=>showTip(`<strong>${d.name} — ${d.val}%</strong><br/>${d.tip}`))
+    .on('mousemove',moveTip).on('mouseleave',hideTip);
+
+  // value labels above bars
+  data.forEach(d => {
+    g.append('text').attr('x',x(d.name)+x.bandwidth()/2).attr('y',y(d.val)-8).attr('text-anchor','middle')
+      .attr('font-weight','bold').attr('font-size',11).attr('fill',d.color).text(d.val+'%');
+    g.append('text').attr('x',x(d.name)+x.bandwidth()/2).attr('y',chartHeight+24).attr('text-anchor','middle').attr('font-size',11).text(d.name);
+  });
+
+  // dashed baseline line
+  g.append('line').attr('x1',0).attr('x2',chartWidth).attr('y1',y(100)).attr('y2',y(100))
+    .attr('stroke','var(--color-secondary)').attr('stroke-dasharray','4 3').attr('stroke-width',0.75);
+
+  // annotation
+  g.append('text').attr('x',chartWidth+12).attr('y',y(72)).attr('font-size',11).attr('font-style','italic').attr('fill','var(--color-red)').text('55% drop');
+  g.append('text').attr('x',chartWidth+12).attr('y',y(72)+14).attr('font-size',10).attr('class','secondary').text('vs. baseline');
+
+  // caption rule
+  g.append('line').attr('x1',0).attr('y1',chartHeight+44).attr('x2',chartWidth+100).attr('y2',chartHeight+44)
+    .attr('stroke','var(--color-border)').attr('stroke-width',0.75).attr('stroke-dasharray','4 3');
+  g.append('text').attr('class','secondary').attr('y',chartHeight+64).attr('font-size',10).text('Source: Kosmyna et al., "Your Brain on ChatGPT," MIT Media Lab, June 2025. EEG during essay writing.');
+}
+draw();
+const ro = new ResizeObserver(() => draw());
+ro.observe(document.getElementById('chart'));
+</script>
+</body>
+</html>

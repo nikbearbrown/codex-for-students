@@ -1,0 +1,71 @@
+<svg viewBox="0 0 700 480" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">Same prompt, same Codex, different outcomes</title>
+  <desc id="desc">Side-by-side annotated code snippets. Left: Run one — pandas version, brittle to quoted dialogue. Right: Run two — stdlib version with explicit quoting and error handling. Annotations call out the lines where supervisory intelligence changed the output.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#2a1a0e"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="700" height="480" fill="#FFFFFF"/>
+
+  <text x="32" y="48" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="10" letter-spacing="0.08em" fill="#545454">FIGURE 3.4 — SAME PROMPT, DIFFERENT OUTCOMES</text>
+  <text x="32" y="76" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="13" font-weight="bold" fill="#2a1a0e">The supervisory intelligence happens after the generation</text>
+
+  <!-- LEFT PANEL: Run one -->
+  <rect x="32" y="100" width="312" height="320" fill="#FFFFFF" stroke="#D4D4D4" stroke-width="1"/>
+  <rect x="32" y="100" width="312" height="32" fill="#F5EFE8" stroke="#D4D4D4" stroke-width="1"/>
+  <text x="188" y="121" text-anchor="middle" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="10" letter-spacing="0.08em" fill="#545454">RUN ONE — PANDAS</text>
+
+  <text x="44" y="152" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="9" fill="#545454">import pandas as pd</text>
+  <text x="44" y="166" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="9" fill="#545454"></text>
+  <text x="44" y="180" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="9" fill="#545454">def word_counts(paths):</text>
+  <text x="44" y="194" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="9" fill="#545454">    out = []</text>
+  <text x="44" y="208" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="9" fill="#545454">    for p in paths:</text>
+  <text x="44" y="222" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="9" fill="#C8102E">        df = pd.read_csv(p)</text>
+  <text x="44" y="236" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="9" fill="#545454">        df["wc"] = df["content"]\</text>
+  <text x="44" y="250" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="9" fill="#545454">          .apply(lambda s: len(s.split()))</text>
+  <text x="44" y="264" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="9" fill="#545454">        out.append(df)</text>
+  <text x="44" y="278" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="9" fill="#545454">    return pd.concat(out)</text>
+
+  <!-- Annotation: red dot + label -->
+  <circle cx="38" cy="220" r="4" fill="#C8102E"/>
+  <text x="44" y="316" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="11" font-weight="bold" fill="#C8102E">→ no quoting / dialect handling</text>
+  <text x="44" y="332" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="10" fill="#545454">Curly quotes inside a 'content' field</text>
+  <text x="44" y="346" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="10" fill="#545454">break the column boundary silently.</text>
+
+  <text x="44" y="374" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="11" font-style="italic" fill="#545454">Outcome:</text>
+  <text x="44" y="390" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="11" font-style="italic" fill="#545454">200-word "article" that's actually 1,700.</text>
+  <text x="44" y="406" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="11" font-style="italic" fill="#545454">Afternoon lost to debugging.</text>
+
+  <!-- RIGHT PANEL: Run two -->
+  <rect x="356" y="100" width="312" height="320" fill="#FFFFFF" stroke="#D4D4D4" stroke-width="1"/>
+  <rect x="356" y="100" width="312" height="32" fill="#F5EFE8" stroke="#D4D4D4" stroke-width="1"/>
+  <text x="512" y="121" text-anchor="middle" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="10" letter-spacing="0.08em" fill="#545454">RUN TWO — STDLIB + AUDIT</text>
+
+  <text x="368" y="152" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="9" fill="#545454">import csv  # WORD_DEFINITION: see note</text>
+  <text x="368" y="166" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="9" fill="#545454"></text>
+  <text x="368" y="180" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="9" fill="#545454">def word_counts(paths):</text>
+  <text x="368" y="194" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="9" fill="#545454">    out = []</text>
+  <text x="368" y="208" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="9" fill="#545454">    for p in paths:</text>
+  <text x="368" y="222" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="9" fill="#1A3A5C">        rows = csv.DictReader(</text>
+  <text x="368" y="236" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="9" fill="#1A3A5C">          open(p, encoding='utf-8'),</text>
+  <text x="368" y="250" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="9" fill="#1A3A5C">          quoting=csv.QUOTE_ALL)</text>
+  <text x="368" y="264" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="9" fill="#1A3A5C">        for r in rows:</text>
+  <text x="368" y="278" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="9" fill="#1A3A5C">          out.append(count(r, errors))</text>
+  <text x="368" y="292" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="9" fill="#545454">    return out, errors</text>
+
+  <!-- Annotation: blue dot + label -->
+  <circle cx="362" cy="220" r="4" fill="#1A3A5C"/>
+  <text x="368" y="316" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="11" font-weight="bold" fill="#1A3A5C">→ explicit quoting, error path</text>
+  <text x="368" y="332" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="10" fill="#545454">PA, PF, TO, IJ, EI applied to the</text>
+  <text x="368" y="346" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="10" fill="#545454">function before it ships.</text>
+
+  <text x="368" y="374" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="11" font-style="italic" fill="#545454">Outcome:</text>
+  <text x="368" y="390" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="11" font-style="italic" fill="#545454">Quoted dialogue flagged for review.</text>
+  <text x="368" y="406" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="11" font-style="italic" fill="#545454">Schedule generated correctly.</text>
+
+  <!-- Bottom rule + caption -->
+  <line x1="32" y1="440" x2="668" y2="440" stroke="#D4D4D4" stroke-width="0.75" stroke-dasharray="4 3"/>
+  <text x="32" y="462" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="10" fill="#545454">Same prompt, same Codex. The difference is fifteen minutes of supervisory work — paid back in an afternoon of debugging not done.</text>
+</svg>

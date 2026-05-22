@@ -1,0 +1,86 @@
+<svg viewBox="0 0 700 420" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">Conductor at the podium vs. conductor in the violin section</title>
+  <desc id="desc">Two-panel illustration. Left panel: a conductor stands at the podium, baton raised, listening to the orchestra. Right panel: the same conductor sits in the violin section playing alongside the musicians. The failure mode is not incompetence; it is being in the wrong seat.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#2a1a0e"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="700" height="420" fill="#FFFFFF"/>
+
+  <text x="32" y="48" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="10" letter-spacing="0.08em" fill="#545454">FIGURE 5.1 — RIGHT SEAT, WRONG SEAT</text>
+  <text x="32" y="76" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="13" font-weight="bold" fill="#2a1a0e">The failure mode is not incompetence. It is being in the wrong seat.</text>
+
+  <!-- LEFT PANEL — conductor at podium -->
+  <rect x="32" y="100" width="304" height="240" fill="#F5EFE8" stroke="#D4D4D4" stroke-width="1"/>
+  <text x="184" y="124" text-anchor="middle" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="10" letter-spacing="0.08em" fill="#545454">PANEL A — AT THE PODIUM</text>
+
+  <!-- Stage / orchestra ground line -->
+  <line x1="64" y1="290" x2="304" y2="290" stroke="#545454" stroke-width="1"/>
+
+  <!-- Podium -->
+  <rect x="160" y="252" width="48" height="38" fill="#FFFFFF" stroke="#2a1a0e" stroke-width="1.5"/>
+
+  <!-- Conductor figure: small stylized human on podium -->
+  <!-- head -->
+  <circle cx="184" cy="216" r="9" fill="#FFFFFF" stroke="#2a1a0e" stroke-width="1.5"/>
+  <!-- body -->
+  <line x1="184" y1="225" x2="184" y2="252" stroke="#2a1a0e" stroke-width="1.5"/>
+  <!-- arms — baton raised -->
+  <line x1="184" y1="232" x2="200" y2="218" stroke="#2a1a0e" stroke-width="1.5"/>
+  <line x1="200" y1="218" x2="216" y2="200" stroke="#2a1a0e" stroke-width="1.2"/>
+  <line x1="184" y1="232" x2="168" y2="240" stroke="#2a1a0e" stroke-width="1.5"/>
+
+  <!-- Orchestra: rows of small heads on either side of podium -->
+  <!-- Left orchestra (3 little circles) -->
+  <circle cx="92" cy="268" r="6" fill="#FFFFFF" stroke="#545454" stroke-width="1"/>
+  <circle cx="112" cy="278" r="6" fill="#FFFFFF" stroke="#545454" stroke-width="1"/>
+  <circle cx="132" cy="282" r="6" fill="#FFFFFF" stroke="#545454" stroke-width="1"/>
+  <!-- Right orchestra -->
+  <circle cx="236" cy="282" r="6" fill="#FFFFFF" stroke="#545454" stroke-width="1"/>
+  <circle cx="256" cy="278" r="6" fill="#FFFFFF" stroke="#545454" stroke-width="1"/>
+  <circle cx="276" cy="268" r="6" fill="#FFFFFF" stroke="#545454" stroke-width="1"/>
+
+  <!-- Caption -->
+  <text x="184" y="316" text-anchor="middle" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="11" fill="#545454">listens, judges, intervenes</text>
+
+  <!-- RIGHT PANEL — conductor in the violin section -->
+  <rect x="364" y="100" width="304" height="240" fill="#F5EFE8" stroke="#D4D4D4" stroke-width="1"/>
+  <text x="516" y="124" text-anchor="middle" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="10" letter-spacing="0.08em" fill="#545454">PANEL B — IN THE SECTION</text>
+
+  <line x1="396" y1="290" x2="636" y2="290" stroke="#545454" stroke-width="1"/>
+
+  <!-- Empty podium (no one on it) -->
+  <rect x="476" y="252" width="48" height="38" fill="#FFFFFF" stroke="#C8102E" stroke-width="1.5" stroke-dasharray="4 3"/>
+  <text x="500" y="246" text-anchor="middle" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="9" font-style="italic" fill="#C8102E">empty</text>
+
+  <!-- Conductor seated in violin row with a violin -->
+  <!-- head -->
+  <circle cx="416" cy="252" r="9" fill="#FFFFFF" stroke="#C8102E" stroke-width="1.5"/>
+  <!-- body (seated, shorter) -->
+  <line x1="416" y1="261" x2="416" y2="282" stroke="#C8102E" stroke-width="1.5"/>
+  <!-- violin -->
+  <rect x="424" y="258" width="22" height="6" fill="#FFFFFF" stroke="#C8102E" stroke-width="1.2"/>
+  <line x1="412" y1="270" x2="424" y2="262" stroke="#C8102E" stroke-width="1.2"/>
+
+  <!-- Other violinists -->
+  <circle cx="436" cy="252" r="7" fill="#FFFFFF" stroke="#545454" stroke-width="1"/>
+  <rect x="444" y="258" width="22" height="6" fill="#FFFFFF" stroke="#545454" stroke-width="1"/>
+  <circle cx="456" cy="252" r="7" fill="#FFFFFF" stroke="#545454" stroke-width="1"/>
+  <rect x="464" y="258" width="22" height="6" fill="#FFFFFF" stroke="#545454" stroke-width="1"/>
+
+  <!-- Right side orchestra rows -->
+  <circle cx="556" cy="278" r="6" fill="#FFFFFF" stroke="#545454" stroke-width="1"/>
+  <circle cx="576" cy="276" r="6" fill="#FFFFFF" stroke="#545454" stroke-width="1"/>
+  <circle cx="596" cy="272" r="6" fill="#FFFFFF" stroke="#545454" stroke-width="1"/>
+  <circle cx="616" cy="268" r="6" fill="#FFFFFF" stroke="#545454" stroke-width="1"/>
+
+  <!-- Caption -->
+  <text x="516" y="316" text-anchor="middle" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="11" fill="#545454">plays a part. no one holds the meaning.</text>
+
+  <!-- Bottom rule + caption -->
+  <line x1="32" y1="364" x2="668" y2="364" stroke="#D4D4D4" stroke-width="0.75" stroke-dasharray="4 3"/>
+  <text x="32" y="386" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="10" fill="#545454">When the conductor stops conducting and starts playing, the orchestra does not stop. It keeps producing notes. The notes are technically correct.</text>
+  <text x="32" y="402" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="10" fill="#545454">But no one is checking whether they are the right notes for this piece.</text>
+</svg>

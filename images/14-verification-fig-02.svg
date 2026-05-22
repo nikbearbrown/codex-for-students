@@ -1,0 +1,79 @@
+<svg viewBox="0 0 700 480" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">The verification loop — defects remaining across passes</title>
+  <desc id="desc">A line chart. X-axis is verification iteration; y-axis is defects remaining. A descending step curve drops sharply at each pass — Pass 1 catches mechanical failures, Pass 2 catches edge-case failures, Pass 3 catches spec-needs failures. A residual marker at the right shows what no pass catches.</desc>
+
+  <rect x="0" y="0" width="700" height="480" fill="#FFFFFF"/>
+
+  <text x="32" y="48" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="10" letter-spacing="0.08em" fill="#545454">FIGURE 14.2 — VERIFICATION LOOP FLOW</text>
+  <text x="32" y="76" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="13" font-weight="bold" fill="#2a1a0e">Defects remaining drops across passes — and never quite reaches zero</text>
+
+  <!-- Plot area -->
+  <rect x="80" y="108" width="540" height="252" fill="#F5EFE8" stroke="#D4D4D4" stroke-width="1"/>
+
+  <!-- Y axis label -->
+  <text x="48" y="234" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="9" letter-spacing="0.08em" fill="#545454" transform="rotate(-90 48 234)">DEFECTS REMAINING →</text>
+
+  <!-- X axis label -->
+  <text x="350" y="402" text-anchor="middle" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="9" letter-spacing="0.08em" fill="#545454">ITERATION →</text>
+
+  <!-- X axis ticks: 0..5 mapped to 80..620 (108px per unit) -->
+  <text x="80" y="378" text-anchor="middle" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="9" fill="#545454">start</text>
+  <text x="188" y="378" text-anchor="middle" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="9" fill="#545454">P1</text>
+  <text x="296" y="378" text-anchor="middle" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="9" fill="#545454">P2</text>
+  <text x="404" y="378" text-anchor="middle" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="9" fill="#545454">P3</text>
+  <text x="512" y="378" text-anchor="middle" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="9" fill="#545454">done</text>
+
+  <!-- Tick marks -->
+  <line x1="80" y1="360" x2="80" y2="364" stroke="#545454" stroke-width="0.75"/>
+  <line x1="188" y1="360" x2="188" y2="364" stroke="#545454" stroke-width="0.75"/>
+  <line x1="296" y1="360" x2="296" y2="364" stroke="#545454" stroke-width="0.75"/>
+  <line x1="404" y1="360" x2="404" y2="364" stroke="#545454" stroke-width="0.75"/>
+  <line x1="512" y1="360" x2="512" y2="364" stroke="#545454" stroke-width="0.75"/>
+
+  <!-- Y axis hint ticks -->
+  <text x="72" y="138" text-anchor="end" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="9" fill="#545454">high</text>
+  <text x="72" y="354" text-anchor="end" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="9" fill="#545454">0</text>
+
+  <!-- Step curve: defects drop at each pass -->
+  <!-- Values: start=130, after P1=70, after P2=30, after P3=10 -->
+  <!-- Plot y: 108 (top) to 360 (bottom), value 130 ≈ y=138, 70 ≈ y=220, 30 ≈ y=280, 10 ≈ y=320 -->
+  <!-- Start to P1 -->
+  <line x1="80" y1="138" x2="188" y2="138" stroke="#C8102E" stroke-width="2.5"/>
+  <line x1="188" y1="138" x2="188" y2="220" stroke="#C8102E" stroke-width="2.5"/>
+  <!-- P1 to P2 -->
+  <line x1="188" y1="220" x2="296" y2="220" stroke="#C8102E" stroke-width="2.5"/>
+  <line x1="296" y1="220" x2="296" y2="280" stroke="#C8102E" stroke-width="2.5"/>
+  <!-- P2 to P3 -->
+  <line x1="296" y1="280" x2="404" y2="280" stroke="#C8102E" stroke-width="2.5"/>
+  <line x1="404" y1="280" x2="404" y2="320" stroke="#C8102E" stroke-width="2.5"/>
+  <!-- P3 to done -->
+  <line x1="404" y1="320" x2="620" y2="320" stroke="#C8102E" stroke-width="2.5"/>
+
+  <!-- Pass markers -->
+  <circle cx="188" cy="220" r="5" fill="#C8102E"/>
+  <circle cx="296" cy="280" r="5" fill="#C8102E"/>
+  <circle cx="404" cy="320" r="5" fill="#C8102E"/>
+
+  <!-- Pass labels -->
+  <text x="234" y="200" text-anchor="middle" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="9" letter-spacing="0.08em" fill="#2a1a0e">PASS 1</text>
+  <text x="234" y="214" text-anchor="middle" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="10" fill="#545454">mechanical</text>
+
+  <text x="342" y="260" text-anchor="middle" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="9" letter-spacing="0.08em" fill="#2a1a0e">PASS 2</text>
+  <text x="342" y="274" text-anchor="middle" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="10" fill="#545454">edge cases</text>
+
+  <text x="448" y="300" text-anchor="middle" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="9" letter-spacing="0.08em" fill="#C8102E">PASS 3</text>
+  <text x="448" y="314" text-anchor="middle" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="10" fill="#C8102E">spec needs</text>
+
+  <!-- Residual annotation -->
+  <line x1="556" y1="320" x2="556" y2="344" stroke="#545454" stroke-width="0.75" stroke-dasharray="3 2"/>
+  <text x="560" y="338" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="10" font-style="italic" fill="#545454">residual</text>
+
+  <!-- Regression loop indicator: a small arrow showing fix → re-run earlier passes -->
+  <path d="M 470 322 q 30 -8 50 0" fill="none" stroke="#C8102E" stroke-width="1" stroke-dasharray="3 2"/>
+  <text x="492" y="336" text-anchor="middle" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="9" font-style="italic" fill="#C8102E">re-run on fix</text>
+
+  <!-- Bottom rule + caption -->
+  <line x1="32" y1="416" x2="668" y2="416" stroke="#D4D4D4" stroke-width="0.75" stroke-dasharray="4 3"/>
+  <text x="32" y="438" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="10" fill="#545454">Each pass drops the defect count by what only that pass can catch. Pass 3 is highlighted because its drop is the one no test suite would have made for you</text>
+  <text x="32" y="454" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="10" fill="#545454">— you ran it by opening the output on the actual device. The residual is what no pass catches: downstream, dependency, and formulation failures.</text>
+</svg>

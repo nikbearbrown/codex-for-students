@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Figure 2.5 — Where the gap is largest</title>
+<style>
+:root {
+  --color-white: #FFFFFF;
+  --color-fill: #F5EFE8;
+  --color-ink: #2a1a0e;
+  --color-mark: #6B3520;
+  --color-red: #C8102E;
+  --color-slate: #1A3A5C;
+  --color-ochre: #C8860E;
+  --color-secondary: #545454;
+  --color-border: #D4D4D4;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-white: #111111;
+    --color-fill: #1a1612;
+    --color-ink: #F0EBE3;
+    --color-mark: #C8865E;
+    --color-red: #E8243A;
+    --color-slate: #6B8FB8;
+    --color-ochre: #D49A30;
+    --color-secondary: #A0978C;
+    --color-border: #2E2E2E;
+  }
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: var(--color-white); color: var(--color-ink); font-family: 'EB Garamond', Georgia, serif; padding: 24px; }
+#chart { width: 100%; min-height: 380px; }
+.tooltip { position: absolute; pointer-events: none; opacity: 0; background: var(--color-slate); color: var(--color-white); padding: 8px 12px; font-size: 12px; font-family: 'EB Garamond', Georgia, serif; max-width: 280px; line-height: 1.4; }
+text { font-family: 'EB Garamond', Georgia, serif; fill: var(--color-ink); }
+.caps { font-family: 'IBM Plex Mono', 'JetBrains Mono', monospace; letter-spacing: 0.08em; fill: var(--color-secondary); font-size: 10px; }
+.secondary { fill: var(--color-secondary); }
+.bar { cursor: pointer; transition: opacity 120ms; }
+.bar:hover { opacity: 0.85; }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+</style>
+</head>
+<body>
+<div id="chart" role="main"></div>
+<div class="tooltip" id="tt"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
+<script>
+function draw() {
+  d3.select('#chart').selectAll('*').remove();
+  const totalWidth = document.getElementById('chart').clientWidth || 700;
+  const totalHeight = 400;
+  const margin = { top: 64, right: 60, bottom: 80, left: 140 };
+  const chartWidth = totalWidth - margin.left - margin.right;
+  const chartHeight = totalHeight - margin.top - margin.bottom;
+
+  const svg = d3.select('#chart').append('svg')
+    .attr('width', totalWidth).attr('height', totalHeight)
+    .attr('role','img').attr('aria-labelledby','chart-title chart-desc');
+  svg.append('title').attr('id','chart-title').text('Where the gap is largest');
+  svg.append('desc').attr('id','chart-desc').text('Horizontal bar chart of performance gaps by question type: Declarative 7, Generative 13, Diagnostic 23 points.');
+
+  const g = svg.append('g').attr('transform', `translate(${margin.left},${margin.top})`);
+  g.append('text').attr('class','caps').attr('y',-32).attr('x',-100).text('FIGURE 2.5 — WHERE THE GAP IS LARGEST');
+  g.append('text').attr('y',-8).attr('x',-100).attr('font-weight','bold').attr('font-size',13).text('Diagnostic questions show the largest gap');
+
+  const tt = d3.select('#tt');
+  function showTip(html){ tt.html(html).style('opacity',1); }
+  function moveTip(e){ tt.style('left',(e.pageX+12)+'px').style('top',(e.pageY-8)+'px'); }
+  function hideTip(){ tt.style('opacity',0); }
+
+  const data = [
+    { name:'Declarative', val:7, color:'var(--color-mark)', tip:'Declarative questions — what does this function do? The AI-assisted group lagged by about 7 points. Smallest gap; the question type least dependent on active prediction.' },
+    { name:'Generative', val:13, color:'var(--color-slate)', tip:'Generative questions — write a function that does X. Moderate gap of about 13 points. The AI-assisted group could recognize the pattern but not reliably produce it from scratch.' },
+    { name:'Diagnostic', val:23, color:'var(--color-red)', highlight:true, tip:'Diagnostic questions — find and explain the bug. Gap of about 23 points. Debugging requires the exact prediction-vs-observation loop that AI delegation skips. The cognitive event that develops the skill is the one outsourced.' }
+  ];
+
+  const x = d3.scaleLinear().domain([0, 25]).range([0, chartWidth]);
+  const y = d3.scaleBand().domain(data.map(d=>d.name)).range([0, chartHeight]).padding(0.3);
+
+  g.append('rect').attr('x',0).attr('y',0).attr('width',chartWidth).attr('height',chartHeight)
+    .attr('fill','var(--color-fill)').attr('stroke','var(--color-border)').attr('stroke-width',1);
+
+  // x ticks
+  [0,5,10,15,20,25].forEach(v => {
+    g.append('line').attr('x1',x(v)).attr('x2',x(v)).attr('y1',chartHeight).attr('y2',chartHeight+5).attr('stroke','var(--color-secondary)');
+    g.append('text').attr('x',x(v)).attr('y',chartHeight+20).attr('text-anchor','middle').attr('class','secondary').attr('font-size',10).text(v);
+  });
+  g.append('text').attr('class','caps').attr('x',chartWidth/2).attr('y',chartHeight+40).attr('text-anchor','middle').text('PERFORMANCE GAP (POINTS)');
+
+  g.selectAll('.bar').data(data).join('rect').attr('class','bar')
+    .attr('x',0).attr('y',d=>y(d.name)).attr('width',d=>x(d.val)).attr('height',y.bandwidth())
+    .attr('fill',d=>d.color)
+    .on('mouseenter',(e,d)=>showTip(`<strong>${d.name} — ${d.val} pts</strong><br/>${d.tip}`))
+    .on('mousemove',moveTip).on('mouseleave',hideTip);
+
+  data.forEach(d => {
+    g.append('text').attr('x',-8).attr('y',y(d.name)+y.bandwidth()/2+4).attr('text-anchor','end').attr('font-size',11)
+      .attr('font-weight', d.highlight?'bold':'normal').attr('fill', d.highlight?'var(--color-red)':'var(--color-ink)').text(d.name);
+    g.append('text').attr('x',x(d.val)+8).attr('y',y(d.name)+y.bandwidth()/2+4).attr('font-size',11).attr('font-weight','bold').attr('fill',d.color).text(d.val+' pts');
+  });
+
+  g.append('line').attr('x1',-100).attr('y1',chartHeight+60).attr('x2',chartWidth).attr('y2',chartHeight+60)
+    .attr('stroke','var(--color-border)').attr('stroke-width',0.75).attr('stroke-dasharray','4 3');
+  g.append('text').attr('class','secondary').attr('x',-100).attr('y',chartHeight+80).attr('font-size',10).text('Debugging is the irreducible cognitive skill. Letting the AI find and name the bug skips the loop that builds it.');
+}
+draw();
+const ro = new ResizeObserver(() => draw());
+ro.observe(document.getElementById('chart'));
+</script>
+</body>
+</html>
