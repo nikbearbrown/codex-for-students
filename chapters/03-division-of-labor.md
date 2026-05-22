@@ -1,209 +1,211 @@
-# Chapter 2 — What You're Actually Good At (And What Codex Is Better At)
+# Chapter 3 — What You're Actually Good At (And What Codex Is Better At)
 
-> Pattern recognition is Codex's domain. Supervisory intelligence is yours. Knowing which is which is the whole game.
-
----
-
-## Learning outcomes
-
-1. **(Understand)** Distinguish pattern recognition (where AI is superhuman) from supervisory intelligence (where AI is structurally weak).
-2. **(Apply)** Classify a set of build tasks as Codex work or human work.
-3. **(Analyze)** Identify the specific supervisory capacity being exercised at a given step in a build.
+*The machine has the pattern. You have the meaning. Knowing which is which is the whole game.*
 
 ---
 
-## Opening
+There is a thing that happens when you first use an AI coding tool seriously. You ask it to write something. It writes it. The code compiles. Your tests pass. And you feel, briefly, like the tool is doing your job.
 
-Seth asked Codex to write a function.
+Then something breaks that the tool did not predict, in a way the tool could not have predicted, because the tool did not know what you actually meant.
 
-The function was a small utility — given a list of student submissions in a directory, return the ones that hadn't been modified in the last seven days. Codex generated something. The function compiled. The test cases Seth had written passed. The output looked correct.
+This chapter is about why that happens — and why it will keep happening, no matter how good the tool gets.
 
-Seth ran it on real data.
+---
 
-The output included a file that Seth knew had been modified yesterday. He looked closer. The function was reading file modification times from the operating system. On the file system Seth was using, the modification time reflected the *last time the content was written*, not the *last time the file was touched* — and the file he was looking at had been opened in an editor without changes saved, then closed. The file appeared modified to his eye (he had just been working on it) but was not modified in the sense his function was using.
+## The Two Things
 
-The function was technically correct. The test cases were technically correct. The *meaning* of "modified" was where the gap lived. The CLI did not know what Seth meant by modified, because Seth had not been precise — and Seth had not been precise because, until the failure surfaced, he had not realized the term was ambiguous.
+Let me describe two operations precisely, because almost everything in this chapter follows from the distinction.
 
-This is the chapter's question, in one example. Codex is superhuman at writing a function that detects file-modification-time changes. Codex is structurally blind to what Seth meant by "modified" for his specific use case. The gap between the two is where supervisory work lives, and it is the chapter's subject.
+The first operation is **pattern completion**. You have seen many examples of something. A new example arrives, partial or ambiguous. You complete it from the pattern. This is what happens when you see "f(x) =" and your hand writes "x²" before you've decided anything consciously. It's what happens when a doctor sees a symptom cluster and names a syndrome. It's what an experienced programmer does when they glance at a stack trace and know, immediately, which class of bug it is.
+
+Codex does pattern completion. It does it over a corpus of code so large — billions of lines, millions of variations, every library in every language — that its pattern-completing power exceeds any individual programmer's by a large margin. If you ask it for "a function that returns files older than seven days," it has effectively written that function thousands of times before, in dozens of styles, across dozens of operating systems and filesystem edge cases. The function it produces is, on average, better than the one you'd produce from memory.
+
+On average.
+
+The second operation is **supervisory judgment**. You know what you mean by "older than seven days" in the specific context of *your* project. You know that your filesystem uses creation time differently from modification time on this operating system. You know that one of your test files was opened in an editor yesterday without being saved, which makes it look unmodified to the OS but look modified to you, because you have a mental model of the file that is richer than its metadata.
+
+Codex cannot do supervisory judgment. Not because it is bad at it. Because it does not have the information.
+
+That distinction — not a matter of quality, but a matter of *access to information* — is the structural fact this chapter is built on.
 
 <!-- → [TABLE: Division of labor — two columns: Codex does / Human does. Rows: pattern completion, code generation, syntax resolution, test execution (Codex) vs. plausibility auditing, problem formulation, interpretive judgment, tool orchestration, executive integration (Human). No color.] -->
 
 ---
 
-## What pattern recognition is
+## What Pattern Completion Actually Is
 
-Codex was trained on an enormous corpus of code. It has seen Python functions that walk directories. It has seen file-modification-time checks. It has seen filter logic for "files older than N days." It has seen these patterns combined and recombined across millions of variations on Stack Overflow, GitHub, blog posts, library documentation.
+I want to be precise about this, because "AI completes patterns" is a phrase that gets used so loosely it stops meaning anything.
 
-When you ask Codex for "a function that returns files older than 7 days," it completes the pattern. The completion is informed by every variation it has ever seen. The result is, on average, more idiomatic and more correct than what a human would produce from memory — because the human has written maybe a few dozen such functions, and the CLI has effectively written a few million.
+Here is what it means concretely. Codex was trained on text. A very large amount of text, most of it code. During training, it learned to predict: *given this sequence of tokens, what token comes next?* It did this billions of times, over billions of examples, updating its internal parameters to make better and better predictions. What emerged from that process is a system that, when you give it a prompt, produces a completion that is statistically consistent with what the training data would predict.
 
-This is the CLI's domain. It is faster than you. It will stay faster than you. The gap will widen, not close.
+The remarkable thing — the thing that surprises people even now — is how much *looks like understanding* falls out of that process. Codex seems to understand what you mean. It seems to reason about your problem. It seems to apply judgment.
 
-What pattern completion does well:
-- **Syntax.** The exact API calls, the right argument order, the proper exception handling for the language and library version.
-- **Idiom.** The conventional way to structure the code. The expected loop pattern. The standard error-handling shape.
-- **Recall.** Library calls and flags you forgot. Codex has the docs effectively memorized in a way you do not.
-- **Translation.** Natural-language descriptions to code. Codex is genuinely good at this in a way that would have seemed implausible five years ago.
+Some of that is real. The training data contains a huge amount of implicit reasoning, and the model has learned to reproduce it. But some of it is sophisticated autocomplete — and the boundary between the two is genuinely unclear, which is part of why this is a hard chapter to think about clearly.
 
-What pattern completion does *not* do:
+What I am confident is true: pattern completion excels at **syntax** (the exact API call, the right argument order, the exception handling shape for this library in this version), **idiom** (the conventional way to structure this kind of code, the expected loop pattern), **recall** (library flags and functions you'd have to look up, which Codex has effectively memorized), and **translation** (converting natural-language descriptions into code, which it is genuinely good at in a way that would have seemed implausible five years ago).
 
-Any of the work in the next section.
+<!-- → [INFOGRAPHIC: The four pattern-completion strengths — four labeled zones in a 2×2 or horizontal strip: Syntax / Idiom / Recall / Translation. One-line description under each. No data, purely conceptual. Helps readers anchor the taxonomy before the chapter complicates it.] -->
 
-> "Codex excels at moving fast and covering ground." — OpenAI internal use doc, December 2025.[^1]
-
-That is what the chapter argues about Codex. The next section is what the chapter argues about you.
+What I am equally confident is true: none of those four capabilities give Codex access to what you mean, what your codebase contains, what your data looks like, or what success looks like for this user on this deadline.
 
 ---
 
-## What supervisory intelligence is
+## What Supervisory Intelligence Is
 
-**Supervisory intelligence** is the work of deciding which patterns are right *for your specific situation* — and noticing when something is wrong even though it looks right.
+Let me give it a name so we can talk about it precisely: **supervisory intelligence** is the work of deciding which pattern is right *for your specific situation*, and noticing when something is wrong even though it looks right.
 
-The CLI cannot do supervisory work, not because it is bad at it but because it does not have the information. The CLI cannot see:
+The word "supervisory" is deliberate. You are not writing the code. You are not finding the algorithm. You are watching the code that was written, in the context of everything you know that the code-writer doesn't, and making judgments about whether it will do what you actually need.
 
-- **Your project.** What other code is in the codebase. What conventions you've established that aren't visible in the snippet you pasted. What architectural decisions were made and what alternatives were rejected.
-- **Your data.** What the inputs actually look like. What edge cases exist in your data that don't exist in the average dataset.
-- **Your intent.** What "modified" means *in your context*. What "old" means. What "clean up" means. What success looks like for *this* user, *this* deadline, *this* purpose.
-- **The consequence horizon.** Whether being wrong costs you five minutes or five days or affects someone else.
+This requires five distinct capacities, which the book develops at length later. For now, the list:
 
-None of this is in the prompt. None can be in the prompt without you typing things you would not want to type repeatedly. The CLI is operating on enormous code knowledge and zero knowledge of *your specific situation*. The output is the most-probable answer to your prompt averaged across the people who might have typed it. You are not the average.
+**Plausibility auditing.** Hearing the wrong note before verification catches it. The vague unease you feel when you look at output and something seems off, before you can say exactly what. This is a real cognitive skill. It develops with practice. It cannot be outsourced.
 
-The five capacities (Chapter 5 names them formally):
+**Problem formulation.** Deciding what the build *is* before Codex sees it. This is the work upstream of any prompt — and it is entirely yours, because Codex cannot tell you what you're trying to do. It can only respond to what you say you're trying to do.
 
-1. **Plausibility Auditing.** Hearing the wrong note before verification catches it. The feeling Seth had when he saw the file in the output that he knew had been modified.
-2. **Problem Formulation.** Deciding what the build IS before Codex sees it. The work upstream of any suggest.
-3. **Tool Orchestration.** Choosing which Codex mode, in what order, with what context. Ask Mode vs. Code Mode; Best-of-N vs. single response.
-4. **Interpretive Judgment.** Supplying meaning the CLI's output cannot supply. The "modified" disambiguation in the chapter opening.
-5. **Executive Integration.** Holding the whole build toward a single goal across many prompts.
+**Interpretive judgment.** Supplying meaning the output cannot supply on its own. "Modified" means one thing to an OS and another thing to you. "Old" means one thing to a generic use case and another thing to your project. The map from words to meanings is yours to maintain.
 
-Each is irreducibly yours. None has a horizon on which a model release closes it, because the model does not have the information to do the work.
+**Tool orchestration.** Choosing which mode, in what order, with what context. When to use Ask Mode instead of Code Mode. When to request multiple candidates and compare them. When the task is too small to warrant a prompt at all and faster to type by hand.
+
+**Executive integration.** Holding the whole build toward a single goal across many prompts, many sessions, many days. Codex has no memory across conversations. The arc of the project is yours to maintain.
+
+<!-- → [INFOGRAPHIC: The five supervisory capacities as a vertical stack or spoke diagram — Plausibility Auditing / Problem Formulation / Interpretive Judgment / Tool Orchestration / Executive Integration. Each with a three-to-five word gloss. Designed as a reference card the reader will return to in later chapters.] -->
+
+None of these has a horizon on which a model release closes it. That claim needs a defense.
+
+The defense is simple: these capacities depend on information that Codex does not have. Your project's history. Your data's actual distribution. Your intent. The consequence if this breaks in production on a Tuesday for a specific user. This information is not in any training corpus. It is not in your prompt, and you would not want to put it in every prompt. The model's access to your specific situation is structurally limited — and supervisory intelligence is precisely the work of applying that specific situation to the model's output.
+
+Better models narrow the gap at the edges. They don't close the structural center.
 
 ---
 
-## The solve-verify asymmetry
+## The Solve-Verify Asymmetry
 
-A practical asymmetry worth naming.
+There is a practical consequence of this that reshapes how AI-assisted work actually goes.
 
-Codex generates faster than you can verify. It writes a function in two seconds. Verifying that the function does what you actually need — reading the code, considering the edge cases, checking against the real data — takes longer than that. The gap is not narrowing; it is widening as Codex gets faster.
-
-The asymmetry has an operational implication: your time during AI-assisted work is *almost entirely* verification time. The generation is essentially free. The verification is the bottleneck.
-
-This reframes what good practice looks like. The student who tries to keep up with Codex's generation pace by skimming verification is operating against the asymmetry. The student who slows down at the verification step — running explain or asking Codex to walk through the code, checking against edge cases, predicting the consequence — is using their scarce resource where it matters.
+Codex generates faster than you can verify. This is not a temporary condition. It is getting more pronounced, not less, as generation speed increases. The function appears in two seconds. Reading it carefully — understanding what it does, checking it against your actual intent, considering the edge cases in your actual data — takes longer than that.
 
 <!-- → [DIAGRAM: The solve-verify asymmetry — simple timeline. Codex's solve speed increasing over time. Human verification capacity stable. The gap widens. The human's job is not to solve faster but to verify better.] -->
 
----
+This asymmetry has a direct operational implication. In AI-assisted work, your time is *almost entirely* verification time. The generation is essentially free. The bottleneck is you, checking.
 
-## The dangerous middle
+The student who tries to match Codex's pace by skimming verification is operating against the asymmetry. They are spending their scarce resource — careful attention — in the place where it matters least, and not spending it in the place where it matters most. The student who slows down at verification — running explain, walking through the code, checking against the actual edge cases — is using attention correctly.
 
-The category that fits neither pure pattern work nor pure supervisory work.
+Feynman used to say that the first principle is you must not fool yourself, and you are the easiest person to fool. AI-assisted coding creates a new version of this problem: the output *looks* right. It compiles. It passes the tests the model wrote (which encode the same understanding as the code). The wrongness, when it exists, is below the surface, waiting for the case that the test suite didn't imagine.
 
-Tasks that *look* like pattern work — the kind of task you expect Codex to handle — but that *require* supervisory judgment to do correctly. These are the **dangerous middle**.
-
-A function to "filter old files" looks like pattern work. Codex generates a working function. The function uses file-modification-time, because that is the most common interpretation of "old." If your situation requires a different interpretation (file age since first creation, or time since last actual write to disk, or some project-specific notion of "no longer in use"), the function is wrong *for you* in a way that is invisible until your specific case surfaces.
-
-A function to "validate user input" looks like pattern work. Codex generates input-validation code. The code rejects empty strings, very long strings, strings with special characters. If your situation requires accepting non-ASCII names (because your users have non-ASCII names) or rejecting specific patterns Codex would not have anticipated (because of your particular threat model), the code is wrong *for you*.
-
-A function to "calculate the average" looks like pattern work. Codex generates `sum(xs) / len(xs)`. If your data contains outliers that should be excluded, or if the empty-list case should return a sentinel rather than raise, or if "average" in your domain means median, the function is wrong *for you*.
-
-The dangerous middle is the largest category of failure in AI-assisted code. The output runs. The tests (which Codex may have written, against the same understanding it had when it wrote the code) pass. The wrongness surfaces only when your specific case hits — sometimes weeks or months after the code shipped.
-
-Chapter 9 owns the dangerous middle as its full chapter. For now, recognize the shape: tasks where pattern completion *gets you most of the way* and *misses the part that matters for your situation*. Those are the tasks where the conducting discipline — supervisory capacities exercised explicitly — is most essential.
+The discipline of not being fooled is supervisory intelligence. It cannot be automated.
 
 ---
 
-## Worked example: the same step, two outcomes
+## The Dangerous Middle
 
-Same task: build a function that takes a list of student CSV submissions and produces a summary table of word counts per submission.
+There is a category of task that does not fit cleanly into either pattern work or supervisory work, and it is responsible for most of the silent failures in AI-assisted coding.
 
-**Run one: Codex unattended.**
+These are tasks that look like pattern work — the kind of task where you'd expect Codex to produce correct output with minimal review — but where the correctness of the output depends on a judgment that is specific to your situation.
 
-Seth types the request. Codex generates a function using `pandas` to read CSVs and `apply` to compute word counts. The function returns a DataFrame. Seth tests it on three sample CSVs. The counts look right. He uses the function in his project.
+Call it the **dangerous middle**.
 
-A month later, a submission with unusual quoting causes the `pandas` CSV reader to misinterpret column boundaries. The word counts for that submission are wildly wrong. Seth does not notice until the affected student questions the count on their submission. Seth realizes the bug. The fix takes an afternoon (debugging, root cause, regenerating the affected counts, apologizing).
+A function to filter "old" files looks like pattern work. It is. Codex generates a working function. But "old" means modification time to the OS; it might mean something else to you. The function is right for the average case and wrong for your case. The wrongness is invisible until a specific file that you know is recent shows up in the "old" pile.
 
-**Run two: Codex with the supervisory capacities exercised.**
+A function to validate user input looks like pattern work. Codex generates sensible validation: reject empty strings, very long strings, strings with certain special characters. But your users have non-ASCII names. The validation rejects their names. The function is right for the training corpus's implicit user model and wrong for your actual users.
 
-Seth types the same request. Codex generates the same function. Then Seth does the supervisory work.
+A function to compute "the average" looks like pattern work. `sum(xs) / len(xs)` is the pattern. But "average" in your domain means median, or your data contains outliers that should be excluded, or the empty-list case should return a sentinel. The function is right on average and wrong for your case.
 
-**Plausibility audit.** Does the function feel right? Seth notices it uses `pandas` for what could be done with the CSV stdlib. Why? Codex defaults to `pandas` for tabular data; the choice is reasonable for most cases but Seth's case is simple. PA fires: investigate.
+<!-- → [TABLE: Three dangerous-middle examples side by side — columns: Task / What Codex assumes / What your situation requires / Where the gap hides. Rows: file filtering, input validation, average computation. Helps readers see the shape of the category, not just three individual examples.] -->
 
-**Problem formulation revisit.** Seth's actual task: word counts for student feedback. Does he need the full `pandas` machinery? No — he needs to count words. PF revisits: a simpler function would be more reliable and easier to debug.
+What distinguishes the dangerous middle is not that the output is bad. The output is often good — it compiles, the obvious tests pass, it handles the generic case correctly. What distinguishes it is that *the part it gets wrong is the part specific to your situation*, and your situation is precisely what Codex cannot see.
 
-**Tool orchestration.** Seth chooses to ask Codex to rewrite the function using the standard library, with explicit handling of quoting and empty cells. The Ask Mode interrogation surfaces edge cases: non-UTF-8 files, embedded newlines in fields, empty rows. Seth notes these as test cases to add.
+The discipline that catches the dangerous middle is supervisory intelligence applied deliberately: plausibility auditing that asks "does this output match what I actually need, not just what I asked for?"; interpretive judgment that unpacks every ambiguous term before accepting the output; problem formulation that makes the specific-situation requirements explicit before the prompt, not after.
 
-**Interpretive judgment.** What is a "word"? Codex's default is split-on-whitespace, which counts hyphenated terms as one. Seth's rubric counts hyphenated terms as one too — so the default matches his domain. He notes this as a `WORD_DEFINITION` comment in the function so future-Seth (or another teacher) does not have to re-derive it.
-
-**Executive integration.** The function is part of a larger grading workflow. Seth checks that the function's output shape (a list of dicts with `submission_id`, `word_count`, and `errors`) matches what the downstream summary script expects. It does.
-
-The function ships. A month later, the unusual-quoting submission comes through. The function's explicit error-handling catches the parsing issue and reports it; the summary script flags the submission for manual review. Seth catches it before the affected student's grade is finalized.
-
-**The lesson:** pattern completion produced a function. Supervisory intelligence produced a function that did not break silently a month later.
-
-**The limit:** the supervisory work took longer upfront. The fifteen extra minutes saved Seth an afternoon of debugging and an apology to a student. The math is favorable; the friction is real.
+Chapter 9 develops this at length. For now, recognizing the shape is enough.
 
 ---
 
-## Common misconceptions
+## The Same Step, Two Outcomes
 
-**"With enough context in the prompt, Codex can do the supervisory work."** Partial. More context narrows Codex's guess; it does not eliminate the gap between the most-probable answer and the right answer for your specific situation. The supervisory work depends on knowledge you have not put in the prompt and would not want to put in every prompt.
+Here is a worked example that makes the abstract concrete. I want you to see supervisory intelligence in operation — not described, but running.
 
-**"This is just being careful."** Carefulness without structure is unreliable. The chapter is not arguing you should be more careful; it is arguing that the supervisory work has *named operations* that you can practice deliberately. Vague carefulness misses the dangerous middle.
+Seth needs a function. He's building a grading tool. Given a directory of student CSV submissions, he wants a summary table of word counts per submission.
 
-**"Pattern completion will get good enough that supervisory judgment isn't a separate skill."** No. Pattern completion is about *averages over a corpus*; supervisory judgment is about *your specific situation*. The two are categorically different. Improving pattern completion does not give the model access to your project, your data, your intent.
+**Run one.** Seth types the request. Codex generates a function using `pandas` to read CSVs and `apply` to compute word counts. The function returns a DataFrame. Seth runs it on three sample CSVs. The counts look right. He uses the function.
 
-**"I'll spot the dangerous middle when it happens."** Sometimes. The whole point of *silent* wrongness is that you cannot reliably spot it without the discipline. The discipline is what makes the spotting reliable.
+A month later, a student's submission has unusual quoting in the CSV. The `pandas` reader misinterprets the column boundaries. The word counts for that submission are wildly wrong. Seth finds out when the student asks why their essay counted as 200 words when it was over 1,000. Seth debugs, finds the cause, re-runs, apologizes. The afternoon is gone.
+
+**Run two.** Same request. Same function from Codex. Then Seth does the supervisory work.
+
+*Plausibility audit:* The function uses `pandas` for what could be a simple standard-library task. Codex defaults to `pandas` for tabular data; it's reasonable for most cases. But Seth's case is simple. PA fires: investigate.
+
+*Problem formulation revisit:* Seth's actual task is word counts for student feedback. He doesn't need the full `pandas` machinery. He needs to count words. PF revisits: a simpler function would be more reliable and easier to debug.
+
+*Tool orchestration:* Seth asks Codex to rewrite the function using the standard library, with explicit handling of quoting and empty cells. Ask Mode surfaces edge cases: non-UTF-8 files, embedded newlines in fields, empty rows. Seth notes these as test cases.
+
+*Interpretive judgment:* What is a "word"? Codex's default is split-on-whitespace. Seth's rubric counts hyphenated terms as one. The default matches. He adds a `WORD_DEFINITION` comment so future-Seth doesn't re-derive it.
+
+*Executive integration:* The function's output — a list of dicts with `submission_id`, `word_count`, and `errors` — needs to match what the downstream summary script expects. Seth checks. It does.
+
+<!-- → [IMAGE: Side-by-side annotated code snippets — Run one (pandas version) on the left, Run two (stdlib version with explicit quoting and error handling) on the right. Annotations call out the specific lines where supervisory intelligence changed the output. Caption: "Same prompt, same Codex. Different outcomes because of what happened after the generation."] -->
+
+The function ships. A month later, the unusual-quoting submission arrives. The function's explicit error-handling catches the parsing issue and flags the submission for manual review. Seth catches it before the grade is finalized.
+
+The supervisory work took fifteen extra minutes upfront. It saved an afternoon of debugging and an apology to a student. The math is favorable; the friction is real. The discipline is what made the difference.
+
+---
+
+## Three Misconceptions Worth Clearing Up
+
+These come up every time I teach this material, so I want to address them directly.
+
+**"With enough context in the prompt, Codex can do the supervisory work."**
+
+More context narrows Codex's guess. It does not eliminate the gap between the most probable answer and the right answer for your situation. The supervisory work depends on knowledge you have not put in the prompt — your project's history, your data's actual edge cases, your intent — and in most cases, you would not want to re-specify all of it for every prompt. The gap narrows at the edges; the structural center holds.
+
+**"This is just being careful."**
+
+Carefulness without structure is unreliable. The dangerous middle catches careful people all the time. The five capacities — plausibility auditing, problem formulation, interpretive judgment, tool orchestration, executive integration — are not generic carefulness. They are specific operations, each aimed at a specific class of failure. Vague carefulness misses the dangerous middle because the dangerous middle looks fine on the surface.
+
+**"Pattern completion will get good enough that supervisory judgment won't be a separate skill."**
+
+No. Pattern completion is about averages over a corpus. Supervisory judgment is about your specific situation. These are categorically different, not points on a continuum. Improving pattern completion does not give the model access to your project, your data, or your intent. Improving it just means the average case gets handled more gracefully. The cases specific to your situation are still yours to navigate.
 
 ---
 
 ## Exercises
 
-1. **(Apply)** Given the following ten code tasks, classify each as **Codex work** (pure pattern completion), **human work** (pure supervisory judgment), or **dangerous middle** (pattern work with supervisory hazard). Defend each classification.
-   - Implementing the Fibonacci function.
-   - Designing the API for a new user-facing feature.
-   - Adding TypeScript types to an existing JavaScript function.
-   - Choosing the right data structure for a graph traversal problem.
-   - Writing a regex to match phone numbers in your country.
-   - Refactoring a long function into smaller ones.
-   - Deciding whether a function should be sync or async.
-   - Writing unit tests for an existing function.
-   - Picking a sorting algorithm for a list of 10,000 items.
-   - Filtering "old" files from a directory.
+**LLM Exercises**
 
-2. **(Analyze)** Read a provided Codex transcript (or one from your own history). At each step, identify the moment where a supervisory capacity should have been exercised but wasn't. Trace what would have gone wrong as a result.
+1. **(Apply)** Classify ten code tasks as Codex work, human work, or dangerous middle. Defend each classification with one sentence explaining where the supervisory judgment lives (or doesn't).
 
-3. **(Create)** Write your own labor separation rule for a project you are currently working on. The rule should be specific to the project: name which kinds of tasks you will delegate to Codex without explicit supervisory review and which kinds you will always review.
+2. **(Analyze)** Find a Codex transcript — from your own history or a provided example. At each step, identify the moment where a supervisory capacity should have been exercised but wasn't. Trace what would have gone wrong.
+
+3. **(Create)** Write a labor-separation rule for a project you are currently working on. Name which kinds of tasks you will delegate without explicit supervisory review, which you will always review, and what specific thing you are watching for in the review.
 
 ---
 
-## What would change my mind
+## What Would Change My Mind
 
-The chapter's strong structural claim is that **the pattern-completion / supervisory-intelligence division is categorical, not gradient** — that no improvement in pattern completion makes supervisory work a different problem. If a 2027 or later system could demonstrate reliable supervisory judgment in domains where it does not have access to the user's project context — perhaps through some form of context inference I am not anticipating — the categorical framing softens to gradient. The chapter would still hold (Codex is much weaker than humans at supervisory work), but the framing would be "the gap is narrowing" rather than "the gap is structural."
+The chapter's strong claim is that the pattern-completion / supervisory-intelligence division is *categorical*, not gradient — that no improvement in pattern completion makes supervisory work a different problem.
 
-I think this is unlikely on the next-edition timeline because the structural argument (the model does not have the information) is hard to engineer around without giving the model project access — which has its own dangers and is not the path most agentic-coding tools are taking.
+If a future system could demonstrate reliable supervisory judgment in domains where it doesn't have access to the user's project context — perhaps through some form of context inference I'm not anticipating — the categorical framing softens to gradient. The chapter would still hold (Codex is much weaker than humans at supervisory work), but the framing would shift from "the gap is structural" to "the gap is narrowing."
+
+I think this is unlikely on the next-edition timeline because the structural argument is hard to engineer around without giving the model project access — which has its own dangers and is not the direction most agentic-coding tools are taking.
 
 ---
 
-## Still puzzling
+## Still Puzzling
 
-- **Where exactly pattern completion shades into supervisory work.** The chapter draws the line crisply for teaching. In practice, the line is fuzzier. Some tasks have *some* supervisory work the CLI can guess at and *some* it cannot.
-
-- **Does the asymmetry hold for Codex variants that read the whole project?** Codex's Ask Mode can read the codebase before generating. This narrows the supervisory-judgment gap somewhat. Whether it narrows enough to change the chapter's argument is open; the book's working answer is no (intent is still not in the project files).
-
-- **Whether some students are systematically better at supervisory work.** The book assumes the discipline is teachable. Some individuals will exercise the capacities more naturally; the book's bet is that everyone can develop them with practice.
+Where exactly pattern completion shades into supervisory work. The chapter draws the line crisply for teaching. In practice the line is fuzzier — some tasks have supervisory work the model can partially guess at and some it cannot. The right answer is probably not a sharp line but a probability distribution over how likely the model's guess is to match your specific situation. I don't yet have a clean way to teach that.
 
 ---
 
 ## AI Wayback Machine
 
-🕰️ **Frederick Winslow Taylor** (1856–1915) — American mechanical engineer who was the first systematic analyst of the division of labor between human judgment and mechanical execution. Taylor's project, *The Principles of Scientific Management* (1911), was to study work tasks and identify which components belonged to human cognition and which to mechanical (or organizational) execution.[^2] Taylor's legacy is complicated — the time-and-motion studies he pioneered were often used to dehumanize labor — but his analytical question is the right one for this chapter: *which cognitive work belongs to which agent?* For AI-assisted programming, Taylor's question becomes: which work belongs to Codex, which to the human, and what is the dangerous middle in between? The chapter's answer (pattern completion to Codex; supervisory intelligence to the human) is Taylor's framework applied to a tool he could not have anticipated. *(The pantry research recommended swapping Taylor for Lillian Gilbreth — Taylor's wife's collaborator and the humane half of the partnership — on grounds of both substantive fit and diversity. Either is defensible; the book uses Taylor here for series consistency.)*
+🕰️ **Frederick Winslow Taylor** (1856–1915) was the first systematic analyst of the division of labor between human judgment and mechanical execution. His *Principles of Scientific Management* (1911) was an attempt to study work tasks and identify which components belonged to human cognition and which to mechanical execution.[^1] Taylor's legacy is complicated — the time-and-motion studies he pioneered were often used to dehumanize labor — but his analytical question is exactly the right one for this chapter: *which cognitive work belongs to which agent?* For AI-assisted programming, Taylor's question becomes: which work belongs to Codex, which to the human, and what is the dangerous middle in between? The chapter's answer — pattern completion to Codex, supervisory intelligence to the human — is Taylor's framework applied to a tool he could not have anticipated.
 
 ---
 
 ## Bridge
 
-You can name the capacities. Chapter 3 explains why school isn't teaching them — and why, at this specific moment in AI-assisted education, the technically fluent student is on their own.
+You can now name the capacities. The next chapter asks why school isn't teaching them — and why, at this specific moment in AI-assisted education, the technically fluent student is on their own.
 
 ---
 
-[^1]: OpenAI engineers, "How OpenAI Engineers use Codex to Tackle Big Projects with Rigor" (forum.openai.com, December 4, 2025).
-[^2]: Taylor, F. W. *The Principles of Scientific Management*. Harper & Brothers, 1911.
+[^1]: Taylor, F. W. *The Principles of Scientific Management*. Harper & Brothers, 1911.
