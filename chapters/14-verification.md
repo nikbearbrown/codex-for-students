@@ -1,57 +1,90 @@
-# Chapter 13 — Verification: How You Know It Works
+# Chapter 14 — Verification: How You Know It Works
 
-> The build is done when it passes the handoff conditions — not when Codex says it's done.
-
----
-
-## Learning outcomes
-
-1. **(Apply)** Run a structured verification pass on a completed build using explicit criteria from the spec.
-2. **(Analyze)** Distinguish build failures from test quality gaps.
-3. **(Evaluate)** Produce a post-build assessment.
+*The build is done when it passes the handoff conditions — not when Codex says it's done.*
 
 ---
 
-## Opening
+The per-step handoffs had all passed.
 
-Seth's personal-finance build had finished its last step. The script processed his February CSV exports. The summary markdown rendered: net worth, cash flow by category, four uncategorized transactions for manual review. Codex's report said the build was done. The handoff conditions per step had all passed.
+Seth's personal-finance script had finished its last step. It processed his February CSV exports. The summary markdown rendered: net worth, cash flow by category, four uncategorized transactions flagged for manual review. Codex's status report said the build was complete. Every handoff condition had returned a pass.
 
-Seth was about to declare it done.
+He was about to declare it done. Then he ran the verification pass — the one he almost skipped.
 
-Then he ran the verification pass — the one he almost skipped because the per-step handoffs had been clean. He checked the output against the User needs from the spec:
+He opened the markdown file on his phone. It rendered. The cash-flow-by-category section used a Markdown table with seven columns. On a phone screen in portrait mode, the table did not fit. The categories at the right edge were cut off. You could scroll horizontally to see them. No one would.
 
-- *Idempotent: running twice produces the same output.* He ran the script a second time. The output was identical. **PASS.**
-- *Dedup is reliable across CSV format differences.* He inspected the SQLite database. The transaction count matched the unique transactions from both CSV files. **PASS.**
-- *Categorization rules are in a config file.* The rules were in `~/finance/config/categories.yaml`. **PASS.**
-- *Output is one markdown file per month, under 200 lines.* The file was 156 lines. **PASS.**
+The build had passed every mechanical check. The User need from the spec — *output is readable on phone* — was technically met in the sense that the markdown file could be opened on a phone. It was not met in the sense that mattered. The table format was wrong for the device.
 
-So far so good. But the spec also said: *"Output is readable on phone."* This was a User need but it had not been a per-step handoff condition. Seth opened the markdown on his phone. It rendered. But the cash-flow-by-category section, which used a Markdown table with seven columns, did not fit on the phone screen. It scrolled horizontally; the categories at the right edge were cut off.
+Seth fixed it. The table became a list. Categories and cash-flow amounts, each on its own line. The output fit. The build was now genuinely done.
 
-The build had passed every per-step handoff. The User need from the spec was technically met (the output *is* readable, in the sense that you can read it by scrolling). The User need was *not* met in the way that mattered — the table format was wrong for the device.
+This is the distinction the chapter is about. The per-step handoffs are necessary. They are not sufficient. There is a verification pass at the level of the *whole build* — against the spec's User needs, not against the individual steps' conditions — and it catches what nothing else catches.
 
-Seth fixed it. The table became a list of categories with cash-flow amounts, each on its own row. The output fit on the phone. The build is now genuinely done.
+---
 
-This is the chapter. The verification pass at the level of the *whole build*, against the spec's User needs, catches what the per-step handoffs cannot.
+## What the handoffs cannot see
+
+Before explaining the three passes, it is worth being precise about what the per-step handoff conditions actually check — because understanding their limits is understanding why the verification pass exists.
+
+A handoff condition is specific, testable, and binary. It checks whether a particular step produced the particular output that step was supposed to produce. *The new function exists at `auth/login.py`. It imports only from the standard library. It passes the three named test cases. It modifies no file outside `auth/`.*
+
+That condition tells you the step is done. It does not tell you the *build* is done. The build is the integration of all the steps. The integration can produce a failure that no single step's handoff would have caught — a table that is technically correct markdown and practically unreadable on the device the spec said it would be read on.
+
+The phone-readability failure is not a handoff failure. Every step that produced the output passed its condition. It is a *spec-needs* failure: the final state of the system does not satisfy a User need that was never encoded as a per-step check. This failure lives above the individual steps. It is visible only when you compare the complete output against the written spec.
+
+This is not a criticism of the handoff discipline. The handoffs protect against the wrong thing being built at each step. The verification pass protects against the right things being built at each step that combine into the wrong whole. Both are necessary. They catch different failures.
+
+<!-- → [TABLE: what each layer catches — three rows (per-step handoff condition, Pass 1–2 verification, Pass 3 spec-needs verification), three columns: what it checks, example failure it catches, example failure it misses. Student should see that no single layer is sufficient and that the layers are complementary, not redundant.] -->
+
+---
+
+## The three passes
+
+The verification step has three layers, run in order.
+
+**Pass 1: functional verification.** Does the script run? Do the tests pass? Are the obvious failure modes handled? This is the pass most people stop at. It is necessary and not sufficient. A build that passes every test and violates its own spec at the user-need level passes Pass 1 completely.
+
+**Pass 2: edge-case verification.** Does the script handle the cases the spec defined as within scope but unusual? Empty inputs. Invalid inputs. Large inputs. The specific boundary conditions named during planning.
+
+For Seth's build: an empty CSV (does the script handle a month with no transactions?); a CSV with one transaction; a duplicate transaction within a single CSV (does dedup catch it?); a transaction with special characters in the description (does it parse?). All passed.
+
+Pass 2 catches failures that Pass 1 misses because the average case works and the edge case does not. A categorization rule that handles every normal description and fails on a merchant name with an ampersand passes every test written for normal descriptions. Pass 2 catches it — if you thought to test the ampersand.
+
+**Pass 3: spec-needs verification.** Does the final state of the build meet the User needs from the spec? Not what the spec said the script should *do* at the technical level — that is Pass 1. Not what edge cases it handles — that is Pass 2. What the spec said the script should *deliver* at the user-need level.
+
+This is where the phone-readability failure lived. "Output is readable on phone" is a User need, not a technical specification. No per-step handoff was written against it. No test verified it. Pass 3 is the only pass that checks it, and Pass 3 checks it by doing the thing: opening the output on a phone and reading it.
+
+Pass 3 verification is manual, specific, and tied to the spec's written User needs. You go down the list. You check each one against the actual system state. You mark pass or fail. You fix the fails.
 
 <!-- → [DIAGRAM: The verification sequence — three passes. Pass 1: functional verification. Pass 2: edge case verification. Pass 3: SDD/spec needs verification. Each pass has a binary result and a path to resolution.] -->
 
 ---
 
-## The three verification passes
+## Why stopping at Pass 1 is the common case
 
-The verification step has three layers, run in order.
+Most builds stop at Pass 1. The tests pass; the build is declared done. This is not negligence. It is the natural stopping point when the tests were written to verify technical correctness and the User needs were never translated into verification steps.
 
-**Pass 1: functional verification.** Does the script run? Do the tests pass? Are the obvious failure modes handled? This is the pass most students stop at. It is the necessary first check; it is not sufficient.
+The translation is the work. "Readable on phone" needs to become "open the output on an iPhone-preset Chrome devtools viewport, portrait mode, default font size, and verify no horizontal scroll is required to read the cash-flow table." Once the translation is done, Pass 3 is fast — you are following a checklist, not making judgment calls.
 
-**Pass 2: edge-case verification.** Does the script handle the cases the spec defines as out-of-bounds? Empty inputs, invalid inputs, very large inputs, the unusual cases the spec named or that you anticipated during planning? This pass catches the cases where the implementation works for the average case and fails for the edge.
+The problem is that the translation is never done as a deliberate step. It is supposed to happen naturally, as part of writing the spec well. Seth's spec said "readable on phone." The translation into "no horizontal scroll in portrait mode" did not happen. The verification pass surfaced the gap.
 
-For Seth's build, Pass 2 included: an empty CSV (does the script handle it?); a CSV with one transaction (does it handle a single-row case?); a duplicate within a single CSV (does dedup catch it?); a transaction with special characters in the description (does it parse?). All passed. Pass 2 cleared.
+The lesson Seth encoded in his AGENTS.md: *"For any output that will be read on phone, verify column count / line width before declaring done."* The next spec will say "readable on phone in portrait mode at default font size; no horizontal scroll; tested on iPhone-preset Chrome devtools before declaring done." The phrasing makes the Pass 3 verification structural — you have the check listed — rather than incidental, where you catch it only if you happen to think of it.
 
-**Pass 3: spec needs verification.** Does the final state of the script meet the User needs from the spec? Not what the spec said the script should *do* at the technical level (Pass 1), not what edge cases it should handle (Pass 2), but what the spec said the script should *deliver* at the user-need level.
+This is the pattern. The first time a User need is vague, Pass 3 surfaces the gap. The gap gets translated into a more precise formulation. The more precise formulation becomes either an AGENTS.md entry or a template for the next spec. The verification pass is how the discipline tightens over time.
 
-This is the pass that catches what Seth caught. The User need was "readable on phone." The Pass 1 verification (does the script produce a markdown file?) passed. The Pass 2 verification (does the script handle edge cases?) passed. The Pass 3 verification (does the markdown deliver the user need?) failed on the table-width issue. Pass 3 is the protection against builds that are technically correct and practically wrong.
+---
 
-The three passes are *cumulative*. Pass 2 catches things Pass 1 missed. Pass 3 catches things Pass 2 missed. Stop at Pass 1 and you ship the build that passes tests and does not serve the user need.
+## The three passes are cumulative
+
+A point worth stating explicitly.
+
+Pass 2 does not replace Pass 1. Pass 3 does not replace Pass 2. They are cumulative — each pass catches things the previous passes cannot, and a failure at any pass means the build is not done.
+
+A build that passes Pass 1 and fails Pass 2 has a working happy path and a broken edge case. Fixing the edge case may not require revisiting Pass 1, but Pass 1 needs to remain green after the fix. A build that passes Pass 1 and Pass 2 but fails Pass 3 has correct technical behavior and unmet user needs. Fixing the user-need failure may require changing the technical behavior, which means re-running Pass 1 and Pass 2 after the fix.
+
+The sequence is: Pass 1, then Pass 2, then Pass 3. If any pass fails, fix and restart the sequence for the affected area. The sequence ends when all three passes are green for the complete build.
+
+The phone-readability fix — changing the table to a list — required Seth to re-run Pass 1 (does the list render correctly in markdown?) and Pass 2 (does the list handle the edge cases the table did: categories with long names, categories with zero transactions?) before running Pass 3 again (does the list fit on the phone screen without horizontal scroll?). Fixing a Pass 3 failure introduced potential Pass 1 and Pass 2 regressions. He checked both. Both were fine. Pass 3 re-ran. The build was done.
+
+<!-- → [CHART: verification loop flow diagram — linear sequence (Pass 1 → Pass 2 → Pass 3 → Done) with regression arrows: a Pass 2 failure loops back to fix → Pass 1 recheck → Pass 2; a Pass 3 failure loops back to fix → Pass 1 recheck → Pass 2 recheck → Pass 3. Student should see that later-pass failures require re-verifying earlier passes, not just re-running the failing pass.] -->
 
 ---
 
@@ -61,99 +94,119 @@ The verification pass produces *what happened*. The post-build learning document
 
 Five sections:
 
-1. **What I built.** One paragraph, plain language. The kind of description you would give a friend who asked what you spent the afternoon on.
-2. **What I delegated to Codex and why.** The specific work Codex did, with the why.
-3. **What I kept for myself and why.** The mirror. The work that was irreducibly yours.
-4. **What I learned that I didn't know before.** The discoveries. The features of the language or framework you understand better. The Codex behaviors you learned to anticipate. The AGENTS.md entries you added.
-5. **What I would do differently.** The honest section. A specific decision you would reverse. Something you would change in the spec, the plan, the AGENTS.md, or the build's execution.
+**What I built.** One paragraph, plain language. The kind of description you would give a friend who asked what you spent the afternoon on.
 
-The document is one page. It takes thirty minutes to write. It is the artifact that converts the experience of building into the capacity to do the next build better than this one.
+**What I delegated to Codex and why.** The specific work Codex did, with the reasoning.
 
-The discipline is to write it *now*, while the lessons are fresh, not later.
+**What I kept for myself and why.** The mirror. The work that was irreducibly yours — the decisions that required your judgment or your specific knowledge of the project.
+
+**What I learned that I didn't know before.** The discoveries. Features of the language or framework you understand better. Codex behaviors you learned to anticipate. AGENTS.md entries you added.
+
+**What I would do differently.** The honest section. A specific decision you would reverse. Something you would change in the spec, the plan, the AGENTS.md, or the execution.
+
+One page. Thirty minutes. The document is the artifact that converts the experience of building into the capacity to build the next thing better.
+
+Write it now. Memory degrades fast. The specific details that make the "What I would do differently" section useful — the exact formulation failure, the precise Codex behavior you were surprised by — are clearest in the hour after the build is done. Written later, they become general lessons. General lessons are less useful than specific ones.
 
 ---
 
-## Worked example: Seth's post-build document
+## What Seth's post-build document said
+
+Here is Seth's document for the personal-finance build, reproduced in full:
 
 > **What I built.** A Python script that processes bank CSV exports into a monthly net-worth and cash-flow summary, written to a markdown file. The script is local-only, idempotent, and produces output I can read on my phone.
 >
-> **What I delegated to Codex and why.** The SQLite schema migration, the CSV parsing logic, the dedup logic, the categorization rule engine, the markdown rendering. These are pattern-completion tasks where Codex is faster than I am and where my verification (run the script; check the output) is straightforward.
+> **What I delegated to Codex and why.** The SQLite schema migration, the CSV parsing logic, the dedup logic, the categorization rule engine, the markdown rendering. These are pattern-completion tasks where Codex is faster than I am and where my verification — run the script, check the output — is straightforward.
 >
-> **What I kept for myself and why.** The Intent Layer of the spec — what this script is for and what kinds of decisions it does NOT make (it does not categorize ambiguous transactions automatically; it flags them for me). The schema design choice (content-hash key vs. auto-incremented — the choice mattered for idempotency, which was a User need). The categorization rules in the config file — these encode my own classification of my transactions and are irreducibly mine. The phone-readable formatting decision (table → list) caught only in Pass 3.
+> **What I kept for myself and why.** The Intent Layer of the spec — what this script is for, and what it does not do (it does not categorize ambiguous transactions automatically; it flags them for me). The schema design choice: content-hash key versus auto-incremented integer. The choice mattered for idempotency, which was a User need. The categorization rules in the config file — these encode my classification of my transactions and are irreducibly mine. The phone-readable formatting decision, caught only in Pass 3.
 >
-> **What I learned that I didn't know before.** That Codex's default schema design biases toward auto-incremented integer keys; when idempotency is a requirement, content-hash keys are usually the right choice and Codex will not propose them unless you ask. That Pass 3 verification (against User needs from the spec) catches things Pass 1 and Pass 2 do not — specifically, the phone-readability issue that no per-step handoff would have caught. AGENTS.md got an entry: "for any output that will be read on phone, verify column count / line width before declaring done."
+> **What I learned that I didn't know before.** Codex's default schema design biases toward auto-incremented integer keys. When idempotency is a requirement, content-hash keys are usually right, and Codex will not propose them unless you ask. Pass 3 verification catches things Pass 1 and Pass 2 cannot — specifically, the phone-readability issue that no per-step handoff would have caught. AGENTS.md got an entry: "for any output that will be read on phone, verify column count and line width before declaring done."
 >
-> **What I would do differently.** I would write the User needs section of the spec more concretely. "Readable on phone" was true at the level of the markdown file being a markdown file, and false at the level of the layout actually fitting on a phone screen. The next spec will say "readable on phone in portrait mode at default font size; no horizontal scroll; tested on iPhone-preset Chrome devtools before declaring done." That phrasing would have made the Pass 3 verification structural rather than incidental.
+> **What I would do differently.** I would write the User needs section of the spec more concretely. "Readable on phone" was true at the level of the markdown file being a markdown file, and false at the level of the layout actually fitting a phone screen. The next spec will say: "readable on phone in portrait mode at default font size; no horizontal scroll; tested on iPhone-preset Chrome devtools before declaring done."
 
-Roughly 280 words. The document is the artifact Seth will reference the next time he builds something like this. The AGENTS.md has been updated with the phone-readability lesson. The next build starts from a better place.
+280 words. The AGENTS.md has been updated. The next build starts from a better place. The document is not a record of failure — it is the record of what the verification pass was designed to produce: specific, actionable lessons that would not have surfaced without the discipline.
 
 ---
 
 ## What the verification pass cannot catch
 
-A few things the discipline does not promise.
+A few things the three passes do not promise.
 
-**Failures whose downstream effects have not yet surfaced.** A build that introduces a subtle behavior change that only matters in a scenario you have not yet tested will pass all three passes today and break tomorrow. The verification covers what you know to check.
+**Failures whose downstream effects have not yet surfaced.** A build that introduces a subtle behavior change affecting a scenario you have not tested will pass all three passes today and fail tomorrow. The verification covers what you know to check.
 
-**Failures in dependencies.** Codex may generate code that calls an external library whose behavior has changed since the model's training. The verification can catch this if you check the *meaning* of the output (Pass 3) and not just its presence (Pass 2).
+**Failures in dependencies.** Codex may generate code that calls an external library whose behavior has changed since the model's training data. Pass 2 can catch this if you check the *meaning* of the output rather than just its presence. It does not catch it automatically.
 
-**Failures of formulation.** If the formulation itself was wrong (you wanted X and asked for Y), the verification will confirm Y happened. The mismatch surfaces only when you notice the system does not do X. The upstream formulation work (Chapter 7) prevents these.
+**Failures of formulation.** If the formulation was wrong — you wanted X and asked for Y — the verification will confirm Y was delivered correctly. The mismatch surfaces only when you notice the system does not do X. Upstream formulation work (Chapter 8) prevents these. The verification pass confirms that what was built is what was specified. It cannot confirm that what was specified is what was needed.
 
-The verification pass is necessary, not sufficient. It is the last line of defense, not the only line.
-
----
-
-## Common misconceptions
-
-**"If the tests pass, the build is done."** Tests are Pass 1. Two more passes follow.
-
-**"My script's report says it worked."** The script reports what it was asked to report on. The verification checks what the script may not have been asked to report on.
-
-**"Intent verification is just gut feeling."** No. Intent verification is comparison against the *written* User needs in the spec. The spec exists in writing; the verification compares the system state to the writing.
-
-**"I'll write the post-build document later."** You will not. Write during. Memory degrades fast.
-
-**"Post-build is bureaucratic."** Five sections, thirty minutes, one page. The artifact pays back the next time you build something similar.
-
----
-
-## Exercises
-
-1. **(Apply)** Run a three-pass verification on your Chapter 12 build. Document each pass's result. For any pass that catches a failure, fix it and re-verify.
-
-2. **(Analyze)** A test in your build passes but you are not sure it is testing the right thing. Diagnose and rewrite the test to check what you intended.
-
-3. **(Create)** Write a post-build learning document for your Chapter 12 build. Five sections. Be especially honest in the "What I would do differently" section.
+The verification pass is the last line of defense. It is not the only line.
 
 ---
 
 ## What would change my mind
 
-The chapter's strong operational claim is that **the three-pass verification catches a meaningful share of failures** that single-pass mechanical verification misses. If a controlled comparison found no measurable difference in the rate of post-deployment failures between one-pass and three-pass verification, the second and third passes become optional. The chapter would still recommend them; the urgency softens.
+The chapter's strong operational claim: the three-pass verification catches a meaningful share of failures that single-pass mechanical verification misses, specifically failures whose handoff conditions were under-specified.
 
-I expect the difference to be substantial because Pass 3 is the only pass that catches failures whose handoff conditions were under-specified, and these failures are the most expensive ones.
+What would soften that claim: a controlled comparison — same class of builds, with single-pass and three-pass verification — that found no measurable difference in post-deployment failure rates. I expect the difference to be substantial because Pass 3 is the only pass that catches spec-needs failures, and spec-needs failures are among the most expensive: they pass all technical checks and manifest only in use.
+
+What remains open: when the three passes are worth automating. The chapter describes them as manual. For builds that run repeatedly, automating Pass 2 and parts of Pass 3 is worth the upstream effort. The threshold for automation is not addressed here.
 
 ---
 
-## Still puzzling
+## What is still puzzling
 
-- **When verification becomes worth automating.** The three passes are manual in the chapter. For builds run repeatedly, automating Pass 2 and parts of Pass 3 is worth the upstream effort.
+**Whether the post-build document should be shared.** Honest post-build documents contain self-criticism. Sharing creates incentives to perform rather than reflect. The book's working answer: candid and private, redacted and public when the specific lesson would help someone else. The specific phone-readability lesson — "for outputs read on phone, verify column count before declaring done" — is worth sharing. The specific decision Seth would reverse about the schema is worth keeping private until the lesson is sufficiently general to be useful without the embarrassing detail.
 
-- **Whether the post-build document should be shared.** Honest post-build documents contain self-criticism; sharing produces incentives to perform. The book's working answer: candid private; redacted public when useful.
+**The relationship between manual verification and CI/CD.** Industry continuous integration is the institutional version of the three passes — automated, running on every commit, catching regressions as they are introduced rather than at the end of the build. Whether students should learn the manual version first and the automated version later, or start automated, is open. The book's working answer: manual first, because the discipline of writing the verification criteria explicitly is the foundation for writing the automated tests correctly. Students who skip manual verification and go straight to test-writing often write tests that pass without being informative.
 
-- **The relationship between this chapter's verification and CI/CD.** Industry CI/CD is the institutional version of the three passes. Whether students should learn the manual version first and the automated version later, or start automated, is open.
+**Whether three passes is the right number.** The chapter's three-pass structure maps onto three concerns: technical correctness, edge-case coverage, and user-need satisfaction. These are the three concerns that appear consistently across the book's worked examples. A fourth pass — checking against external constraints like accessibility standards or security requirements — is defensible for some builds. The chapter does not prescribe it; the principle would extend naturally.
 
 ---
 
 ## AI Wayback Machine
 
-🕰️ **Barbara Liskov** (born 1939) — computer scientist whose work on behavioral subtyping and formal specification formalized the principle that *"correct" must be defined before it can be verified*. The Liskov Substitution Principle, articulated with Jeannette Wing in 1994, made the connection precise: a program's correctness is a property of its *specification*, not just of its execution.[^1] The chapter's three-pass verification is Liskov applied to AI-assisted builds. Pass 1 (mechanical) checks execution. Pass 2 (edge cases) checks against the spec's defined boundaries. Pass 3 (User needs) checks against the spec's intent. The hierarchy — execution → specification → intent — is the hierarchy Liskov's framework formalizes. The post-build learning document, in turn, is the practitioner's record of where the hierarchy held and where it did not, which is the cognitive event that makes the next build's hierarchy tighter.
+🕰️ **Barbara Liskov** (born 1939) — computer scientist whose work on behavioral subtyping and formal specification formalized the principle that *"correct" must be defined before it can be verified*.[^1] The Liskov Substitution Principle, articulated with Jeannette Wing in 1994, made the connection precise: a program's correctness is a property of its *specification*, not just of its execution. You cannot verify correctness against a standard that has not been written down.
+
+The three-pass verification is Liskov applied to AI-assisted builds. Pass 1 checks execution — does the code run? Pass 2 checks against the spec's defined boundaries — does it handle what the spec said it would handle? Pass 3 checks against the spec's intent — does the output deliver what the spec said the user would receive?
+
+The hierarchy — execution, then specification, then intent — is the hierarchy Liskov's framework formalizes. The failure Seth caught at Pass 3 would not have been catchable at Pass 1 or Pass 2 precisely because no specification had been written for it at the step level. The spec existed at the build level (in the User needs section). Liskov's insight is that the level of the specification determines the level at which correctness can be verified. Seth's Pass 3 was checking against the build-level specification. Nothing in the per-step handoffs could have substituted for it.
+
+The post-build learning document, in turn, is the practitioner's record of where the specification was tight enough to verify against, and where it was not — which is the cognitive event that makes the next build's specification tighter.
 
 ---
 
 ## Bridge
 
-You have the discipline. Chapter 14 hands you the build.
+You have the discipline. The next chapter hands you the build.
+
+---
+
+## Exercises
+
+**Warm-up**
+
+1. *(Tests: what each pass checks)* For each of the following failures, name which pass would catch it and explain why the earlier passes would not: (a) the script crashes when the input CSV is empty; (b) the output file renders in a browser but the font size falls below 16px on mobile; (c) a merchant name containing an ampersand causes a silent parse error that drops the transaction; (d) the script runs correctly but produces a different result on the second run than the first.
+
+2. *(Tests: the handoff / verification distinction)* A student says: "My per-step handoff conditions all passed, so my build is done." What is the specific failure mode this reasoning misses? Name the type of failure and describe a concrete example from a build in this book or one of your own.
+
+3. *(Tests: translating User needs into Pass 3 checks)* Translate the following vague User needs into testable Pass 3 verification steps. For each, state exactly what you would do, what tool or viewport you would use, and what result would count as a pass: (a) "the output should be readable"; (b) "setup should be quick"; (c) "errors should be handled gracefully."
+
+**Application**
+
+4. *(Tests: running the three passes)* Run a three-pass verification on a build you have completed in this course. Document each pass: what you checked, what passed, what failed. For any failure: describe the fix, then state which earlier passes you re-ran after the fix and what the results were.
+
+5. *(Tests: the cumulative structure)* You fix a Pass 3 failure by changing the output format from a table to a list. Identify every Pass 1 and Pass 2 check that could plausibly be affected by this change. For each, write the specific re-verification step you would run.
+
+6. *(Tests: writing a post-build learning document)* Write a post-build learning document for a build you have completed. All five sections. The "What I would do differently" section must name a specific decision — not a general lesson — and explain exactly what you would change in the spec, the AGENTS.md, or the execution. A post-build document that contains only general lessons does not meet the standard; specific ones do.
+
+**Synthesis**
+
+7. *(Tests: verification + formulation together)* Seth's Pass 3 failure — the phone-readability table issue — was ultimately a formulation failure: the User need "readable on phone" was not precise enough to encode as a per-step handoff condition. Trace the failure all the way back: where in the formulation workflow (Chapter 8) would the more precise phrasing have been written? What Ask Mode interrogation question might have surfaced "portrait mode, no horizontal scroll" as a constraint before Code Mode began? What would Seth's spec have said if the formulation had been done correctly?
+
+8. *(Tests: what verification cannot catch)* The chapter names three classes of failure the three passes cannot catch: downstream failures, dependency failures, and formulation failures. For each class, identify which earlier discipline in the book is the primary defense — and explain why the verification pass cannot substitute for it.
+
+**Challenge**
+
+9. *(Open-ended)* The chapter's three-pass structure maps onto three concerns: technical correctness, edge-case coverage, and user-need satisfaction. Some builds have a fourth concern not covered by the three passes — accessibility requirements, security constraints, or compliance with external standards. Design a Pass 4 for one of these concerns. Your Pass 4 must: name the concern precisely, describe the checks that constitute the pass, explain what a failure looks like, and identify the spec section (from Chapter 8's minimum viable spec) that would need to exist for Pass 4 to be checkable. Explain why the concern belongs in a separate pass rather than in Pass 3.
 
 ---
 
