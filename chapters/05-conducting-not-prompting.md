@@ -1,232 +1,238 @@
-# Chapter 4 — Conducting, Not Prompting: The Core Idea
+# Chapter 5 — Conducting, Not Prompting: The Core Idea
 
-> Programming as conducting. Codex does what it's superhuman at. You do what only you can.
-
----
-
-## Learning outcomes
-
-1. **(Understand)** Explain the difference between prompting Codex and conducting a build with Codex.
-2. **(Apply)** Use Ask Mode for planning and Code Mode for execution — and explain why the gate between them matters.
-3. **(Understand)** Explain what a handoff condition is and why it matters.
+*The orchestra does not need a better typist. It needs someone who knows what the music is supposed to sound like.*
 
 ---
 
-## Opening
+Here is what went wrong.
 
-This is Seth.
+I was thirty minutes into a build — a script to process AP CS submissions and generate a summary before I submitted grades. Codex was producing functions. The functions worked. I was reading them, accepting them, moving on. The session was fast. I thought I was conducting.
 
-The orchestra metaphor came to me halfway through a build that was going wrong, and once I had it I could not unsee it.
+Then one function's output did not match what I expected. Not obviously wrong — it had done what I asked for, but what I had asked for was not what I needed. I rolled back. I tried a different prompt. The new function had the same problem with a different surface. I rolled back again. By the third attempt, the session context was cluttered with failed tries, and the fourth prompt was operating against a context that was now confused.
 
-I was using Codex to build a small piece of a personal project — a script that would process my AP CS submissions and generate a summary for me to review before submitting. Codex was producing functions. The functions worked. I was reading them, accepting them, moving on. The session was fast. I was, I thought, conducting.
-
-About thirty minutes in, the output of one function did not match what I had expected. Not in a way that was obviously wrong — the function had done what I asked it to do, but what I had asked for was not what I needed. I rolled back. I tried a different prompt. The new function had the same issue but with a different surface. I rolled back again. I tried a third prompt. By this point my session was cluttered with three failed attempts, and the fourth attempt was operating against context that was now confused.
-
-That was when I caught myself. I had not been conducting. I had been *typing*. The CLI was the orchestra; I was supposed to be the conductor; instead I had been a person trying to play the instruments alongside the orchestra, getting in the way of the music because I had not stepped back to actually *direct*.
-
-The conductor does not play. The conductor reads the score, knows what the music is supposed to sound like, listens to what the orchestra produces, and intervenes when a wrong note is about to play. The orchestra's job is technique; the conductor's job is *meaning*. I had been mixing the two roles, and the result was a build that drifted because no one was holding the meaning.
-
-This chapter is the discipline that keeps the roles separated. The operational form is the **Ask Mode → Code Mode gate**. The metaphor is the orchestra. The point is that you are not the typist; you are the director.
-
-<!-- → [DIAGRAM: The Ask Mode / Code Mode gate. Human in Ask Mode: interrogate, plan, formulate. Gate: plan reviewed and approved. Human in Code Mode: execute against plan, verify output. Editorial style. No color.] -->
+I stopped. I looked at what I had been doing for thirty minutes. I had not been conducting. I had been *typing*. The difference turned out to be everything.
 
 ---
 
-## Ask Mode and Code Mode
+## The metaphor that is also a mechanism
 
-Codex has two main operational modes. Knowing the difference is the chapter's content.
+A conductor does not play the instruments. A conductor reads the score, holds the intended sound in their head, listens to what the orchestra actually produces, and intervenes when what is being played diverges from what the score says it should sound like. The orchestra provides technique — the physical production of notes. The conductor provides *meaning* — the judgment of whether those notes are the right ones, in the right order, at the right tempo.
 
-### Ask Mode
+The division of labor is clean. The orchestra is superhuman at technique. The conductor is irreplaceable for meaning. Neither can do the other's job.
 
-Codex operates **read-only**. It reads your project files. It answers your questions. It proposes plans. It does not modify any file. It does not run any command that has side effects on your system.
+<!-- → [IMAGE: two-panel illustration — left panel: conductor at podium, baton raised, watching the orchestra; right panel: same conductor sitting in the violin section playing alongside musicians. Caption: "The failure mode is not incompetence. It is being in the wrong seat."] -->
 
-Use Ask Mode for:
+Codex is the orchestra. You are the conductor. The session that went wrong was a session where I had stopped conducting and started playing alongside the orchestra — trying to write parts of the code myself while Codex was writing other parts, prompting in real time against problems that had not been thought through, producing a build that drifted because no one was holding the meaning.
 
-- **Interrogating the codebase.** *"What does this function do?"* *"Where would I add a new feature?"* *"What conventions does this code follow?"*
-- **Proposing plans.** *"How would you implement X?"* *"What steps would this build need?"*
-- **Disambiguating decisions.** *"What's the difference between using a generator vs. a list comprehension here?"* *"Should this be a method on the class or a free function?"*
-- **Exploring options.** *"What are three different ways to structure this?"*
+The metaphor is not decoration. It names the actual failure mode. When the conductor stops conducting and starts playing, the orchestra does not stop — it keeps producing notes. The notes are technically correct. But no one is checking whether they are the *right* notes for this piece. The build accumulates. The drift accumulates. The rollback eventually comes.
 
-Ask Mode is the cognitive register for *understanding before doing*. The OpenAI engineering retrospective is explicit on this: *"For large changes, start by prompting Codex for an implementation plan using Ask Mode."*[^1]
+The question is: what does conducting actually look like in a Codex session? The answer is the **Ask Mode → Code Mode gate**.
 
-### Code Mode
+---
 
-Codex executes. It writes files. It modifies files in place. It runs commands. It iterates against tests.
+## Two modes and why they are different things
 
-Use Code Mode for:
+Codex has two operational modes. The discipline lives in the boundary between them.
 
-- The implementation work, *after* the Ask Mode plan has been reviewed and approved.
+**Ask Mode** is read-only. Codex reads your project files, answers questions, proposes plans. It does not modify any file. It does not run any command with side effects on your system. Nothing changes. You are interrogating; Codex is responding.
 
-That is it. Code Mode is the *execution register*. Everything that requires deciding what to build goes in Ask Mode. Everything that builds the decided thing goes in Code Mode.
+Use Ask Mode to understand before doing. *What does this function do? Where would I add a new feature? What conventions does this codebase follow? How would you implement X? What are three different ways to structure this?* These are the conductor's questions — questions about what the score says before the orchestra starts playing.
 
-### The gate
+The OpenAI engineering retrospective is explicit: *"For large changes, start by prompting Codex for an implementation plan using Ask Mode."*[^1] Senior engineers who use Codex every day have learned, from experience, not to skip this step. That is the tell. The people who pay the cost of skipping the gate are the ones most insistent that the gate exists.
 
-The discipline:
+**Code Mode** executes. Codex writes files, modifies files in place, runs commands, iterates against tests. Things change. The system moves from one state to another.
 
-> **Nothing goes from Ask Mode to Code Mode until you have reviewed the plan.**
+Use Code Mode for one thing: executing the plan that Ask Mode produced and you reviewed.
 
-The rule is the chapter. Everything else is help with following the rule.
+That is it. Every decision about *what to build* belongs in Ask Mode. Every act of *building the decided thing* belongs in Code Mode. The modes are not a suggestion about workflow. They are a separation of two categorically different kinds of work — understanding and execution — that produce different kinds of errors when mixed.
 
-The plan-review step is the gate. Read the Ask Mode plan. Look for assumptions Codex made that you have not verified. Look for steps whose dependencies are different from what you assumed. Correct the plan in Ask Mode (cheap) rather than in Code Mode (expensive). When you are satisfied, approve and switch to Code Mode.
+<!-- → [TABLE: Ask Mode vs. Code Mode — columns: property, Ask Mode, Code Mode. Rows: what Codex does, what changes in the system, what the human's job is, what goes wrong when you skip it. No color. Student should be able to locate any given action in one column or the other.] -->
 
-The switch is deliberate. In the Codex CLI, the command is explicit. In the Codex app, the toggle is visible. The friction is intentional — switching from Ask to Code should feel like a decision, not a default.
+---
+
+## The gate
+
+Between Ask Mode and Code Mode, there is a gate. The discipline is:
+
+**Nothing goes from Ask Mode to Code Mode until you have reviewed the plan.**
+
+Review means reading the plan with a specific purpose: finding the assumptions Codex made that you did not explicitly state. Every Ask Mode plan contains some. The average plan contains two or three. They are not failures — they are the places where the spec was underspecified and Codex filled in the most probable interpretation. Your job is to find them.
+
+Find one. Either confirm it (you have now made an implicit assumption explicit, and the plan is stronger) or correct it (you have now caught a divergence between what Codex will build and what you need, before any code is written). The correction in Ask Mode costs a sentence. The correction in Code Mode costs a rollback.
+
+If you cannot find an assumption, look harder. If you genuinely cannot find one after looking, approve. But be primed: the assumption you did not find will surface later as a handoff failure, and you will remember this moment.
+
+"Looks good" is not the gate. The gate is a specific review with a specific purpose, not a skim followed by an optimistic interpretation of fluent prose.
 
 ---
 
 ## Why "looks good" is not the gate
 
-The most common failure of the discipline: skim the Ask Mode plan, see that it looks reasonable, approve, regret.
+The Ask Mode plan has the property that all fluent output has: it looks more complete than it is.
 
-The plan in front of you, when Codex returns it, has the property that fluent output always has — it looks more complete than it is. The plan reads as "I have thought about this carefully." The plan was produced by pattern completion against your prompt and the project context. The thinking was real; it was averaged across the most-probable interpretations of what you asked for.
+The plan reads as careful thinking. It was produced by pattern completion against your prompt and the project context. The thinking is real; it is averaged across the most-probable interpretations of what you asked for. The problem is that the most-probable interpretation and *your* interpretation are often close but not identical — and the gap between them is invisible until the code is written and the tests run.
 
-Your job is to find the place where the most-probable interpretation diverges from *your* interpretation.
+This is the fluency trap again, in a different register. The plan feels like it covers your case. The plan covers the average case. You are not the average case; you are this specific project, this specific problem, these specific constraints that did not all make it into the prompt.
 
-A practical pattern: in every Ask Mode plan, look for one specific assumption Codex made that you did not explicitly state. Codex always makes some assumptions; the average plan contains two or three. Find at least one. Either confirm it (and now you have made the assumption explicit) or correct it (and now the plan does what you wanted, not what Codex guessed).
-
-If you cannot find an assumption, look harder. If you genuinely cannot find one, approve — but be primed for the fact that the build will surface the assumption later as a handoff failure, and you will remember this moment.
+The gate is what converts "this plan reads well" into "this plan is correct for my situation." The gate is the supervisory act. The conductor listening to the rehearsal, noticing where the orchestra is playing the wrong tempo, saying so before the performance starts — not after.
 
 ---
 
-## What a handoff condition is
+## Handoff conditions
 
 Within a multi-step Code Mode build, the gate extends per step.
 
-After Step N completes, before Step N+1 begins, you check a **handoff condition** — a specific, testable, binary check that the state of the system is what Step N was supposed to produce. The condition is the operational form of "Step N is done."
+After Step N completes, before Step N+1 begins, you check a **handoff condition** — a specific, testable, binary statement of what Step N was supposed to produce. If the condition is met, Step N+1 proceeds. If not, Step N+1 does not begin.
 
-Strong handoff conditions are:
+Strong handoff conditions share three properties. They are **specific** — they name a file, a value, a count, a state, not a vibe. They are **testable** — you can run a check and get an answer. They are **binary** — pass or fail, not "mostly fine."
 
-- **Specific** — name a file, a count, a value, a state.
-- **Testable** — you can run a check and produce an answer.
-- **Binary** — pass or fail.
+"Looks good" is none of these. "Tests pass" is partial — tests check mechanical correctness, not scope or intent. The strong condition is a sentence: *The new function exists at `auth/login.py`, imports only from the standard library, passes the three test cases I wrote, and does not modify any file outside `auth/`.*
 
-"Looks good" is none of these. "Tests pass" is partial (mechanical, not scope or intent). The strong condition is a sentence: *"The new function exists at `auth/login.py`, imports only from the standard library, passes the three test cases I wrote, and does not modify any file outside `auth/`."*
+<!-- → [TABLE: handoff condition quality — three columns: condition text, specific?, testable?, binary?. Rows: "looks good" (no/no/no), "tests pass" (partial/yes/yes), "function exists at auth/login.py, imports only stdlib, passes three named tests, no files modified outside auth/" (yes/yes/yes). Student should see why the third row is the only one that does the job.] -->
 
-Chapter 9 owns handoff conditions as its full chapter. For now: every significant Code Mode step has a handoff condition you wrote *before* the step ran. The condition is the per-step extension of the Ask Mode → Code Mode gate.
+The handoff condition is written *before* the step runs. This is important. Writing the condition after the step runs, when you can see the output, produces a condition that describes what happened rather than what was supposed to happen. The condition written before is a commitment; the condition written after is a rationalization.
+
+Chapter 9 owns handoff conditions in full. For now: every significant Code Mode step has a condition you wrote before the step ran. The condition is the per-step extension of the Ask Mode → Code Mode gate.
 
 ---
 
-## Worked example: the same build, two ways
+## The same build, two ways
 
 The task: add a small CLI that runs grading on a single submission file.
 
-**Path A: typing without the discipline.**
+**Without the discipline.**
 
 ```
-Seth: "Add a CLI to run grading on a single submission."
-Codex: [Code Mode] writes cli.py with argparse, imports the grading module,
-       calls grade() on the submitted file, prints the result.
-Seth: runs it.
-       Realizes the grading module isn't found because it's in a
-       different directory.
-Seth: "Fix the import path."
-Codex: changes the import.
-Seth: runs it.
-       Realizes the grade() function expects a different argument shape.
-Seth: "Use the right argument shape."
-Codex: changes the call.
-Seth: runs it.
-       Output is correct.
-       Total time: 25 minutes. Three corrections.
-       Session context is cluttered with the failed attempts.
+Prompt: "Add a CLI to run grading on a single submission."
+Codex writes cli.py — argparse, imports the grading module, calls grade(),
+prints the result.
+Run it. Import not found. Wrong directory.
+"Fix the import path."
+Codex fixes the import.
+Run it. grade() expects different arguments.
+"Use the right argument shape."
+Codex fixes the call.
+Run it. Output correct.
+Time: 25 minutes. Three corrections. Cluttered session context.
 ```
 
-**Path B: with the discipline.**
+**With the discipline.**
 
 ```
-Seth: [Ask Mode] "I want to add a small CLI that runs grading on a single
-       submission file. Read the existing grading module and propose a plan."
-Codex: [Ask Mode] returns a plan. Step 1: create cli.py in the project root.
-       Step 2: import the grading module from src.grading. Step 3: parse
-       arguments with argparse, expecting --submission. Step 4: call
-       grading.grade_submission(submission_file) and print the result.
-Seth: reviews. Notices the function name is wrong — the existing function
-       is grade(submission_path, rubric_path), not grade_submission(file).
-       Notices Step 2's import path is wrong because the project uses absolute
-       imports from src. Corrects both in the plan, mentions the rubric_path
-       argument needs a default.
-Codex: [Ask Mode] revises the plan. Confirms the corrections.
-Seth: approves the revised plan. Switches to Code Mode.
-Codex: [Code Mode] writes cli.py per the plan.
-Seth: runs it. Output is correct.
-       Total time: 12 minutes. No corrections in Code Mode.
-       Session context is clean.
+[Ask Mode] "I want a CLI that runs grading on a single submission file.
+Read the existing grading module and propose a plan."
+Codex returns a plan. Four steps. Imports from src.grading. Calls
+grade_submission(submission_file).
+
+Review: the function name is wrong — it is grade(submission_path,
+rubric_path), not grade_submission(file). The import path is wrong —
+the project uses absolute imports from src. The rubric argument
+needs a default.
+
+Correct the plan in Ask Mode. Codex confirms.
+
+[Code Mode] Codex writes cli.py per the revised plan.
+Run it. Output correct.
+Time: 12 minutes. No corrections in Code Mode. Clean session context.
 ```
 
-Same task. Same Codex. Different times. The difference is that Path B did the cheap work in Ask Mode (correcting assumptions in the plan) instead of the expensive work in Code Mode (rolling back failed implementations).
+Same task. Same Codex. Thirteen minutes faster. No rollbacks.
 
-The lesson: the gate is what turns Code Mode into a clean execution of a reviewed plan, instead of a series of guesses against an unreviewed plan.
+The thirteen minutes is not the interesting number. The interesting number is zero — the number of rollbacks in Code Mode when the assumptions were caught in Ask Mode. The gate moved the cheap work (correcting the plan) upstream of the expensive work (rolling back the implementation). The math is favorable whenever catching one assumption saves one rollback, which is almost always.
 
-The limit: the gate does not eliminate failures. Codex sometimes produces output in Code Mode that surprises you even when the plan was reviewed. The handoff condition catches those (Chapter 9). The gate is the first line of defense; the handoff condition is the second.
+<!-- → [DIAGRAM: The Ask Mode / Code Mode gate. Human in Ask Mode: interrogate, plan, formulate. Gate: plan reviewed and approved. Human in Code Mode: execute against plan, verify output. Editorial style. No color.] -->
 
 ---
 
-## Best-of-N as a supervisory tool
+## Best-of-N
 
-A practical move from the practitioner literature.
+A practical move for steps where the right answer is not obvious.
 
-When you are at a step where the right answer is not obvious — multiple reasonable approaches exist, and you are not sure which is best — generate **multiple Codex responses** for the same prompt and evaluate them all.
+When multiple reasonable approaches exist and you are not sure which is best, generate multiple Codex responses for the same prompt and evaluate them against each other. Run the same Ask Mode plan request twice in separate sessions. Compare the two plans. The places where they differ are the places where the answer is not determined by the spec — they are the places where supervisory judgment is needed.
 
-Operationally: run the same Ask Mode plan request twice in separate sessions. Compare the two plans. Note where they differ. The differences are the places where the answer is not determined by the spec — they are the places where supervisory judgment is needed.
+For Code Mode steps that produce output you have to live with — a function design, a class structure — the same move works. Generate two implementations. Compare. Choose. Note why you chose.
 
-For Code Mode steps that produce output you have to live with (a function design, a class structure, a UI layout), the same move works. Generate two implementations. Compare. Choose. Note *why* you chose.
+This is called **Best-of-N** in the practitioner literature. As of mid-2026 it is a practice, not a product feature — there is no button. The practice is: when the answer requires judgment that the spec does not fully constrain, generate multiple candidates so you have something to judge against. Codex produces the candidates; you produce the selection. The selection is the supervisory work. The candidates are the material.
 
-This pattern is called **Best-of-N** in the practitioner literature. As of mid-2026, it is not a named user-facing feature in Codex — the technique exists; the button does not. The book uses it as a *practice* rather than as a product. The practice is: when the answer requires judgment, generate multiple candidates so you have material to judge against.
-
-The selection is the supervisory work. The candidates are the material. Codex produces the candidates; you produce the selection. This is the **Humans + AI division of labor** in operation for judgment-intensive steps.
+The conductor does not compose the notes. The conductor chooses among the interpretations the orchestra offers, or asks for the passage again with a different tempo, and makes the choice that serves the score. Best-of-N is that move, in operational form.
 
 ---
 
-## Common misconceptions
+## What the discipline is not
 
-**"Ask Mode is for beginners."** No. Senior OpenAI engineers prescribe Ask-Mode-first specifically because *they* have learned not to skip it. The discipline is for everyone using agentic AI.
+**It is not for beginners.** Senior OpenAI engineers use Ask-Mode-first specifically because they have paid the cost of skipping it. The discipline is for everyone who has found Codex doing something unexpected and wished they had caught it earlier.
 
-**"I can keep the plan in my head."** Sometimes, for trivial tasks. For anything multi-step, the plan-in-writing (or plan-in-your-Ask-Mode-window) is the cheap-to-revise version; the plan-in-your-head is the version that drifts during execution and produces the messy Path A from the worked example.
+**It is not slow.** The gate costs time only when no assumptions need correcting — and then it costs very little. When assumptions do need correcting, it saves the time of a rollback, which is always more expensive. The friction is paid back at the first avoided rollback.
 
-**"The gate slows me down."** Sometimes, on tiny tasks. For real builds, the math is dramatically favorable — the 13 minutes Path B saved over Path A in the worked example is one example among many. The friction of the gate is paid back the moment you avoid a single rollback.
+**It is not about distrust.** The gate is not skepticism about Codex's ability to write code. Codex writes code well. The gate is about the conductor's job: holding the meaning of what is being built, and checking that the orchestra's technically correct notes are the right notes for this piece.
 
-**"Best-of-N is overkill for student work."** Use it when the right answer requires judgment. Skip it when the spec determines the answer. For most student work, this means using it on the design steps (which structure, which approach) and skipping it on the implementation steps (write the function that does X).
-
-**"The orchestra metaphor is just a metaphor."** It is also operational. The conductor's job — read the score, listen to the orchestra, intervene before wrong notes play — is exactly the work the supervisory capacities (Chapter 5) name. The metaphor is doing real work in the chapter; it is not decoration.
-
----
-
-## Exercises
-
-1. **(Apply)** Take a prompt you've used in the past week. Rewrite it as an Ask Mode interrogation followed by a Code Mode specification. Run the new version. Compare the result to the original.
-
-2. **(Apply)** Write a handoff condition for a Codex task in a current project. The condition should be specific, testable, and binary — not "looks good," not "tests pass."
-
-3. **(Analyze)** Given a provided Codex transcript, identify where the Ask Mode / Code Mode gate was skipped and what broke as a result. Trace the consequences.
+**It is not optional for multi-step builds.** For a one-line fix, skip the gate. For anything you would not bet a full hour on getting right in one shot, the gate is the first line of defense. The handoff condition is the second.
 
 ---
 
 ## What would change my mind
 
-The chapter's central operational claim is that **the Ask Mode → Code Mode gate, applied per significant build, materially reduces wasted Code Mode work** and produces better outputs than starting from Code Mode directly. If a controlled comparison — same set of tasks, with and without the gate — found no measurable difference in build time or output quality, the gate becomes optional rather than load-bearing. The book would still teach it for the supervisory-practice benefit; the urgency softens.
+The chapter's central operational claim: the Ask Mode → Code Mode gate, applied per significant build, materially reduces wasted Code Mode work and produces better outputs than starting from Code Mode directly.
 
-I expect the difference to be substantial because the gate moves the cheap work (assumption correction) upstream of the expensive work (rollback after failed implementation), and the math is dramatically favorable when the upstream work catches even one assumption that would have produced a rollback.
+What would soften that claim: a controlled comparison — same tasks, with and without the gate — that found no measurable difference in build time or output quality. If the assumption-correction work in Ask Mode does not actually prevent rollbacks in Code Mode, the gate becomes recommended practice rather than load-bearing. I expect the difference to be substantial because the math is favorable whenever upstream work catches even one assumption that would have produced a rollback. That is nearly always.
+
+What remains open: the exact threshold below which the gate is overhead. A typo fix does not need it. A multi-file refactor does. The middle cases are fuzzy. Working heuristic: any change you would not bet a full hour on getting right in one shot.
+
+Also open: how the gate interacts with Codex's multi-step autopilot surfaces, where Codex chains steps with limited human intervention. The book argues against those for student work. Whether they can be used safely with the gate applied at the plan level is an open question.
 
 ---
 
-## Still puzzling
+## What is still puzzling
 
-- **The exact threshold below which the gate is overhead.** A one-line change to fix a typo does not need the gate. A multi-file refactor does. The middle cases are fuzzy. The book's working heuristic: any change you would not bet a full hour on getting right in one shot.
+**When Best-of-N becomes a habit vs. overhead.** The book does not prescribe frequency. Use it when the answer requires judgment the spec does not fully constrain. Skip it when the spec determines the answer. For most student work: use it on design steps (which structure, which approach), skip it on implementation steps (write the function that does X).
 
-- **How the gate interacts with Codex's "Agents" mode or other multi-step autopilot surfaces.** The Codex app has modes where Codex chains steps with limited human intervention. The book argues against using those for student work — the discipline is the point. Whether the autopilot modes can be used safely with the gate applied at the *plan* level (and trust delegated thereafter) is open.
-
-- **Best-of-N: when does it become a habit vs. overhead?** For most students, occasionally — on the steps where judgment matters. The book does not prescribe frequency; the prescription is "when the answer requires judgment that the spec does not fully constrain, generate multiple candidates."
+**The long-horizon effect of skipping the gate.** The worked example shows a single build. Over a semester, a student who never uses the gate accumulates session context that is cluttered with failed attempts and corrections in Code Mode. The correction habits that Code-Mode-first produces — try, fail, reprompt — are themselves a form of skill formation. But it is the wrong skill. Reprompting against failed output is not the same as reviewing a plan before execution. The student who skips the gate is practicing triage, not architecture.
 
 ---
 
 ## AI Wayback Machine
 
-🕰️ **Herbert Simon** (1916–2001) — Nobel-laureate polymath whose concept of **bounded rationality** is the deep frame for the gate. Simon argued that real human decision-makers operate within real cognitive limits and that good systems are ones that *extend those limits without removing the work that constitutes good decision-making*.[^2] The Ask Mode → Code Mode gate is bounded rationality applied to AI-assisted coding. Codex extends your pattern-completion capacity (you can produce code you couldn't write from memory); the gate preserves your supervisory capacity (you check the plan against your situation before code is written). The combination — tool extends, gate preserves — is exactly Simon's prescription for human-machine collaboration. Without the gate, the tool extends *and* erodes — extending what you can do today, eroding what you could do tomorrow. With the gate, the tool extends *and* preserves. Simon would recognize the trade-off and the resolution.
+🕰️ **Herbert Simon** (1916–2001) — Nobel-laureate economist and cognitive scientist whose concept of **bounded rationality** is the deep frame for the gate.[^2] Simon argued that real decision-makers do not optimize against infinite information — they operate within real cognitive limits, and good systems extend those limits without removing the decision-making work that constitutes good judgment.
+
+The Ask Mode → Code Mode gate is bounded rationality applied to AI-assisted coding. Codex extends your pattern-completion capacity — you can produce code you could not write from memory, at a pace you could not sustain unaided. The gate preserves your supervisory capacity — you check the plan against your actual situation before the code is written. The combination is Simon's prescription: the tool extends, the gate preserves.
+
+Without the gate, the tool extends and erodes — extending what you can do today, eroding the judgment you would exercise tomorrow. With the gate, the tool extends and preserves. Simon would recognize the trade-off immediately. The gate is not a tax on Codex's power. It is what keeps the power yours.
 
 ---
 
 ## Bridge
 
-You have the gate. Chapter 5 names the five things the human must never delegate — the supervisory capacities the discipline keeps yours, no matter how fluent Codex becomes.
+You have the gate. The next chapter names the five things the human must never delegate — the supervisory capacities the discipline keeps yours, no matter how fluent Codex becomes.
+
+---
+
+## Exercises
+
+**Warm-up**
+
+1. *(Tests: Ask Mode vs. Code Mode distinction)* List three actions that belong in Ask Mode and three that belong in Code Mode. For each, state in one sentence why it belongs where you placed it.
+
+2. *(Tests: what makes a handoff condition strong)* You are given three handoff condition candidates for a step that adds a new authentication function: (a) "looks good," (b) "tests pass," (c) "function exists at `auth/login.py`, accepts `username` and `password`, returns a boolean, passes five named test cases, modifies no file outside `auth/`." Explain what each candidate does and does not check, and which one you would use.
+
+3. *(Tests: the gate rule)* A classmate says: "I read the Ask Mode plan and it looked reasonable, so I switched to Code Mode." Is this the gate? What specifically is missing?
+
+**Application**
+
+4. *(Tests: assumption-finding in a real plan)* You ask Codex in Ask Mode: "Add a function that sends a weekly summary email to all users." Codex returns a four-step plan. Identify at least two assumptions Codex likely made that you did not state in your prompt. For each: name the assumption, state whether you would confirm or correct it, and explain what would go wrong in Code Mode if you did not catch it first.
+
+5. *(Tests: writing a handoff condition before execution)* Choose a multi-step Codex task from a current or recent project. Write a handoff condition for one significant step — before running it. The condition must be specific, testable, and binary. Submit the condition alongside the step description.
+
+6. *(Tests: Best-of-N as supervisory judgment)* You are designing the data model for a new feature. You run the same Ask Mode plan request twice and get two different proposals. Describe a process for choosing between them that constitutes supervisory judgment rather than a coin flip. What would you look for in the diff between the two plans?
+
+**Synthesis**
+
+7. *(Tests: gate + handoff conditions together)* Walk through the "two ways" worked example from the chapter and identify every point at which a handoff condition should have been written in Path B. For each point: write the condition, and explain what failure it would have caught if Path B had gone wrong at that step.
+
+8. *(Tests: the fluency trap in the planning register)* The chapter argues that "looks good" is not the gate because Ask Mode plans have the same property as all fluent output — they look more complete than they are. Explain this claim in your own words, connecting it to the fluency trap from Chapter 2. Then describe a specific inspection move (what you would actually look for when reviewing a plan) that converts "looks good" into a genuine gate check.
+
+**Challenge**
+
+9. *(Open-ended)* The chapter's working heuristic for when the gate is required is: "any change you would not bet a full hour on getting right in one shot." Design a more precise decision rule for when to use Ask Mode first. Your rule should be checkable (you can apply it in under 30 seconds at the start of a session), handle the edge cases the heuristic leaves fuzzy, and be based on properties of the task rather than your confidence level. Explain the trade-offs of your rule against the chapter's heuristic.
 
 ---
 
