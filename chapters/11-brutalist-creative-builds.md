@@ -317,37 +317,3 @@ You have the full conducting discipline — technical and creative. The next cha
 
 [^1]: For the broader ecosystem, see designmd.app's library of design systems for AI agents; VoltAgent's awesome-design-md collection on GitHub; the DEV Community discussion "AGENTS.md, SKILL.md, DESIGN.md: How AI Instructions Split into Three Layers." The Brutalist three-file system is one entrant in this conversation.
 [^2]: LeWitt, S. "Paragraphs on Conceptual Art." *Artforum* 5, no. 10 (1967): 79–83. See also LeWitt's "Sentences on Conceptual Art" in *0–9*, no. 5 (1969).
-
-## Prompts
-
-Use these prompts with Claude to generate interactive D3 v7 versions of the
-figures in this chapter. Each produces a standalone HTML file you can open
-in a browser and modify freely.
-
-**Prerequisites:** Load `brutalist/CLAUDE.md` and `brutalist/DESIGN.md` into
-your Claude project context before using these prompts. They define the stack,
-naming conventions, color system, and typography the figures use.
-
----
-
-### Figure 11.1 — Illustration 
-
-Create a standalone D3 v7 HTML file for Figure Illustration . Use the CDN https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js, inline CSS, ResizeObserver redraw, SVG role="img", aria-labelledby, title, and desc. Build the figure from this structural brief: two-panel illustration — left panel: a polished platform homepage with generic sans-serif font, blue accent color, standard card grid, labeled "most-probable output"; right panel: same content with deep blue-black background, hot-neon-pink accents, phosphor-green code blocks, JetBrains Mono labels, labeled "specified output." Caption: "Both are technically correct. Only one has an author.". Use the described data shape and labels; when exact values are not supplied, use plausible illustrative values that preserve the relationships in the brief. Use a zero baseline for bars or areas, direct labels where possible, and annotations named in the brief. Use only DESIGN.md color variables and the required serif/mono font split.
-
-> Reference implementation: `d3/11-brutalist-creative-builds-fig-01.html`
-
----
-
-### Figure 11.2 — The three-file system as three nested layers
-
-Create a standalone D3 v7 HTML file for Figure The three-file system as three nested layers. Use the CDN https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js, inline CSS, ResizeObserver redraw, SVG role="img", aria-labelledby, title, and desc. Build the figure from this structural brief: The three-file system as three nested layers. Outer: CLAUDE.md / AGENTS.md (technical constitution). Middle: DESIGN.md (visual constitution). Inner: PROJECT.md (project state — Intent Layer is human, always). Editorial style.. Use the described data shape and labels; when exact values are not supplied, use plausible illustrative values that preserve the relationships in the brief. Use a zero baseline for bars or areas, direct labels where possible, and annotations named in the brief. Use only DESIGN.md color variables and the required serif/mono font split.
-
-> Reference implementation: `d3/11-brutalist-creative-builds-fig-02.html`
-
----
-
-### Figure 11.3 — Chart comparison 
-
-Create a standalone D3 v7 HTML file for Figure Chart comparison . Use the CDN https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js, inline CSS, ResizeObserver redraw, SVG role="img", aria-labelledby, title, and desc. Build the figure from this structural brief: side-by-side chart comparison — left: survey data rendered with default green-yellow-red gradient, standard gridlines, axis labels; right: same data rendered with muted earth-tone palette, annotation labels, no gridlines. Caption: "Same data, same Codex, different files. The 30-minute investment is visible in the output.". Use the described data shape and labels; when exact values are not supplied, use plausible illustrative values that preserve the relationships in the brief. Use a zero baseline for bars or areas, direct labels where possible, and annotations named in the brief. Use only DESIGN.md color variables and the required serif/mono font split.
-
-> Reference implementation: `d3/11-brutalist-creative-builds-fig-03.html`

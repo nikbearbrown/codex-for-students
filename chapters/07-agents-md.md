@@ -240,25 +240,3 @@ You have AGENTS.md. Codex knows your project at every session. Chapter 8 teaches
 [^1]: Knuth, D. E. "Literate Programming." *The Computer Journal* 27, no. 2 (1984): 97–111.
 
 ---
-
-## Prompts
-
-Use these prompts with Claude to generate interactive D3 v7 versions of the figures in this chapter. Each produces a standalone HTML file you can open in a browser and modify freely.
-
-**Prerequisites:** Load `brutalist/CLAUDE.md` and `brutalist/DESIGN.md` into your Claude project context before using these prompts. They define the stack, naming conventions, color system, and typography the figures use.
-
----
-
-### Figure 7.1 — AGENTS.md as persistent session context
-
-Build a hub-and-spoke diagram in D3 v7. A central rectangular card in `--color-fill` with a `--color-red` border, holding a monospace ALL CAPS title `AGENTS.MD`, a bold subtitle `project root`, two italic lines summarizing contents (`stack · style · architecture` / `environment · lessons learned`), and a monospace footer `UNDER 200 LINES`. Three session cards around the hub: upper-left `CODEX SESSION 1` (Monday — feature work), right `SESSION 2` (Wed — bug hunt), and lower-left `CODEX SESSION 3` (Fri — refactor pass). Each session card is a small rectangle with a `--color-fill` header strip carrying a monospace ALL CAPS label, a bold title line, and an italic gloss. Hairline `--color-ink` arrows fan from the central card to each session card. A dashed contrast box in the lower right labeled `WITHOUT AGENTS.MD` notes that each session re-establishes context. Hovering any card shows a tooltip with the longer description. Dashed footer rule plus a two-line caption noting the arrows are loading, not requests.
-
-> Reference implementation: `d3/07-agents-md-fig-01.html`
-
----
-
-### Figure 7.2 — Literate vs. bare
-
-Build a two-panel comparison in D3 v7. Left panel `LITERATE — PROSE + RULE` highlighted with a `--color-red` border; right panel `BARE — RULE ALONE` with a `--color-border` border. Each panel has a `--color-fill` header strip with the monospace ALL CAPS label. Inside the literate panel: three prose lines explaining why the rule exists, a `--color-fill` rule box with the monospace ALL CAPS rule (`RULE — NO DIRECT HTTP CALLS` / `USE NetClient.request()`), then a dashed divider, then a label `SERVES THREE READERS` with three small reader cards (`YOU`, `COLLAB.`, `CODEX`) each holding a monospace ALL CAPS cap and an italic verb. Footer line in `--color-red`: *The "why" is the entry's load-bearing part.* The bare panel omits the prose, shows the same rule box, divider, and label `SERVES ONE READER` with only the `CODEX` card. Footer in secondary: *Future-you forgets why. Pattern-matched around.* Hover either panel for the longer narrative. Dashed footer rule plus a two-line caption tying the figure to Knuth.
-
-> Reference implementation: `d3/07-agents-md-fig-02.html`

@@ -191,25 +191,3 @@ The build is done when it passes the handoff conditions. Chapter 14 defines what
 [^2]: Deming, W. E. *Out of the Crisis*. MIT Press, 1986; reissued 2018. PDCA is articulated across his work; the 1986 book is the standard reference.
 
 ---
-
-## Prompts
-
-Use these prompts with Claude to generate interactive D3 v7 versions of the figures in this chapter. Each produces a standalone HTML file you can open in a browser and modify freely.
-
-**Prerequisites:** Load `brutalist/CLAUDE.md` and `brutalist/DESIGN.md` into your Claude project context before using these prompts. They define the stack, naming conventions, color system, and typography the figures use.
-
----
-
-### Figure 13.1 — The build loop
-
-Build a five-node clockwise cycle in D3 v7 inside a `--color-fill` plot rectangle. Five rectangular cards with a `--color-fill` header strip and a monospace ALL CAPS code (`READ PLAN`, `PICK STEP`, `EXECUTE`, `VERIFY`, `NEXT`), arranged in a clock-face pattern around a central hub. Connect the five nodes with curved single-headed arrows that share one `<defs>` arrowhead marker. The `VERIFY` node is highlighted in `--color-red` — header text, code label, and card stroke all switch to red. From `EXECUTE`, draw a dashed red branch to a sixth card (`STOP — REVERT`, `/rewind → respecify`) using a second red-filled arrowhead marker; label the branch `fail` in red italic. At the centre of the cycle, place a monospace ALL CAPS label `ONE PROMPT / WIDE` over an italic secondary line `PDCA at prompt granularity`. Hovering any card shows a tooltip with the longer step description. Dashed footer rule plus a caption naming why Verify is highlighted.
-
-> Reference implementation: `d3/13-running-the-build-fig-01.html`
-
----
-
-### Figure 13.2 — Three pivotal moments
-
-Build a three-column box layout in D3 v7. Each column is a tall rectangular card with a `--color-fill` header strip containing a monospace ALL CAPS code (`PLAN DEVIATION`, `TEST FAILURE`, `SCOPE DRIFT`). Inside each box, three labeled sub-sections: a bold `Trigger` heading with two `--color-secondary` body lines; a bold `Temptation` heading with two italic `--color-secondary` lines; a bold red `Do this` heading with a monospace red action line (`/rewind`, `investigate the feeling`, `log it, decline now`) followed by three `--color-ink` instruction lines. The middle card (`TEST FAILURE`) is the highlighted one — header text and card stroke switch to `--color-red`. Hovering any card shows a tooltip explaining the trigger and the discipline. Dashed footer rule plus a two-line caption naming the middle moment as the hardest — the discipline is investigating a feeling rather than dismissing it because the tests passed.
-
-> Reference implementation: `d3/13-running-the-build-fig-02.html`

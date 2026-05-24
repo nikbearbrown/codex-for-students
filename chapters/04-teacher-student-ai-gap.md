@@ -203,17 +203,3 @@ You understand the problem completely. Chapter 5 introduces the solution: conduc
 [^1]: Illich, I. *Tools for Conviviality*. Harper & Row, 1973. See also *Deschooling Society* (Harper & Row, 1971).
 
 ---
-
-## Prompts
-
-Use these prompts with Claude to generate interactive D3 v7 versions of the figures in this chapter. Each produces a standalone HTML file you can open in a browser and modify freely.
-
-**Prerequisites:** Load `brutalist/CLAUDE.md` and `brutalist/DESIGN.md` into your Claude project context before using these prompts. They define the stack, naming conventions, color system, and typography the figures use.
-
----
-
-### Figure 4.1 — Technical fluency × domain depth
-
-Build a four-quadrant chart in D3 v7. The chart area is a `--color-fill` rectangle divided into quadrants by dashed `--color-border` cross-lines at the midpoints. Label each quadrant with a monospace ALL CAPS heading and a bold one-line sub-title. Top-left `EXPERT LEARNER · low fluency · high depth`; top-right `TARGET · high fluency · high depth` (drawn as an inset card with `--color-slate` border); bottom-left `BEGINNER · PROTECTED · low fluency · low depth`; bottom-right `DANGER ZONE · high fluency · low depth` (drawn as an inset card with `--color-red` border). Add a vertical arrow with marker-end running from the Danger inset up into the Target inset, with an italic right-side label `the conducting discipline`. X-axis title `TECHNICAL FLUENCY →` and Y-axis title `DOMAIN DEPTH →` in monospace ALL CAPS. Hovering any quadrant shows a tooltip with the longer description.
-
-> Reference implementation: `d3/04-teacher-student-ai-gap-fig-01.html`

@@ -259,25 +259,3 @@ You have a formulation. The next chapter teaches you to write the Codex prompts 
 [^1]: Brooks, F. P. *The Mythical Man-Month*. Addison-Wesley, 1975. See also "No Silver Bullet: Essence and Accidents of Software Engineering." *IEEE Computer* 20, no. 4 (1987): 10–19.
 
 ---
-
-## Prompts
-
-Use these prompts with Claude to generate interactive D3 v7 versions of the figures in this chapter. Each produces a standalone HTML file you can open in a browser and modify freely.
-
-**Prerequisites:** Load `brutalist/CLAUDE.md` and `brutalist/DESIGN.md` into your Claude project context before using these prompts. They define the stack, naming conventions, color system, and typography the figures use.
-
----
-
-### Figure 8.1 — Cost of revision
-
-Build a line chart in D3 v7. X axis: five phases ordered `SPEC`, `PLAN`, `CODE`, `VERIFY`, `SHIP` — all monospace ALL CAPS, the `SHIP` label in `--color-red` and bold. Y axis: cost to change, labeled `COST TO CHANGE` vertically in monospace ALL CAPS, with three tick labels `~0`, `MED`, `HIGH`. Two dashed gridlines across the plot. Curve: a Catmull-Rom path in `--color-red` rising from near-zero at SPEC to near-top at SHIP, with the shape exponential — flat through SPEC and PLAN, then climbing steeply through CODE, VERIFY, and SHIP. A filled circle at each phase, the SHIP circle slightly larger. Italic annotations beside each point: "change a sentence", "re-plan upstream", "discard prompts; restart", "debug + re-frame; tests stale", "side effects ran — irreversible" (the last in `--color-red`). A `--color-fill` callout box in the upper-left labeled `THE CHEAP WINDOW` with two lines noting SPEC and PLAN cost minutes, not hours. Hovering any point shows a longer tip. Dashed footer rule plus a two-line caption naming why the curve steepens.
-
-> Reference implementation: `d3/08-problem-formulation-fig-01.html`
-
----
-
-### Figure 8.2 — Path A vs. Path B
-
-Build a two-row horizontal flow diagram in D3 v7. Row 1: `PATH A — SPECIFY FIRST` in `--color-red` ALL CAPS, italic subtitle "10 min upstream → 45 min build → working tool", then four step boxes left to right — `ASK MODE` (interrogate, 10 min), `SPEC` (write, 5 min), `CODE MODE` (implement to spec, 45 min), `WORKING` (used daily, total: 60 min) with the last box in `--color-red` border. Hairline `--color-ink` arrows connect adjacent boxes. Each box has a `--color-fill` body, a monospace ALL CAPS cap label, a bold title line, and an italic time line in secondary. Row 2: `PATH B — CODE FIRST, FIX LATER` in secondary ALL CAPS, italic subtitle "60 min build → unused script → wasted hour", then four step boxes — `CODE MODE` (vague prompt, 25 min), `REWORK 1` (discard, retry, 15 min), `REWORK 2` (patch forward, 20 min), `UNUSED` (wrong framing, total: 60 min). Two `--color-red` dashed loop arrows above Path B: one from REWORK 1 back to CODE MODE labeled "re-prompt; same vague frame", one from REWORK 2 spanning back to REWORK 1 labeled "accumulate context pollution". Hover any step for the longer narrative. Dashed footer rule plus a two-line caption noting both flows cost 60 minutes and the upstream investment is the difference.
-
-> Reference implementation: `d3/08-problem-formulation-fig-02.html`

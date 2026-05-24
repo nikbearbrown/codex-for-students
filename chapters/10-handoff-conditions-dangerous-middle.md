@@ -191,29 +191,3 @@ You have the full conducting discipline for code builds. Chapter 11 applies the 
 
 [^1]: OpenAI engineers, "How OpenAI Engineers use Codex to Tackle Big Projects with Rigor" (forum.openai.com, December 4, 2025).
 [^2]: Hopper, G. *Various lectures and interviews*, 1980s. The "we've always done it this way" phrase is quoted across her recorded talks and is widely attributed.
-
-## Prompts
-
-Use these prompts with Claude to generate interactive D3 v7 versions of the
-figures in this chapter. Each produces a standalone HTML file you can open
-in a browser and modify freely.
-
-**Prerequisites:** Load `brutalist/CLAUDE.md` and `brutalist/DESIGN.md` into
-your Claude project context before using these prompts. They define the stack,
-naming conventions, color system, and typography the figures use.
-
----
-
-### Figure 10.1 — The handoff condition as a gate between build
-
-Create a standalone D3 v7 HTML file for Figure The handoff condition as a gate between build. Use the CDN https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js, inline CSS, ResizeObserver redraw, SVG role="img", aria-labelledby, title, and desc. Build the figure from this structural brief: The handoff condition as a gate between build steps. Step N → [Handoff condition check] → Step N+1. If check fails: /rewind to step N checkpoint. If check passes: proceed. Editorial style.. Use the described data shape and labels; when exact values are not supplied, use plausible illustrative values that preserve the relationships in the brief. Use a zero baseline for bars or areas, direct labels where possible, and annotations named in the brief. Use only DESIGN.md color variables and the required serif/mono font split.
-
-> Reference implementation: `d3/10-handoff-conditions-dangerous-middle-fig-01.html`
-
----
-
-### Figure 10.2 — Three dangerous-middle subtypes as a taxonomy 
-
-Create a standalone D3 v7 HTML file for Figure Three dangerous-middle subtypes as a taxonomy . Use the CDN https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js, inline CSS, ResizeObserver redraw, SVG role="img", aria-labelledby, title, and desc. Build the figure from this structural brief: three dangerous-middle subtypes as a taxonomy — language footguns, convention misalignments, edge-case omissions — each with a one-line example and the protection that catches it. Student should see at a glance which subtype Seth's mutable-default error belongs to.. Use the described data shape and labels; when exact values are not supplied, use plausible illustrative values that preserve the relationships in the brief. Use a zero baseline for bars or areas, direct labels where possible, and annotations named in the brief. Use only DESIGN.md color variables and the required serif/mono font split.
-
-> Reference implementation: `d3/10-handoff-conditions-dangerous-middle-fig-02.html`

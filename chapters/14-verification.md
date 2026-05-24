@@ -221,25 +221,3 @@ You have the discipline. The next chapter hands you the build.
 [^1]: Liskov, B. and Wing, J. M. "A Behavioral Notion of Subtyping." *ACM Transactions on Programming Languages and Systems* 16, no. 6 (1994): 1811–1841.
 
 ---
-
-## Prompts
-
-Use these prompts with Claude to generate interactive D3 v7 versions of the figures in this chapter. Each produces a standalone HTML file you can open in a browser and modify freely.
-
-**Prerequisites:** Load `brutalist/CLAUDE.md` and `brutalist/DESIGN.md` into your Claude project context before using these prompts. They define the stack, naming conventions, color system, and typography the figures use.
-
----
-
-### Figure 14.1 — The verification sequence
-
-Build a vertical three-pass column in D3 v7. Each pass is a rectangular card with a `--color-fill` header strip containing a monospace ALL CAPS code (`PASS 1 — FUNCTIONAL`, `PASS 2 — EDGE CASE`, `PASS 3 — SPEC NEEDS`), a bold serif question title (`Does it run?`, `Does it do what was asked?`, `Does it survive real use?`), and a one-line `--color-secondary` body sentence. To the right of each card, stack a two-block side annotation: a monospace ALL CAPS `CATCHES` label with two `--color-ink` lines, then a monospace ALL CAPS `CANNOT SEE` label with one italic `--color-secondary` line. Connect the three cards top-to-bottom with single-headed downward arrows sharing one `<defs>` arrowhead marker. The third pass (`PASS 3 — SPEC NEEDS`) is highlighted in `--color-red` — header text, code label, the title, the `CATCHES` label, and the `CATCHES` lines all switch to red; card stroke also red. Hovering any card shows a tooltip with the longer description of what that pass does. Dashed footer rule plus a two-line caption noting that the passes are cumulative and that the highlighted pass is the only one that checks against User needs.
-
-> Reference implementation: `d3/14-verification-fig-01.html`
-
----
-
-### Figure 14.2 — Verification loop flow
-
-Build a descending step chart in D3 v7. X axis: monospace ALL CAPS `ITERATION →`, five labeled stops at `start`, `P1`, `P2`, `P3`, `done`. Y axis: rotated monospace ALL CAPS `DEFECTS REMAINING →`, with `high` and `0` hint labels at top and bottom. Plot area filled with `--color-fill`. Render a step path in `--color-red` (stroke-width 2.5, no fill) with values 130 → 70 → 30 → 10 → 10 across the five stops. Place red dots at the three pass landings; next to each, a two-line annotation with the monospace ALL CAPS pass code on top and a serif descriptor below (`mechanical`, `edge cases`, `spec needs`). The Pass 3 dot and labels are in `--color-red`. From the Pass 3 region, draw a small dashed red arc back toward earlier passes labeled `re-run on fix` in red italic — the regression loop. At `done`, drop a dashed `--color-secondary` vertical from the curve to the y=0 line, labeled `residual` in italic. Hovering any dot shows a tooltip explaining what failures that pass catches. Dashed footer rule plus a two-line caption naming the residual (downstream, dependency, formulation failures).
-
-> Reference implementation: `d3/14-verification-fig-02.html`

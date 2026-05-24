@@ -251,25 +251,3 @@ You have the gate. The next chapter names the five things the human must never d
 [^2]: Simon, H. A. *The Sciences of the Artificial*. MIT Press, 3rd ed., 1996.
 
 ---
-
-## Prompts
-
-Use these prompts with Claude to generate interactive D3 v7 versions of the figures in this chapter. Each produces a standalone HTML file you can open in a browser and modify freely.
-
-**Prerequisites:** Load `brutalist/CLAUDE.md` and `brutalist/DESIGN.md` into your Claude project context before using these prompts. They define the stack, naming conventions, color system, and typography the figures use.
-
----
-
-### Figure 5.1 — Right seat, wrong seat
-
-Build a two-panel illustration in D3 v7. Two equally-sized `--color-fill` panels side by side, each with a monospace ALL CAPS header (`PANEL A — AT THE PODIUM`, `PANEL B — IN THE SECTION`). In Panel A, draw a simple stage line, a rectangular podium centered on it in `--color-white` with `--color-ink` outline, a stick-figure conductor on the podium with one arm raised holding a baton, and six small circles to either side representing the orchestra. In Panel B, draw the same stage line and an empty podium dashed in `--color-red` with an italic label `empty`. A stick-figure conductor (in `--color-red`) sits in the violin row holding a small rectangular violin; flanked by two other violinists in `--color-secondary`; additional orchestra dots on the far side. One-line caption under each panel. Hovering either panel shows a tooltip explaining what the seat does and does not do.
-
-> Reference implementation: `d3/05-conducting-not-prompting-fig-01.html`
-
----
-
-### Figure 5.2 — The Ask Mode / Code Mode gate
-
-Build a three-stage horizontal flow in D3 v7. Three cards from left to right. Left card (`--color-fill`): `ASK MODE · Human`, with three short arrow-bulleted lines (`→ interrogate`, `→ plan`, `→ formulate`) and an italic `--color-secondary` line `no files change.`. Center card (`--color-white` with `--color-red` border): `THE GATE`, with bold red title `plan reviewed and approved` and two italic `--color-secondary` lines `find one assumption.` / `confirm or correct.`. Right card (`--color-fill`): `CODE MODE · Human`, with three arrow-bulleted lines (`→ execute`, `→ check handoff`, `→ verify output`) and an italic line `files, state, effects.`. Connect the three cards with `marker-end` arrows. Hovering any stage shows a tooltip explaining what that stage does and what goes wrong if it is skipped. Dashed footer rule plus two caption lines: the gate is a specific review with a specific purpose; correction in Ask Mode costs a sentence, in Code Mode costs a rollback.
-
-> Reference implementation: `d3/05-conducting-not-prompting-fig-02.html`
