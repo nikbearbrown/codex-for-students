@@ -1,178 +1,29 @@
-<svg viewBox="0 0 700 720" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
-  <title id="title">The fourteen-step sequence — from spec to ship</title>
-  <desc id="desc">A numbered vertical flow of fourteen steps in three phases. Upstream (steps 1–7) is the planning phase that happens once. The per-step loop (steps 8–12) repeats for every step in the build. Closing (steps 13–14) is the verification and post-build document that happens once at the end. The repeat phase is bracketed and highlighted.</desc>
+<svg viewBox="0 0 700 420" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">The fourteen-step sequence as two phases </title>
+  <desc id="desc">The fourteen-step sequence as two phases — upstream (steps 1–7, happens once) and per-step loop (steps 8–12, repeats) and closing (steps 13–14, happen</desc>
   <defs>
     <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
       <polygon points="0 0, 8 3, 0 6" fill="#2a1a0e"/>
     </marker>
-    <marker id="arrowred" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
-      <polygon points="0 0, 8 3, 0 6" fill="#C8102E"/>
-    </marker>
   </defs>
-
-  <rect x="0" y="0" width="700" height="720" fill="#FFFFFF"/>
-
-  <text x="32" y="40" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="10" letter-spacing="0.08em" fill="#545454">FIGURE 15.1 — THE FOURTEEN-STEP SEQUENCE</text>
-  <text x="32" y="64" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="13" font-weight="bold" fill="#2a1a0e">From spec to ship — once upstream, looped through, once closing</text>
-
-  <!-- Phase labels at left, steps in centre column -->
-  <!-- Phase 1: Upstream (steps 1-7), Phase 2: Per-step loop (8-12), Phase 3: Closing (13-14) -->
-
-  <!-- Upstream bracket (steps 1-7): y from 92 to 374 -->
-  <text x="32" y="100" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="9" letter-spacing="0.08em" fill="#545454">UPSTREAM</text>
-  <text x="32" y="114" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="10" font-style="italic" fill="#545454">once, before</text>
-  <text x="32" y="128" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="10" font-style="italic" fill="#545454">Code Mode</text>
-  <line x1="118" y1="96" x2="118" y2="374" stroke="#545454" stroke-width="0.75"/>
-  <line x1="118" y1="96" x2="124" y2="96" stroke="#545454" stroke-width="0.75"/>
-  <line x1="118" y1="374" x2="124" y2="374" stroke="#545454" stroke-width="0.75"/>
-
-  <!-- Loop bracket (steps 8-12) — highlighted -->
-  <text x="32" y="404" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="9" letter-spacing="0.08em" fill="#C8102E">PER-STEP LOOP</text>
-  <text x="32" y="418" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="10" font-style="italic" fill="#C8102E">repeats for</text>
-  <text x="32" y="432" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="10" font-style="italic" fill="#C8102E">every step</text>
-  <line x1="118" y1="394" x2="118" y2="592" stroke="#C8102E" stroke-width="0.75"/>
-  <line x1="118" y1="394" x2="124" y2="394" stroke="#C8102E" stroke-width="0.75"/>
-  <line x1="118" y1="592" x2="124" y2="592" stroke="#C8102E" stroke-width="0.75"/>
-
-  <!-- Closing bracket (steps 13-14) -->
-  <text x="32" y="622" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="9" letter-spacing="0.08em" fill="#545454">CLOSING</text>
-  <text x="32" y="636" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="10" font-style="italic" fill="#545454">once, at end</text>
-  <line x1="118" y1="612" x2="118" y2="692" stroke="#545454" stroke-width="0.75"/>
-  <line x1="118" y1="612" x2="124" y2="612" stroke="#545454" stroke-width="0.75"/>
-  <line x1="118" y1="692" x2="124" y2="692" stroke="#545454" stroke-width="0.75"/>
-
-  <!-- Step cards in vertical column at x=140..520, height 32, gap 8 -->
-  <!-- Compact: 14 cards × 32px + 13 × 8px gaps = 552px. Fit from y=92 to y=684 -->
-
-  <!-- Helper: each card is 32 tall starting at given y. Number badge on left, title on right. -->
-
-  <!-- Step 1 -->
-  <g>
-    <rect x="140" y="92" width="380" height="32" fill="#FFFFFF" stroke="#D4D4D4" stroke-width="1"/>
-    <rect x="140" y="92" width="36" height="32" fill="#F5EFE8" stroke="#D4D4D4" stroke-width="1"/>
-    <text x="158" y="113" text-anchor="middle" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="11" letter-spacing="0.08em" fill="#2a1a0e">1</text>
-    <text x="188" y="108" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="11" font-weight="bold" fill="#2a1a0e">Ask Mode interrogation</text>
-    <text x="188" y="120" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="9" fill="#545454">Ch 7 — what considerations matter</text>
-  </g>
-  <!-- Step 2 -->
-  <g>
-    <rect x="140" y="132" width="380" height="32" fill="#FFFFFF" stroke="#D4D4D4" stroke-width="1"/>
-    <rect x="140" y="132" width="36" height="32" fill="#F5EFE8" stroke="#D4D4D4" stroke-width="1"/>
-    <text x="158" y="153" text-anchor="middle" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="11" letter-spacing="0.08em" fill="#2a1a0e">2</text>
-    <text x="188" y="148" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="11" font-weight="bold" fill="#2a1a0e">One-sentence formulation</text>
-    <text x="188" y="160" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="9" fill="#545454">Ch 7 — three sentences: does, touches, never touches</text>
-  </g>
-  <!-- Step 3 -->
-  <g>
-    <rect x="140" y="172" width="380" height="32" fill="#FFFFFF" stroke="#D4D4D4" stroke-width="1"/>
-    <rect x="140" y="172" width="36" height="32" fill="#F5EFE8" stroke="#D4D4D4" stroke-width="1"/>
-    <text x="158" y="193" text-anchor="middle" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="11" letter-spacing="0.08em" fill="#2a1a0e">3</text>
-    <text x="188" y="188" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="11" font-weight="bold" fill="#2a1a0e">Minimum viable spec</text>
-    <text x="188" y="200" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="9" fill="#545454">Ch 7 — half-page contract; five sections</text>
-  </g>
-  <!-- Step 4 -->
-  <g>
-    <rect x="140" y="212" width="380" height="32" fill="#FFFFFF" stroke="#D4D4D4" stroke-width="1"/>
-    <rect x="140" y="212" width="36" height="32" fill="#F5EFE8" stroke="#D4D4D4" stroke-width="1"/>
-    <text x="158" y="233" text-anchor="middle" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="11" letter-spacing="0.08em" fill="#2a1a0e">4</text>
-    <text x="188" y="228" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="11" font-weight="bold" fill="#2a1a0e">AGENTS.md</text>
-    <text x="188" y="240" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="9" fill="#545454">Ch 6 — persistent record; revised twice during build</text>
-  </g>
-  <!-- Step 5 -->
-  <g>
-    <rect x="140" y="252" width="380" height="32" fill="#FFFFFF" stroke="#D4D4D4" stroke-width="1"/>
-    <rect x="140" y="252" width="36" height="32" fill="#F5EFE8" stroke="#D4D4D4" stroke-width="1"/>
-    <text x="158" y="273" text-anchor="middle" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="11" letter-spacing="0.08em" fill="#2a1a0e">5</text>
-    <text x="188" y="268" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="11" font-weight="bold" fill="#2a1a0e">DESIGN.md and PROJECT.md</text>
-    <text x="188" y="280" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="9" fill="#545454">Ch 10 — when creative or aesthetic dimensions matter</text>
-  </g>
-  <!-- Step 6 -->
-  <g>
-    <rect x="140" y="292" width="380" height="32" fill="#FFFFFF" stroke="#D4D4D4" stroke-width="1"/>
-    <rect x="140" y="292" width="36" height="32" fill="#F5EFE8" stroke="#D4D4D4" stroke-width="1"/>
-    <text x="158" y="313" text-anchor="middle" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="11" letter-spacing="0.08em" fill="#2a1a0e">6</text>
-    <text x="188" y="308" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="11" font-weight="bold" fill="#2a1a0e">Ask Mode plan</text>
-    <text x="188" y="320" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="9" fill="#545454">Ch 12 — Codex drafts; you edit</text>
-  </g>
-  <!-- Step 7 -->
-  <g>
-    <rect x="140" y="332" width="380" height="32" fill="#FFFFFF" stroke="#D4D4D4" stroke-width="1"/>
-    <rect x="140" y="332" width="36" height="32" fill="#F5EFE8" stroke="#D4D4D4" stroke-width="1"/>
-    <text x="158" y="353" text-anchor="middle" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="11" letter-spacing="0.08em" fill="#2a1a0e">7</text>
-    <text x="188" y="348" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="11" font-weight="bold" fill="#2a1a0e">Plan review</text>
-    <text x="188" y="360" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="9" fill="#545454">Ch 12 — find at least one wrong assumption</text>
-  </g>
-
-  <!-- arrow connecting upstream to loop -->
-  <line x1="330" y1="368" x2="330" y2="392" stroke="#2a1a0e" stroke-width="1.5" marker-end="url(#arrow)"/>
-
-  <!-- Step 8 (loop) — highlighted -->
-  <g>
-    <rect x="140" y="394" width="380" height="32" fill="#FFFFFF" stroke="#C8102E" stroke-width="1"/>
-    <rect x="140" y="394" width="36" height="32" fill="#F5EFE8" stroke="#C8102E" stroke-width="1"/>
-    <text x="158" y="415" text-anchor="middle" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="11" letter-spacing="0.08em" fill="#C8102E">8</text>
-    <text x="188" y="410" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="11" font-weight="bold" fill="#C8102E">First Code Mode prompt</text>
-    <text x="188" y="422" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="9" fill="#545454">Ch 9 — five-element specification</text>
-  </g>
-  <!-- Step 9 -->
-  <g>
-    <rect x="140" y="434" width="380" height="32" fill="#FFFFFF" stroke="#C8102E" stroke-width="1"/>
-    <rect x="140" y="434" width="36" height="32" fill="#F5EFE8" stroke="#C8102E" stroke-width="1"/>
-    <text x="158" y="455" text-anchor="middle" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="11" letter-spacing="0.08em" fill="#C8102E">9</text>
-    <text x="188" y="450" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="11" font-weight="bold" fill="#C8102E">Read output; predict first</text>
-    <text x="188" y="462" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="9" fill="#545454">Ch 6 — the prediction is the target</text>
-  </g>
-  <!-- Step 10 -->
-  <g>
-    <rect x="140" y="474" width="380" height="32" fill="#FFFFFF" stroke="#C8102E" stroke-width="1"/>
-    <rect x="140" y="474" width="36" height="32" fill="#F5EFE8" stroke="#C8102E" stroke-width="1"/>
-    <text x="158" y="495" text-anchor="middle" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="11" letter-spacing="0.08em" fill="#C8102E">10</text>
-    <text x="188" y="490" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="11" font-weight="bold" fill="#C8102E">Handoff condition check</text>
-    <text x="188" y="502" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="9" fill="#545454">Ch 13 — mechanical verification</text>
-  </g>
-  <!-- Step 11 -->
-  <g>
-    <rect x="140" y="514" width="380" height="32" fill="#FFFFFF" stroke="#C8102E" stroke-width="1"/>
-    <rect x="140" y="514" width="36" height="32" fill="#F5EFE8" stroke="#C8102E" stroke-width="1"/>
-    <text x="158" y="535" text-anchor="middle" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="11" letter-spacing="0.08em" fill="#C8102E">11</text>
-    <text x="188" y="530" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="11" font-weight="bold" fill="#C8102E">Plausibility audit</text>
-    <text x="188" y="542" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="9" fill="#545454">Ch 6 — investigate before accepting</text>
-  </g>
-  <!-- Step 12 -->
-  <g>
-    <rect x="140" y="554" width="380" height="32" fill="#FFFFFF" stroke="#C8102E" stroke-width="1"/>
-    <rect x="140" y="554" width="36" height="32" fill="#F5EFE8" stroke="#C8102E" stroke-width="1"/>
-    <text x="158" y="575" text-anchor="middle" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="11" letter-spacing="0.08em" fill="#C8102E">12</text>
-    <text x="188" y="570" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="11" font-weight="bold" fill="#C8102E">Update AGENTS.md</text>
-    <text x="188" y="582" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="9" fill="#545454">Ch 6 — lesson learned this step</text>
-  </g>
-
-  <!-- Loop-back arrow from step 12 to step 8 -->
-  <path d="M 540 570 q 38 -10 38 -70 t -38 -90 q -10 -8, -20 -2" fill="none" stroke="#C8102E" stroke-width="1.5" stroke-dasharray="4 3" marker-end="url(#arrowred)"/>
-  <text x="586" y="490" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="10" font-style="italic" fill="#C8102E">repeat</text>
-  <text x="586" y="504" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="10" font-style="italic" fill="#C8102E">per step</text>
-
-  <!-- arrow from loop to closing -->
-  <line x1="330" y1="588" x2="330" y2="610" stroke="#2a1a0e" stroke-width="1.5" marker-end="url(#arrow)"/>
-
-  <!-- Step 13 -->
-  <g>
-    <rect x="140" y="612" width="380" height="32" fill="#FFFFFF" stroke="#D4D4D4" stroke-width="1"/>
-    <rect x="140" y="612" width="36" height="32" fill="#F5EFE8" stroke="#D4D4D4" stroke-width="1"/>
-    <text x="158" y="633" text-anchor="middle" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="11" letter-spacing="0.08em" fill="#2a1a0e">13</text>
-    <text x="188" y="628" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="11" font-weight="bold" fill="#2a1a0e">Three-pass verification</text>
-    <text x="188" y="640" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="9" fill="#545454">Ch 14 — functional, edge case, spec needs</text>
-  </g>
-  <!-- Step 14 -->
-  <g>
-    <rect x="140" y="652" width="380" height="32" fill="#FFFFFF" stroke="#D4D4D4" stroke-width="1"/>
-    <rect x="140" y="652" width="36" height="32" fill="#F5EFE8" stroke="#D4D4D4" stroke-width="1"/>
-    <text x="158" y="673" text-anchor="middle" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="11" letter-spacing="0.08em" fill="#2a1a0e">14</text>
-    <text x="188" y="668" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="11" font-weight="bold" fill="#2a1a0e">Post-build learning document</text>
-    <text x="188" y="680" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="9" fill="#545454">Ch 14 — five sections, one page, written now</text>
-  </g>
-
-  <!-- Bottom rule + caption -->
-  <line x1="32" y1="700" x2="668" y2="700" stroke="#D4D4D4" stroke-width="0.75" stroke-dasharray="4 3"/>
-  <text x="32" y="716" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="10" fill="#545454">The highlighted phase is the per-step loop — it repeats for every step in the build. Upstream and Closing each happen once.</text>
+  <rect x="0" y="0" width="700" height="420" fill="#FFFFFF"/>
+  <text x="32" y="42" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="13" font-weight="bold" fill="#2a1a0e">The fourteen-step sequence as two phases </text>
+  <text x="32" y="62" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="10" fill="#545454">The fourteen-step sequence as two phases — upstream (steps 1–7, happens once) and per-step loop (steps 8–12, repeats) and closing (steps 13–14, happen</text>
+  <rect x="64" y="166" width="112" height="88" fill="#FFFFFF" stroke="#D4D4D4" stroke-width="1"/>
+  <text x="120" y="205" text-anchor="middle" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="10" letter-spacing="0.08em" fill="#545454">START</text>
+  <text x="120" y="226" text-anchor="middle" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="10" fill="#2a1a0e">checkpoint</text>
+  <path d="M 180 210 C 196 210, 206 210, 218 210" stroke="#2a1a0e" stroke-width="1.5" fill="none" marker-end="url(#arrow)"/>
+  <rect x="218" y="166" width="112" height="88" fill="#F5EFE8" stroke="#D4D4D4" stroke-width="1"/>
+  <text x="274" y="205" text-anchor="middle" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="10" letter-spacing="0.08em" fill="#545454">THE</text>
+  <text x="274" y="226" text-anchor="middle" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="10" fill="#2a1a0e">checkpoint</text>
+  <path d="M 334 210 C 350 210, 360 210, 372 210" stroke="#2a1a0e" stroke-width="1.5" fill="none" marker-end="url(#arrow)"/>
+  <rect x="372" y="166" width="112" height="88" fill="#FFFFFF" stroke="#D4D4D4" stroke-width="1"/>
+  <text x="428" y="205" text-anchor="middle" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="10" letter-spacing="0.08em" fill="#545454">FOURTEEN-STEP</text>
+  <text x="428" y="226" text-anchor="middle" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="10" fill="#2a1a0e">checkpoint</text>
+  <path d="M 488 210 C 504 210, 514 210, 526 210" stroke="#2a1a0e" stroke-width="1.5" fill="none" marker-end="url(#arrow)"/>
+  <rect x="526" y="166" width="112" height="88" fill="#FFFFFF" stroke="#D4D4D4" stroke-width="1"/>
+  <text x="582" y="205" text-anchor="middle" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="10" letter-spacing="0.08em" fill="#545454">SEQUENCE</text>
+  <text x="582" y="226" text-anchor="middle" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="10" fill="#2a1a0e">checkpoint</text>
+  <path d="M 120 292 C 240 340, 430 340, 584 292" stroke="#C8102E" stroke-width="1.5" fill="none" stroke-dasharray="5 4"/>
+  <text x="350" y="362" text-anchor="middle" font-family="'EB Garamond', Georgia, 'Times New Roman', serif" font-size="11" fill="#2a1a0e">The diagram emphasizes sequence, dependency, and the decision point.</text>
 </svg>

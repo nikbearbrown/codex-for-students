@@ -102,7 +102,8 @@ The 150 words of specification are the protection against all three.
 | Output format | (whatever Codex returns) | Complete `articles/feedback.py`; `tests/articles/test_feedback.py` covering all-criteria-hit, two-criteria-miss (length + missing section), and empty article; return string under 500 characters. |
 | Negative constraint | (none) | Do not rewrite the article's prose. Do not produce coach-style "great voice!" feedback. Do not modify `scorer.py` or `target.py`. Do not add a new dependency. |
 
-<!-- → [IMAGE: Annotated diff view — left side shows the output from the weak prompt (grade generated, scorer.py modified, generic voice), right side shows output from the specification (no grade, scorer.py untouched, matter-of-fact voice). Callout annotations point to the three specific differences. Caption: "Same Codex. The specification is the entire difference."] -->
+![Same Codex. The specification is the entire difference.](images/09-prompts-as-specifications-fig-01.png)
+*Figure 9.1 — Diff view *
 
 ---
 
@@ -126,7 +127,8 @@ The output format element is the specification of what done looks like. The veri
 
 This is not magic. The loop is limited by what the test suite covers. But it makes the specification into a feedback system rather than a one-shot request, and the difference in output quality is measurable.
 
-<!-- → [DIAGRAM: Verification loop — Codex generates → runs verification command → output passes? → yes: surface to human / no: revise and rerun. Shows the loop the verification move creates vs. the one-shot flow without it.] -->
+![Verification loop ](images/09-prompts-as-specifications-fig-02.png)
+*Figure 9.2 — Verification loop *
 
 ---
 
@@ -154,7 +156,8 @@ The five elements are the mechanism for replacing Codex's defaults with your act
 
 This is why vague prompts are not just inefficient — they are structurally incorrect. A vague prompt does not invite Codex to do its best; it invites Codex to produce output calibrated to a different project. Specificity is not style. It is the mechanism by which the prompt produces output for your situation rather than for the average situation.
 
-<!-- → [INFOGRAPHIC: Five-element specification as five layers — each layer labels one element, with a one-line note on what default it replaces. Visual: five stacked horizontal bands, narrow to wide, representing the increasing specificity each element adds.] -->
+![Five-element specification as five layers ](images/09-prompts-as-specifications-fig-03.png)
+*Figure 9.3 — Five-element specification as five layers *
 
 ---
 
@@ -214,3 +217,37 @@ You have specifications. The next chapter addresses what happens when the specif
 
 [^1]: OpenAI engineers, "How OpenAI Engineers use Codex to Tackle Big Projects with Rigor" (forum.openai.com, December 4, 2025).
 [^2]: Lovelace, A. *Notes on the Analytical Engine* (1843). Multiple scholarly editions; Note G is the key reference for the Bernoulli-number algorithm.
+
+## Prompts
+
+Use these prompts with Claude to generate interactive D3 v7 versions of the
+figures in this chapter. Each produces a standalone HTML file you can open
+in a browser and modify freely.
+
+**Prerequisites:** Load `brutalist/CLAUDE.md` and `brutalist/DESIGN.md` into
+your Claude project context before using these prompts. They define the stack,
+naming conventions, color system, and typography the figures use.
+
+---
+
+### Figure 9.1 — Diff view 
+
+Create a standalone D3 v7 HTML file for Figure Diff view . Use the CDN https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js, inline CSS, ResizeObserver redraw, SVG role="img", aria-labelledby, title, and desc. Build the figure from this structural brief: Annotated diff view — left side shows the output from the weak prompt (grade generated, scorer.py modified, generic voice), right side shows output from the specification (no grade, scorer.py untouched, matter-of-fact voice). Callout annotations point to the three specific differences. Caption: "Same Codex. The specification is the entire difference.". Use the described data shape and labels; when exact values are not supplied, use plausible illustrative values that preserve the relationships in the brief. Use a zero baseline for bars or areas, direct labels where possible, and annotations named in the brief. Use only DESIGN.md color variables and the required serif/mono font split.
+
+> Reference implementation: `d3/09-prompts-as-specifications-fig-01.html`
+
+---
+
+### Figure 9.2 — Verification loop 
+
+Create a standalone D3 v7 HTML file for Figure Verification loop . Use the CDN https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js, inline CSS, ResizeObserver redraw, SVG role="img", aria-labelledby, title, and desc. Build the figure from this structural brief: Verification loop — Codex generates → runs verification command → output passes? → yes: surface to human / no: revise and rerun. Shows the loop the verification move creates vs. the one-shot flow without it.. Use the described data shape and labels; when exact values are not supplied, use plausible illustrative values that preserve the relationships in the brief. Use a zero baseline for bars or areas, direct labels where possible, and annotations named in the brief. Use only DESIGN.md color variables and the required serif/mono font split.
+
+> Reference implementation: `d3/09-prompts-as-specifications-fig-02.html`
+
+---
+
+### Figure 9.3 — Five-element specification as five layers 
+
+Create a standalone D3 v7 HTML file for Figure Five-element specification as five layers . Use the CDN https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js, inline CSS, ResizeObserver redraw, SVG role="img", aria-labelledby, title, and desc. Build the figure from this structural brief: Five-element specification as five layers — each layer labels one element, with a one-line note on what default it replaces. Visual: five stacked horizontal bands, narrow to wide, representing the increasing specificity each element adds.. Use the described data shape and labels; when exact values are not supplied, use plausible illustrative values that preserve the relationships in the brief. Use a zero baseline for bars or areas, direct labels where possible, and annotations named in the brief. Use only DESIGN.md color variables and the required serif/mono font split.
+
+> Reference implementation: `d3/09-prompts-as-specifications-fig-03.html`

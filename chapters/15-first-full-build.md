@@ -77,7 +77,8 @@ Steps 8 through 12 repeat for every step in the build. Steps 1 through 7 happen 
 
 **14. Post-build learning document** (Chapter 13). Five sections. One page. Written now, at the end of the build, before the lessons fade.
 
-<!-- → [DIAGRAM: The fourteen-step sequence as two phases — upstream (steps 1–7, happens once) and per-step loop (steps 8–12, repeats) and closing (steps 13–14, happens once). Flowchart with the loop explicitly shown. Shows the structure of the build before the reader is inside it.] -->
+![The fourteen-step sequence as two phases ](images/15-first-full-build-fig-01.png)
+*Figure 15.1 — The fourteen-step sequence as two phases *
 
 ---
 
@@ -135,7 +136,8 @@ The post-build learning document is the record of this transformation. Not the r
 
 This is why the chapter exists as a chapter and not as an appendix. The capstone is where the framework becomes yours. Chapters 1 through 13 built the framework. Chapter 14 makes it practice. A practitioner who has read all thirteen chapters but not built is a different person, with a different capability, than a practitioner who has read thirteen chapters and built once. The build is the step that closes the distance.
 
-<!-- → [INFOGRAPHIC: Two practitioners side by side — left: has read chapters 1–13 but not built; right: has read chapters 1–13 and completed the capstone. Contrast their relationship to the five supervisory capacities: framework known vs. framework practiced. Simple two-column layout, no data, conceptual only.] -->
+![Two practitioners side by side ](images/15-first-full-build-fig-02.png)
+*Figure 15.2 — Two practitioners side by side *
 
 ---
 
@@ -220,3 +222,29 @@ The next build is yours.
 ---
 
 [^1]: Dewey, J. *Experience and Education*. Macmillan, 1938. The Kappa Delta Pi reprint (1998) is the standard recent edition.
+
+## Prompts
+
+Use these prompts with Claude to generate interactive D3 v7 versions of the
+figures in this chapter. Each produces a standalone HTML file you can open
+in a browser and modify freely.
+
+**Prerequisites:** Load `brutalist/CLAUDE.md` and `brutalist/DESIGN.md` into
+your Claude project context before using these prompts. They define the stack,
+naming conventions, color system, and typography the figures use.
+
+---
+
+### Figure 15.1 — The fourteen-step sequence as two phases 
+
+Create a standalone D3 v7 HTML file for Figure The fourteen-step sequence as two phases . Use the CDN https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js, inline CSS, ResizeObserver redraw, SVG role="img", aria-labelledby, title, and desc. Build the figure from this structural brief: The fourteen-step sequence as two phases — upstream (steps 1–7, happens once) and per-step loop (steps 8–12, repeats) and closing (steps 13–14, happens once). Flowchart with the loop explicitly shown. Shows the structure of the build before the reader is inside it.. Use the described data shape and labels; when exact values are not supplied, use plausible illustrative values that preserve the relationships in the brief. Use a zero baseline for bars or areas, direct labels where possible, and annotations named in the brief. Use only DESIGN.md color variables and the required serif/mono font split.
+
+> Reference implementation: `d3/15-first-full-build-fig-01.html`
+
+---
+
+### Figure 15.2 — Two practitioners side by side 
+
+Create a standalone D3 v7 HTML file for Figure Two practitioners side by side . Use the CDN https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js, inline CSS, ResizeObserver redraw, SVG role="img", aria-labelledby, title, and desc. Build the figure from this structural brief: Two practitioners side by side — left: has read chapters 1–13 but not built; right: has read chapters 1–13 and completed the capstone. Contrast their relationship to the five supervisory capacities: framework known vs. framework practiced. Simple two-column layout, no data, conceptual only.. Use the described data shape and labels; when exact values are not supplied, use plausible illustrative values that preserve the relationships in the brief. Use a zero baseline for bars or areas, direct labels where possible, and annotations named in the brief. Use only DESIGN.md color variables and the required serif/mono font split.
+
+> Reference implementation: `d3/15-first-full-build-fig-02.html`
