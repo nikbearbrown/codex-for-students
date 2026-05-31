@@ -1,77 +1,109 @@
-<!--
-    99-back-matter.md
-    BACK MATTER — everything that appears after the final chapter.
-
-    Sections in order:
-      1. Acknowledgments
-      2. About the Author
-      3. Notes (by chapter, if using endnotes rather than footnotes)
-      4. References / Bibliography
-      5. Index (omit for online/free release; include for print/press)
-
-    Back matter continues the arabic page numbering from where
-    the final chapter ended. No page restart.
--->
-
 ---
 
 ## Acknowledgments
 
-<!-- Keep it short. Name the people who materially helped the book exist:
-     readers of drafts, researchers, editors, collaborators.
-     One paragraph is enough unless the debt is substantial.
-     Avoid laundry lists. -->
-
-[ACKNOWLEDGMENTS PLACEHOLDER]
+This rough draft acknowledges the readers, students, collaborators, reviewers, and AI-assisted production workflows that help turn a book from a directory of files into a usable learning object. Specific names should be added after manuscript review.
 
 ---
 
-## About the Authors
+## About the Author
 
-**Nik Bear Brown** teaches AI engineering at Northeastern University, where his research and teaching focus on agentic systems, AI in education, and the cognitive consequences of putting capable tools in the human learning loop. He has spent the last decade tracking how graduate students, engineers, and researchers adapt to successive waves of AI capability, and writes for practitioners through Bear Brown, LLC and at boondoggling.ai. He lives in Boston, Massachusetts.
+**Nik Bear Brown** is an Associate Teaching Professor in the College of Engineering at Northeastern University. He has taught artificial intelligence, computer science, statistics, applied mathematics, programming, visualization, web systems, game programming, and AI fluency across Northeastern, UCLA, Santa Monica College, ITT, and the Art Institutes Hollywood. His Ph.D. is in computer science from UCLA, with a major field in computational and systems biology and minor fields in artificial intelligence and statistics. He also holds a Master's in Information Design and Data Visualization and an MBA from Northeastern University.
 
-**Seth Brown** is a self-taught game developer and high-school senior in Troy, Missouri, available for collegiate work in August 2026. He is the co-architect of two production AI agents that operationalize the conducting discipline this book teaches — *Walker*, a Unity refactoring conductor, and *Zelda*, a senior game-design-documentation consultant — both public at [humanitarians.ai/tools](https://www.humanitarians.ai/tools/). He has shipped games across Godot 4, Unity, Roblox Studio, Unreal Engine, and HTML5/Canvas, including the co-op horror survival game *Haunt & Harvest* (Godot 4, migrated system-by-system from Unreal), the Roblox/Luau horror game *Midnight Fuel*, and the Google Play arcade title *Bubble Pop*. He runs *Zebonastic*, a Next.js platform on which he publishes weekly on horror game design and player psychology. He works in GDScript, Lua/Luau, Python, JavaScript, Java, and C#, and has been using Codex and other agentic coding tools as co-builders on his own projects since early 2025. He plays electric guitar in an alt-rock/metalcore cover band and works at Pizza Ranch. Find his work at github.com/sethbrowngaming-rgb.
+[nikbearbrown.com](https://www.nikbearbrown.com) · [irreducibly.xyz](https://irreducibly.xyz) · [bearbrown.co](https://www.bearbrown.co/)
 
 ---
 
 ## Notes
 
-<!-- Use this section for endnotes if you prefer them over footnotes.
-     Group by chapter. Format:
+Notes are organized by chapter in the production draft.
 
-     ### Chapter 1
+### Chapter 1
 
-     1. [Citation or explanatory note]
-     2. [Citation or explanatory note]
+- Sources to be finalized during editorial review for "Introduction: The Cautious Builder".
 
-     ### Chapter 2
-     ...
+### Chapter 2
 
-     If using footnotes in-line (pandoc [^1] syntax), delete this section.
--->
+- Sources to be finalized during editorial review for "The Homework/Quiz Gap: What's Actually Happening".
 
-[NOTES PLACEHOLDER]
+### Chapter 3
+
+- Sources to be finalized during editorial review for "What You're Actually Good At (And What Codex Is Better At)".
+
+### Chapter 4
+
+- Sources to be finalized during editorial review for "The Teacher-Student AI Gap: Why You're On Your Own".
+
+### Chapter 5
+
+- Sources to be finalized during editorial review for "Conducting, Not Prompting: The Core Idea".
+
+### Chapter 6
+
+- Sources to be finalized during editorial review for "The Five Supervisory Capacities".
+
+### Chapter 7
+
+- Sources to be finalized during editorial review for "AGENTS.md: Your Coding Constitution".
+
+### Chapter 8
+
+- Sources to be finalized during editorial review for "Problem Formulation: The Mission Before the Build".
+
+### Chapter 9
+
+- Sources to be finalized during editorial review for "Writing Codex Prompts That Are Specifications".
+
+### Chapter 10
+
+- Sources to be finalized during editorial review for "Handoff Conditions and the Dangerous Middle".
+
+### Chapter 11
+
+- Sources to be finalized during editorial review for "Brutalist: When the Build Is Creative".
+
+### Chapter 12
+
+- Sources to be finalized during editorial review for "Planning Your First Conducted Build".
+
+### Chapter 13
+
+- Sources to be finalized during editorial review for "Running the Build: Codex Tasks and Human Tasks".
+
+### Chapter 14
+
+- Sources to be finalized during editorial review for "Verification: How You Know It Works".
+
+### Chapter 15
+
+- Sources to be finalized during editorial review for "Your First Full Build: From Problem to Verified Output".
+
 
 ---
 
 ## References
 
-<!-- Full bibliography. Alphabetical by author last name, or grouped by chapter.
-     Use a consistent citation style throughout (Chicago, APA, or a hybrid).
-
-     Example entry (Chicago author-date):
-     Pearl, Judea, and Dana Mackenzie. *The Book of Why*. Basic Books, 2018.
--->
-
-[REFERENCES PLACEHOLDER]
+A full bibliography will be compiled after fact-checking. Use a consistent citation style across the manuscript.
 
 ---
 
-## Index
+## No Index
 
-<!-- For online/free release: delete this section.
-     For print/press: compile after all other content is final.
-     Pandoc does not auto-generate an index; use dedicated indexing software
-     (e.g., indexd, Word indexing tools) or a professional indexer. -->
+This book is designed primarily for Kindle, online reading, and integration with **Medhavy** / **Medhavi**, the AI-powered intelligent textbook system. In those environments, search, links, adaptive navigation, glossary lookup, and generated study paths do more useful work than a static print index. A print index can be commissioned later if the book receives a print edition, but this draft intentionally omits one.
 
-[INDEX PLACEHOLDER — omit for online release]
+---
+
+## Glossary
+
+- **Cautious.** Short definition to be completed during final editorial pass.
+- **Builder.** Short definition to be completed during final editorial pass.
+- **Homework.** Short definition to be completed during final editorial pass.
+- **Actually.** Short definition to be completed during final editorial pass.
+- **Happening.** Short definition to be completed during final editorial pass.
+- **Codex.** Short definition to be completed during final editorial pass.
+- **Better.** Short definition to be completed during final editorial pass.
+- **Teacher-Student.** Short definition to be completed during final editorial pass.
+- **Conducting.** Short definition to be completed during final editorial pass.
+- **Supervisory.** Short definition to be completed during final editorial pass.
+- **AGENTS.** Short definition to be completed during final editorial pass.
+- **Problem.** Short definition to be completed during final editorial pass.
