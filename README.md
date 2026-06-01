@@ -2,39 +2,40 @@
 
 **Author:** Nik Bear Brown  
 **Publisher:** Bear Brown, LLC  
+**Copyright:** Copyright © 2026 Nik Bear Brown. All rights reserved.  
 **Edition:** 2026
 
-## Overview
+## Summary
 
-The first sign of trouble is usually not failure. It is fluency. The draft looks clean. The answer sounds reasonable. The chart has labels. The code runs. The plan has phases. The explanation has the rhythm of expertise. Nothing in the surface announces that a human still has work to do. This book is about the gap between a polished artifact and a trustworthy one. The central argument of **Codex for Students** is that readers need a working method for the part of the work that cannot be delegated: the...
+*Codex for Students* is a structured textbook for readers who need a clear path through the subject rather than a loose collection of explanations. It begins with Chapter 1 — Introduction: The Cautious Builder, moves through 15 core chapters, and ends with Chapter 15 — Your First Full Build: From Problem to Verified Output.
+
+AI matters to *Codex for Students* because the modern textbook is no longer only a static container. It is also part of a learning system: searchable, remixable, explainable, and increasingly connected to tools such as Medhavy. For Bear Brown books, the relevant question is not whether AI can replace the learner or the teacher. It cannot. The useful question is what AI can make easier to inspect: definitions, worked examples, misconceptions, practice sequences, alternate explanations, and the structure of an argument. This book treats AI as infrastructure for practical AI-assisted authorship, analysis, and production. The chapters should still stand on their own as readable prose, but they are also designed to be legible to an intelligent textbook system.
 
 ## Table of Contents
 
-- [Front Matter](chapters/00-frontmatter.md)
-- [Introduction](chapters/00-introduction.md)
-- [Chapter 1 — Introduction: The Cautious Builder](chapters/01-introduction-cautious-builder.md)
-- [Chapter 2 — The Homework/Quiz Gap: What's Actually Happening](chapters/02-homework-quiz-gap.md)
-- [Chapter 3 — What You're Actually Good At (And What Codex Is Better At)](chapters/03-division-of-labor.md)
-- [Chapter 4 — The Teacher-Student AI Gap: Why You're On Your Own](chapters/04-teacher-student-ai-gap.md)
-- [Chapter 5 — Conducting, Not Prompting: The Core Idea](chapters/05-conducting-not-prompting.md)
-- [Chapter 6 — The Five Supervisory Capacities](chapters/06-five-supervisory-capacities.md)
-- [Chapter 7 — AGENTS.md: Your Coding Constitution](chapters/07-agents-md.md)
-- [Chapter 8 — Problem Formulation: The Mission Before the Build](chapters/08-problem-formulation.md)
-- [Chapter 9 — Writing Codex Prompts That Are Specifications](chapters/09-prompts-as-specifications.md)
-- [Chapter 10 — Handoff Conditions and the Dangerous Middle](chapters/10-handoff-conditions-dangerous-middle.md)
-- [Chapter 11 — Brutalist: When the Build Is Creative](chapters/11-brutalist-creative-builds.md)
-- [Chapter 12 — Planning Your First Conducted Build](chapters/12-planning-first-build.md)
-- [Chapter 13 — Running the Build: Codex Tasks and Human Tasks](chapters/13-running-the-build.md)
-- [Chapter 14 — Verification: How You Know It Works](chapters/14-verification.md)
-- [Chapter 15 — Your First Full Build: From Problem to Verified Output](chapters/15-first-full-build.md)
-- [Back Matter](chapters/99-back-matter.md)
+- **Chapter 1: Chapter 1 — Introduction: The Cautious Builder.** *Doing the cognitive work the tool will happily do for you — if you let it.* > Meet Seth. He noticed something his friends didn't. Let me be precise about what is happening, because the mechanism matters. When Seth's friend typed the...
+- **Chapter 2: Chapter 2 — The Homework/Quiz Gap: What's Actually Happening.** *The fluency of the answer is indistinguishable, from inside your own head, from the fluency of understanding.* || | Practice score | 48% above control | At control baseline | | Unassisted exam score | 17 points below control | At control...
+- **Chapter 3: Chapter 3 — What You're Actually Good At (And What Codex Is Better At).** *The machine has the pattern. You have the meaning. Knowing which is which is the whole game.* Let me describe two operations precisely, because almost everything in this chapter follows from the distinction. The first operation is **pattern completion**. You have seen...
+- **Chapter 4: Chapter 4 — The Teacher-Student AI Gap: Why You're On Your Own.** *When the people teaching you know less about the tool than you do, the discipline is yours to build.* > You know more than your teachers about the tools, and less than you need to about the domains. That gap is exactly...
+- **Chapter 5: Chapter 5 — Conducting, Not Prompting: The Core Idea.** *The orchestra does not need a better typist. It needs someone who knows what the music is supposed to sound like.* A conductor does not play the instruments. A conductor reads the score, holds the intended sound in their head, listens to...
+- **Chapter 6: Chapter 6 — The Five Supervisory Capacities.** *These are the five things you do that Codex cannot. Name them. Practice them. Never delegate them.* You already do supervisory work. Every time you stop before accepting a Codex output and think *wait* — that is supervisory work. Every time you...
+- **Chapter 7: Chapter 7 — AGENTS.md: Your Coding Constitution.** *The twenty-minute file that stops you from repeating yourself across every session for the life of the project.* > AGENTS.md is the file Codex reads at the start of every session. It is the difference between a Codex that knows your project...
+- **Chapter 8: Chapter 8 — Problem Formulation: The Mission Before the Build.** *The most expensive mistake in an AI-assisted build happens before the first prompt.* Formulation is the work of deciding what the build *is* before Codex sees it. This sounds obvious. It is almost never done. The natural impulse when you have a...
+- **Chapter 9: Chapter 9 — Writing Codex Prompts That Are Specifications.** *"Write me a login function" is not a prompt. A prompt names the thing, the invariants, the output format, and what not to touch.* A request names what you want. A specification names what you want with enough precision that the executor...
+- **Chapter 10: Chapter 10 — Handoff Conditions and the Dangerous Middle.** *The failure that survives a clean specification is the one you didn't know to check for.* > Not "looks good." A specific, testable condition that must be true before the next step begins. A handoff condition is a binary check between build...
+- **Chapter 11: Chapter 11 — Brutalist: When the Build Is Creative.** *The output is polished. The voice is the model's. Those are not the same problem.* In Chapter 2, the fluency trap was about learning: reading Codex's output felt like understanding, even when the cognitive events that produce understanding had not occurred. The...
+- **Chapter 12: Chapter 12 — Planning Your First Conducted Build.** *Before Codex sees a single prompt, you know exactly what you are building, why, and which steps belong to you.* The planning sequence has six steps. Each takes a few minutes. Together they produce the artifacts the build will execute against. The...
+- **Chapter 13: Chapter 13 — Running the Build: Codex Tasks and Human Tasks.** *Quality is built in at every step, not inspected in at the end — and the step is one prompt wide.* > The plan is approved. Now you execute it — one step at a time, with the suggest → explain →...
+- **Chapter 14: Chapter 14 — Verification: How You Know It Works.** *The build is done when it passes the handoff conditions — not when Codex says it's done.* Before explaining the three passes, it is worth being precise about what the per-step handoff conditions actually check — because understanding their limits is understanding...
+- **Chapter 15: Chapter 15 — Your First Full Build: From Problem to Verified Output.** *You have the discipline. Here is the project. Run it.* The chapter does not prescribe a specific project. It prescribes a shape, and the choice within that shape is yours. The shape has four requirements. **Multi-step.** At least five Code Mode prompts....
 
-## Copyright and License
+## Files
 
-Copyright © 2026 Nik Bear Brown. All rights reserved.
+- `chapters/00-frontmatter.md` — title page, copyright, dedication, and preface
+- `chapters/00-introduction.md` — roadmap and book-level AI note
+- `chapters/99-back-matter.md` — acknowledgments, author note, references placeholder, and Medhavy note
+- `LICENSE.md` — rights and reuse terms
 
-See [LICENSE.md](LICENSE.md) for permissions and restrictions.
+## Medhavy
 
-## Medhavy / Medhavi Integration
-
-This book is intended for Kindle, online reading, and integration with Medhavy, an AI-powered intelligent textbook system. The static manuscript provides the durable text; Medhavy can provide adaptive practice, glossary support, study paths, and feedback loops.
+This book is prepared for Kindle, online publication, and integration with Medhavy: https://www.medhavy.com/
