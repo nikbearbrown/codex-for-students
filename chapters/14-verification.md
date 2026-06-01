@@ -174,6 +174,10 @@ What remains open: when the three passes are worth automating. The chapter descr
 
 🕰️ **Barbara Liskov** (born 1939) — computer scientist whose work on behavioral subtyping and formal specification formalized the principle that *"correct" must be defined before it can be verified*.[^1] The Liskov Substitution Principle, articulated with Jeannette Wing in 1994, made the connection precise: a program's correctness is a property of its *specification*, not just of its execution. You cannot verify correctness against a standard that has not been written down.
 
+![Barbara Liskov](../images/barbara-liskov-1vp.png)
+
+*Puppet Art by [Nik Bear Brown](https://www.nikbearbrown.com/).*
+
 The three-pass verification is Liskov applied to AI-assisted builds. Pass 1 checks execution — does the code run? Pass 2 checks against the spec's defined boundaries — does it handle what the spec said it would handle? Pass 3 checks against the spec's intent — does the output deliver what the spec said the user would receive?
 
 The hierarchy — execution, then specification, then intent — is the hierarchy Liskov's framework formalizes. The failure Seth caught at Pass 3 would not have been catchable at Pass 1 or Pass 2 precisely because no specification had been written for it at the step level. The spec existed at the build level (in the User needs section). Liskov's insight is that the level of the specification determines the level at which correctness can be verified. Seth's Pass 3 was checking against the build-level specification. Nothing in the per-step handoffs could have substituted for it.

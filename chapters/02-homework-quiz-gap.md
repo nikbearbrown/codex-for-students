@@ -204,6 +204,10 @@ Three things I do not know and think are worth naming.
 
 🕰️ **William James** (1842–1910) — American psychologist whose chapter on **Habit** in *The Principles of Psychology* (1890) is the foundational account of how repeated effortful engagement consolidates into durable capability.[^4] James wrote: *"All our life, so far as it has definite form, is but a mass of habits — practical, emotional, and intellectual — systematically organized for our weal or woe, and bearing us irresistibly toward our destiny, whatever the latter may be."*
 
+![William James](../images/william-james-1gl.png)
+
+*Puppet Art by [Nik Bear Brown](https://www.nikbearbrown.com/).*
+
 James was describing, in the language of 1890, exactly the mechanism the three studies measured. The consolidation of repeated effortful work into durable neural structure. The struggle as the mechanism, not the cost. Without the struggle, the habit does not form. Without the habit, the practitioner does not change. The fluency trap is the trap James warned about — the appearance of skill without the underlying formation that constitutes it. He did not have randomized controlled trials or EEG. He had careful observation and a very clear idea of what learning actually was.
 
 The mechanism has not changed. Only the tool that obscures it is new.

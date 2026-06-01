@@ -273,6 +273,10 @@ A two-file system — combining AGENTS.md and DESIGN.md — might also work. The
 
 🕰️ **Sol LeWitt** (1928–2007) — American conceptual artist whose *Paragraphs on Conceptual Art* (1967) argued that the idea is the art — that the person who holds the intent and writes the instruction is the author, regardless of who executes.[^2] LeWitt's wall drawings were instructions: a set of constraints and operations that any competent person could execute. The execution varied in small ways; the work was the same, because the concept was the work. The instructions were specific enough that the executor's voice did not drown the artist's; LeWitt's choices were in the constraints.
 
+![Sol LeWitt](../images/sol-lewitt-4f1.png)
+
+*Puppet Art by [Nik Bear Brown](https://www.nikbearbrown.com/).*
+
 The three-file system is LeWitt's discipline applied to AI-assisted creative work. The Intent Layer holds your intent. The DESIGN.md holds your constraints. The AGENTS.md holds the technical scaffolding. Together they specify the work completely enough that Codex's execution does not overwrite your authorship. The CLI is the executor; you are the author. The discipline LeWitt operationalized in 1967, for human executors, scales to AI executors precisely because the relationship is the same. The author specifies the work; the executor produces the instance. What LeWitt understood was that the specification *is* the creative act. Execution is how it becomes visible.
 
 The classmates who produced voiceless work had not understood this. They had outsourced the specification along with the execution. The three-file system is what it looks like to keep the specification yours.
