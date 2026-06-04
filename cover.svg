@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 2560" width="1600" height="2560" preserveAspectRatio="xMidYMid meet" shape-rendering="geometricPrecision">
+  <g id="background"><rect x="0" y="0" width="1600" height="2560" fill="#F6D24A"/></g>
+  <g id="symbol-fragments" transform="rotate(-4, 800, 800)">
+    <path d="M 230 319 L 330 253 L 480 233 L 630 293 L 780 361 L 930 366 L 1080 385 L 1230 236" fill="none" stroke="#191919" stroke-width="44" stroke-linecap="butt" stroke-linejoin="miter"/>
+    <path d="M 230 473 L 330 431 L 480 384 L 630 434 L 780 430 L 930 452 L 1080 397 L 1230 545" fill="none" stroke="#191919" stroke-width="50" stroke-linecap="butt" stroke-linejoin="miter"/>
+    <path d="M 230 629 L 330 626 L 480 611 L 630 556 L 780 667 L 930 670 L 1080 710 L 1230 592" fill="none" stroke="#E85B3A" stroke-width="56" stroke-linecap="butt" stroke-linejoin="miter"/>
+    <path d="M 230 758 L 330 839 L 480 843 L 630 697 L 780 788 L 930 800 L 1080 730 L 1230 818" fill="none" stroke="#191919" stroke-width="62" stroke-linecap="butt" stroke-linejoin="miter"/>
+    <path d="M 230 893 L 330 861 L 480 806 L 630 917 L 780 955 L 930 839 L 1080 823 L 1230 942" fill="none" stroke="#191919" stroke-width="68" stroke-linecap="butt" stroke-linejoin="miter"/>
+  </g>
+  <g id="title-letterforms">
+    <text x="120" y="1510" font-family="Arial Black, Arial, sans-serif" font-size="250" font-weight="900" letter-spacing="0" fill="#191919">CODEX</text>
+    <text x="120" y="1768" font-family="Arial Black, Arial, sans-serif" font-size="250" font-weight="900" letter-spacing="0" fill="#E85B3A">FOR</text>
+    <text x="120" y="2026" font-family="Arial Black, Arial, sans-serif" font-size="250" font-weight="900" letter-spacing="0" fill="#191919" textLength="1300" lengthAdjust="spacingAndGlyphs">STUDENTS</text>
+  </g>
+</svg>
