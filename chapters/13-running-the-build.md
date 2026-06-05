@@ -157,6 +157,10 @@ How the loop changes when Codex operates with more agentic autonomy. The 2026 Co
 
 ---
 
+![W. Edwards Deming](../images/w-edwards-deming-efb.png)
+
+*Puppet Art by [Nik Bear Brown](https://www.nikbearbrown.com/).*
+
 ## Bridge
 
 The build is done when it passes the handoff conditions. Chapter 14 defines what "done" actually means at the level of the whole build — and asks you to conduct it yourself, end to end.

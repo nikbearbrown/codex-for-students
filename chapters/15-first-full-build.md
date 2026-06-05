@@ -213,7 +213,7 @@ What comes after the chapter. Most readers will do a second build, then a third,
 
 🕰️ **John Dewey** (1859–1952) — philosopher of education whose *Experience and Education* (1938) argued that learning is the transformation of the learner through purposeful experience, not the deposit of information into the learner.[^1] Dewey's claim was that the cognitive structures that constitute durable learning are built through engaged practice on real tasks — not through reading about practice or being told about practice. The post-build learning document is Dewey applied to AI-assisted coding: the record that the experience changed the person, not just the codebase. The full conducted build is the experience. The document is the record of what the experience built. Dewey was writing about classroom learning; the form scales to the practitioner's first capstone build.
 
-![John Dewey](../images/john-dewey-8ic.png)
+![John Dewey](../images/john-dewey-7x5.png)
 
 *Puppet Art by [Nik Bear Brown](https://www.nikbearbrown.com/).*
 

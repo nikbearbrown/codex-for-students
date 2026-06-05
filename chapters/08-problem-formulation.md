@@ -220,6 +220,10 @@ Brooks saw this coming, conceptually, forty years before the tools existed. *No 
 
 ---
 
+![Frederick Brooks](../images/frederick-brooks-cn9.png)
+
+*Puppet Art by [Nik Bear Brown](https://www.nikbearbrown.com/).*
+
 ## Bridge
 
 You have a formulation. The next chapter teaches you to write the Codex prompts that are *specifications* — the prompts that convert the formulation into code Codex can produce reliably, step by step, with handoff conditions that catch what the formulation left open.

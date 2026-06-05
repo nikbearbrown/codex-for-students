@@ -157,7 +157,7 @@ Whether Plausibility Auditing develops with the discipline. The book's working a
 
 🕰️ **Grace Hopper** (1906–1992) — computer scientist and US Navy Rear Admiral who developed COBOL and the A-0 compiler and who insisted that **"correct" must be defined before it can be verified.** Hopper's account of programming was that the practitioner's discipline is in specifying correctness explicitly — not assuming the absence of errors equals correctness. Her warning, *"The most dangerous phrase in the language is 'we've always done it this way,'"* applies directly to handoff conditions that default to "tests pass."[^2] The dangerous middle is exactly what that phrase produces: the condition that worked before, reused, on a step where it is not sufficient. Hopper's insistence on explicit verification criteria is the handoff condition principle stated at the founding of software engineering. The chapter's discipline is hers, restated for Codex: define "correct" before the step runs, not after.
 
-![Grace Hopper](../images/grace-hopper-wqk.png)
+![Grace Hopper](../images/grace-hopper-w8h.png)
 
 *Puppet Art by [Nik Bear Brown](https://www.nikbearbrown.com/).*
 
